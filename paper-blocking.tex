@@ -1,8 +1,8 @@
 % !TeX root = RJwrapper.tex
-\title{ToOoOlTiPs: An R Package for Customizable Tooltips in Interactive Graphics}
+\title{Blocking: An R Package for Blocking of Records for Record Linkage and Deduplication}
 
 
-\author{by Quietest Quokka and Bounciest Bilby}
+\author{by Maciej Beręsewicz and Adam Struzik}
 
 \maketitle
 
@@ -19,6 +19,12 @@ This paper will first review some R packages on interactive graphics and their t
 \section{Background}\label{background}
 
 Some packages on interactive graphics include \CRANpkg{plotly} \citep{plotly} that interfaces with Javascript for web-based interactive graphics, \CRANpkg{crosstalk} \citep{crosstalk} that specializes cross-linking elements across individual graphics. The recent R Journal paper \CRANpkg{tsibbletalk} \citep{RJ-2021-050} provides a good example of including interactive graphics into an article for the journal. It has both a set of linked plots, and also an animated gif example, illustrating linking between time series plots and feature summaries.
+
+\section{\texorpdfstring{Blocking of records using \texttt{blocking} function}{Blocking of records using blocking function}}\label{blocking-of-records-using-blocking-function}
+
+\section{Integration with existing packages}\label{integration-with-existing-packages}
+
+\section{Case study}\label{case-study}
 
 \section{\texorpdfstring{Customizing tooltip design with \pkg{ToOoOlTiPs}}{Customizing tooltip design with }}\label{customizing-tooltip-design-with}
 
@@ -75,24 +81,28 @@ penguins %>%
 
 We have displayed various tooltips that are available in the package \pkg{ToOoOlTiPs}.
 
+\section{Acknowledgements}\label{acknowledgements}
+
+Work on this package is supported by the National Science Centre, OPUS 20 grant no. 2020/39/B/HS4/00941
+
 \bibliography{RJreferences.bib}
 
 \address{%
-Quietest Quokka\\
-University of Little Mates\\%
-Department of Letter Q\\ Somewhere, Australia\\
+Maciej Beręsewicz\\
+University of Economics and BusinessStatisical Office in Poznań\\%
+Department of Statistics, Poznań, Poland\\ Centre for the Methodology of Population Studies\\
 %
-\url{https://www.britannica.com/animal/quokka}\\%
-\textit{ORCiD: \href{https://orcid.org/0000-1721-1511-1101}{0000-1721-1511-1101}}\\%
-\href{mailto:qquo@ulm.edu}{\nolinkurl{qquo@ulm.edu}}%
+\url{https://maciejberesewicz.com}\\%
+\textit{ORCiD: \href{https://orcid.org/0000-0002-8281-4301}{0000-0002-8281-4301}}\\%
+\href{mailto:maciej.beresewicz@poznan.pl}{\nolinkurl{maciej.beresewicz@poznan.pl}}%
 }
 
 \address{%
-Bounciest Bilby\\
-University of Little MatesUniversity of Aussie Animals\\%
-Department of Letter Q, Somewhere, Australia\\ Department of Marsupials, Somewhere, Australia\\
+Adam Struzik\\
+Adam Mickiewicz UniversityStatisical Office in Poznań\\%
+Department of Mathematics, Poznań, Poland\\ Centre for Urban Statistics\\
 %
-\url{https://www.britannica.com/animal/bilby}\\%
-\textit{ORCiD: \href{https://orcid.org/0000-0002-0912-0225}{0000-0002-0912-0225}}\\%
-\href{mailto:bbil@ulm.edu}{\nolinkurl{bbil@ulm.edu}}%
+%
+%
+\href{mailto:adastr5@st.amu.edu.pl}{\nolinkurl{adastr5@st.amu.edu.pl}}%
 }

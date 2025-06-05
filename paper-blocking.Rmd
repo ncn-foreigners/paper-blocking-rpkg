@@ -1,28 +1,28 @@
 ---
-title: "ToOoOlTiPs: An R Package for Customizable Tooltips in Interactive Graphics"
-date: "2022-11-09"
+title: "Blocking: An R Package for Blocking of Records for Record Linkage and Deduplication"
+date: "2025-11-09"
 abstract: >
   An abstract of less than 250 words.
 draft: true
 author:  
-  - name: Quietest Quokka
-    affiliation: University of Little Mates
+  - name: Maciej Beręsewicz
+    affiliation: 
+      - University of Economics and Business
+      - Statisical Office in Poznań
     address:
-    - Department of Letter Q
-    - Somewhere, Australia
-    url: https://www.britannica.com/animal/quokka
-    orcid: 0000-1721-1511-1101
-    email:  qquo@ulm.edu
-  - name: Bounciest Bilby
+      - Department of Statistics, Poznań, Poland
+      - Centre for the Methodology of Population Studies
+    url: https://maciejberesewicz.com
+    orcid: 0000-0002-8281-4301
+    email:  maciej.beresewicz@poznan.pl
+  - name: Adam Struzik
     affiliation:
-    - University of Little Mates
-    - University of Aussie Animals
+      - Adam Mickiewicz University
+      - Statisical Office in Poznań
     address:
-    - Department of Letter Q, Somewhere, Australia
-    - Department of Marsupials, Somewhere, Australia
-    url: https://www.britannica.com/animal/bilby
-    email: bbil@ulm.edu
-    orcid: 0000-0002-0912-0225
+      - Department of Mathematics, Poznań, Poland
+      - Centre for Urban Statistics
+    email: adastr5@st.amu.edu.pl
 type: package
 output: 
   rjtools::rjournal_article:
@@ -100,3 +100,8 @@ penguins %>%
 # Summary
 
 We have displayed various tooltips that are available in the package \pkg{ToOoOlTiPs}. 
+
+# Acknowledgements
+
+Work on this package is supported by the National Science Centre, OPUS 20 grant no. 2020/39/B/HS4/00941
+
