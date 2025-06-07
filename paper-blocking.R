@@ -33,7 +33,11 @@ head(foreigners_1)
 
 
 ## ----reclin_nnd, echo = TRUE--------------------------------------------------
-result_reclin <- blocking(x = foreigners_1$txt, y = foreigners_2$txt, verbose = 1)
+set.seed(2025)
+result_reclin <- blocking(x = foreigners_1$txt, 
+                          y = foreigners_2$txt, 
+                          verbose = 1, 
+                          n_threads = 4)
 
 
 ## ----reclin_nnd_summary, echo = TRUE------------------------------------------
@@ -61,7 +65,9 @@ head(matches)
 
 
 ## ----reclin_nnd_true_blocks, echo = TRUE--------------------------------------
-result_2_reclin <- blocking(x = foreigners_1$txt, y = foreigners_2$txt, verbose = 1,
+result_2_reclin <- blocking(x = foreigners_1$txt, 
+                            y = foreigners_2$txt, 
+                            verbose = 1, n_threads = 4, 
                             true_blocks = matches[, .(x, y, block)])
 result_2_reclin
 
