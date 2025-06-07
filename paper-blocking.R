@@ -9,6 +9,63 @@ library(palmerpenguins)
 library(kableExtra)
 
 
+## ----packages, echo=TRUE, message=FALSE, warning=FALSE------------------------
+library(blocking)
+library(data.table)
+
+
+## ----foreigners, echo = TRUE--------------------------------------------------
+data(foreigners)
+head(foreigners)
+
+
+## ----split, echo = TRUE-------------------------------------------------------
+foreigners_1 <- foreigners[!duplicated(foreigners$true_id), ]
+foreigners_2 <- foreigners[duplicated(foreigners$true_id), ]
+
+
+## ----concat, echo = TRUE------------------------------------------------------
+foreigners_1[, date := gsub("/", "", date)]
+foreigners_1[, txt := paste0(fname, sname, surname, date, region, country)]
+foreigners_2[, date := gsub("/", "", date)]
+foreigners_2[, txt := paste0(fname, sname, surname, date, region, country)]
+head(foreigners_1)
+
+
+## ----reclin_nnd, echo = TRUE--------------------------------------------------
+result_reclin <- blocking(x = foreigners_1$txt, y = foreigners_2$txt, verbose = 1)
+
+
+## ----reclin_nnd_summary, echo = TRUE------------------------------------------
+result_reclin
+
+
+## ----reclin_nnd_str, echo = TRUE----------------------------------------------
+str(result_reclin, 1)
+
+
+## ----reclin_nnd_result, echo = TRUE-------------------------------------------
+head(result_reclin$result)
+
+
+## ----reclin_nnd_example, echo = TRUE------------------------------------------
+cbind(t(foreigners_1[3, 1:6]), t(foreigners_2[1, 1:6]))
+
+
+## ----reclin_nnd_matches, echo = TRUE------------------------------------------
+matches <- merge(x = foreigners_1[, .(x = 1:.N, true_id)],
+                 y = foreigners_2[, .(y = 1:.N, true_id)],
+                 by = "true_id")
+matches[, block := rleid(x)]
+head(matches)
+
+
+## ----reclin_nnd_true_blocks, echo = TRUE--------------------------------------
+result_2_reclin <- blocking(x = foreigners_1$txt, y = foreigners_2$txt, verbose = 1,
+                            true_blocks = matches[, .(x, y, block)])
+result_2_reclin
+
+
 ## ----penguins-alison, out.width = "100%", out.height = "30%", fig.cap = "Artwork by \\@allison\\_horst", fig.alt="A picture of three different penguins with their species: Chinstrap, Gentoo, and Adelie. "----
 knitr::include_graphics("figures/penguins.png")
 

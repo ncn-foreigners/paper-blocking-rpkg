@@ -29,7 +29,6 @@ output:
     self_contained: yes
     toc: no
 bibliography: RJreferences.bib
-
 ---
 
 ```{r setup, include=FALSE}
@@ -44,11 +43,11 @@ library(kableExtra)
 
 Interactive data graphics provides plots that allow users to interact them. One of the most basic types of interaction is through tooltips, where users are provided additional information about elements in the plot by moving the cursor over the plot.
 
-This paper will first review some R packages on interactive graphics and their tooltip implementations. A new package \CRANpkg{ToOoOlTiPs} that provides customized tooltips for plot, is introduced. Some example plots will then be given to showcase how these tooltips help users to better read the graphics. 
+This paper will first review some R packages on interactive graphics and their tooltip implementations. A new package \CRANpkg{ToOoOlTiPs} that provides customized tooltips for plot, is introduced. Some example plots will then be given to showcase how these tooltips help users to better read the graphics.
 
 # Background
 
-Some packages on interactive graphics include \CRANpkg{plotly} [@plotly] that interfaces with Javascript for web-based interactive graphics, \CRANpkg{crosstalk} [@crosstalk] that specializes cross-linking elements across individual graphics.  The recent R Journal paper \CRANpkg{tsibbletalk} [@RJ-2021-050] provides a good example of including interactive graphics into an article for the journal. It has both a set of linked plots, and also an animated gif example, illustrating linking between time series plots and feature summaries.
+Some packages on interactive graphics include \CRANpkg{plotly} [@plotly] that interfaces with Javascript for web-based interactive graphics, \CRANpkg{crosstalk} [@crosstalk] that specializes cross-linking elements across individual graphics. The recent R Journal paper \CRANpkg{tsibbletalk} [@RJ-2021-050] provides a good example of including interactive graphics into an article for the journal. It has both a set of linked plots, and also an animated gif example, illustrating linking between time series plots and feature summaries.
 
 # Blocking of records using `blocking` function
 
@@ -56,6 +55,112 @@ Some packages on interactive graphics include \CRANpkg{plotly} [@plotly] that in
 
 # Case study
 
+## Record linkage example
+
+Let us first load the required packages.
+
+```{r packages, echo=TRUE, message=FALSE, warning=FALSE}
+library(blocking)
+library(data.table)
+```
+
+We will demonstrate the use of `blocking` function for record linkage with the `foreigners` dataset included in the package. This fictional representation of the foreign population in Poland was generated based on publicly available information, preserving the distributions from administrative registers. It contains 110,000 rows with 100,000 entities. Each row represents one record, with the following columns:
+
+- `fname` -- first name,
+- `sname` -- second name,
+- `surname` -- surname,
+- `date` -- date of birth,
+- `region` -- region (county),
+- `country` -- country,
+- `true_id` -- person ID.
+
+```{r foreigners, echo = TRUE}
+data(foreigners)
+head(foreigners)
+```
+
+We split the dataset into two separate files: one containing the first appearance of each entity in the `foreigners` dataset, and the other containing its subsequent appearances.
+
+```{r split, echo = TRUE}
+foreigners_1 <- foreigners[!duplicated(foreigners$true_id), ]
+foreigners_2 <- foreigners[duplicated(foreigners$true_id), ]
+```
+
+Now in both datasets we remove slashes from the `date` column and create a new string column that concatenates the information from all columns (excluding `true_id`) in each row.
+
+```{r concat, echo = TRUE}
+foreigners_1[, date := gsub("/", "", date)]
+foreigners_1[, txt := paste0(fname, sname, surname, date, region, country)]
+foreigners_2[, date := gsub("/", "", date)]
+foreigners_2[, txt := paste0(fname, sname, surname, date, region, country)]
+head(foreigners_1)
+```
+
+We use the newly created columns in the `blocking` function, which relies on the default \CRANpkg{rnndescent} (Nearest Neighbor Descent) algorithm based on cosine distance. Additionally, we set `verbose = 1` to monitor progress.
+
+```{r reclin_nnd, echo = TRUE}
+result_reclin <- blocking(x = foreigners_1$txt, y = foreigners_2$txt, verbose = 1)
+```
+
+Now we examine the results of record linkage.
+
+- We have created 6,469 blocks.
+- The blocking process utilized 1,232 columns (2 character shingles).
+- We have 3,916 blocks of 2 elements, 1,604 blocks of 3 elements,..., 2 blocks of 7 elements.
+
+```{r reclin_nnd_summary, echo = TRUE}
+result_reclin
+```
+
+Structure of the object is as follows:
+
+- `result` -- a `data.table` with identifiers and block IDs,
+- `method` -- name of the ANN algorithm used,
+- `deduplication` -- whether deduplication was applied,
+- `representation` -- whether shingles or vectors were used,
+- `metrics` -- metrics for quality assessment (here `NULL`),
+- `confusion` -- confusion matrix (here `NULL`),
+- `colnames` -- column names used for the comparison,
+- `graph` -- an \CRANpkg{igraph} object, mainly for visualization (here `NULL`).
+
+```{r reclin_nnd_str, echo = TRUE}
+str(result_reclin, 1)
+```
+
+The resulting `data.table` has four columns:
+
+- `x` -- reference dataset (i.e. `foreigners_1`) -- this may not contain all units of `foreigners_1`,
+- `y` -- query (each row of `foreigners_2`) -- this may not contain all units of `foreigners_2`,
+- `block` -- block ID,
+- `dist` -- distance between objects.
+
+```{r reclin_nnd_result, echo = TRUE}
+head(result_reclin$result)
+```
+
+Let's examine the first pair. Obviously, there are typos in the `fname` and `surname`. Nevertheless, the pair appears to be a match.
+
+```{r reclin_nnd_example, echo = TRUE}
+cbind(t(foreigners_1[3, 1:6]), t(foreigners_2[1, 1:6]))
+```
+
+Now we use the `true_id` values to evaluate our approach.
+
+```{r reclin_nnd_matches, echo = TRUE}
+matches <- merge(x = foreigners_1[, .(x = 1:.N, true_id)],
+                 y = foreigners_2[, .(y = 1:.N, true_id)],
+                 by = "true_id")
+matches[, block := rleid(x)]
+head(matches)
+```
+
+We have 10,000 matched pairs. We use the `true_blocks` parameter in the `blocking` function to specify the true block assignments. We obtain the quality metrics for the assessment of record linkage.
+
+```{r reclin_nnd_true_blocks, echo = TRUE}
+result_2_reclin <- blocking(x = foreigners_1$txt, y = foreigners_2$txt, verbose = 1,
+                            true_blocks = matches[, .(x, y, block)])
+result_2_reclin
+```
 
 # Customizing tooltip design with \pkg{ToOoOlTiPs}
 
@@ -63,7 +168,7 @@ Some packages on interactive graphics include \CRANpkg{plotly} [@plotly] that in
 
 # A gallery of tooltips examples
 
-The \CRANpkg{palmerpenguins} data [@palmerpenguins]  features three penguin species which has a lovely illustration by Alison Horst in Figure \@ref(fig:penguins-alison). 
+The \CRANpkg{palmerpenguins} data [@palmerpenguins] features three penguin species which has a lovely illustration by Alison Horst in Figure \@ref(fig:penguins-alison).
 
 ```{r penguins-alison, out.width = "100%", out.height = "30%", fig.cap = "Artwork by \\@allison\\_horst", fig.alt="A picture of three different penguins with their species: Chinstrap, Gentoo, and Adelie. "}
 knitr::include_graphics("figures/penguins.png")
@@ -78,9 +183,9 @@ knitr::kable(head(penguins), format = "html", caption = "A basic table")
 ```{r penguins-tab-static, eval = knitr::is_latex_output()}
 knitr::kable(head(penguins), format = "latex", caption = "A basic table") %>% 
   kableExtra::kable_styling(font_size = 7)
-```   
+```
 
-Figure `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\@ref(fig:penguins-plotly)', '\\@ref(fig:penguins-ggplot)'))` shows an `r ifelse(knitr::is_html_output(), 'interactive', '')` plot of the penguins data, made using the `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\CRANpkg{plotly}', '\\CRANpkg{ggplot2}'))` package. 
+Figure `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\@ref(fig:penguins-plotly)', '\\@ref(fig:penguins-ggplot)'))` shows an `r ifelse(knitr::is_html_output(), 'interactive', '')` plot of the penguins data, made using the `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\CRANpkg{plotly}', '\\CRANpkg{ggplot2}'))` package.
 
 ```{r penguins-plotly, echo = TRUE, out.width="100%", fig.width = 6, fig.height=5, layout="l-body", fig.cap="A basic interactive plot made with the plotly package on palmer penguin data. Three species of penguins are plotted with bill depth on the x-axis and bill length on the y-axis. When hovering on a point, a tooltip will show the exact value of the bill depth and length for that point, along with the species name.", include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.alt = "A scatterplot of bill length against bill depth, both measured in millimetre. The three species are shown in different colours and loosely forms three clusters. Adelie has small bill length and large bill depth, Gentoo has small bill depth but large bill length, and Chinstrap has relatively large bill depth and bill length."}
 p <- penguins %>% 
@@ -99,9 +204,8 @@ penguins %>%
 
 # Summary
 
-We have displayed various tooltips that are available in the package \pkg{ToOoOlTiPs}. 
+We have displayed various tooltips that are available in the package \pkg{ToOoOlTiPs}.
 
 # Acknowledgements
 
 Work on this package is supported by the National Science Centre, OPUS 20 grant no. 2020/39/B/HS4/00941
-

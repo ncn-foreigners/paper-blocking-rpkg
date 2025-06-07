@@ -26,6 +26,269 @@ Some packages on interactive graphics include \CRANpkg{plotly} \citep{plotly} th
 
 \section{Case study}\label{case-study}
 
+\subsection{Record linkage example}\label{record-linkage-example}
+
+Let us first load the required packages.
+
+\begin{verbatim}
+library(blocking)
+library(data.table)
+\end{verbatim}
+
+We will demonstrate the use of \texttt{blocking} function for record linkage with the \texttt{foreigners} dataset included in the package. This fictional representation of the foreign population in Poland was generated based on publicly available information, preserving the distributions from administrative registers. It contains 110,000 rows with 100,000 entities. Each row represents one record, with the following columns:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{fname} -- first name,
+\item
+  \texttt{sname} -- second name,
+\item
+  \texttt{surname} -- surname,
+\item
+  \texttt{date} -- date of birth,
+\item
+  \texttt{region} -- region (county),
+\item
+  \texttt{country} -- country,
+\item
+  \texttt{true\_id} -- person ID.
+\end{itemize}
+
+\begin{verbatim}
+data(foreigners)
+head(foreigners)
+\end{verbatim}
+
+\begin{verbatim}
+#>     fname  sname    surname       date region country true_id
+#>    <char> <char>     <char>     <char> <char>  <char>   <num>
+#> 1:   emin            imanov 1998/02/05            031       0
+#> 2: nurlan        suleymanli 2000/08/01            031       1
+#> 3:   amio        maharrsmov 1939/03/08            031       2
+#> 4:   amik        maharramof 1939/03/08            031       2
+#> 5:   amil        maharramov 1993/03/08            031       2
+#> 6:  gadir        jahangirov 1991/08/29            031       3
+\end{verbatim}
+
+We split the dataset into two separate files: one containing the first appearance of each entity in the \texttt{foreigners} dataset, and the other containing its subsequent appearances.
+
+\begin{verbatim}
+foreigners_1 <- foreigners[!duplicated(foreigners$true_id), ]
+foreigners_2 <- foreigners[duplicated(foreigners$true_id), ]
+\end{verbatim}
+
+Now in both datasets we remove slashes from the \texttt{date} column and create a new string column that concatenates the information from all columns (excluding \texttt{true\_id}) in each row.
+
+\begin{verbatim}
+foreigners_1[, date := gsub("/", "", date)]
+foreigners_1[, txt := paste0(fname, sname, surname, date, region, country)]
+foreigners_2[, date := gsub("/", "", date)]
+foreigners_2[, txt := paste0(fname, sname, surname, date, region, country)]
+head(foreigners_1)
+\end{verbatim}
+
+\begin{verbatim}
+#>     fname  sname    surname     date region country true_id
+#>    <char> <char>     <char>   <char> <char>  <char>   <num>
+#> 1:   emin            imanov 19980205            031       0
+#> 2: nurlan        suleymanli 20000801            031       1
+#> 3:   amio        maharrsmov 19390308            031       2
+#> 4:  gadir        jahangirov 19910829            031       3
+#> 5:   zaur         bayramova 19961006  01261     031       4
+#> 6:   asif          mammadov 19970726            031       5
+#>                              txt
+#>                           <char>
+#> 1:         eminimanov19980205031
+#> 2:   nurlansuleymanli20000801031
+#> 3:     amiomaharrsmov19390308031
+#> 4:    gadirjahangirov19910829031
+#> 5: zaurbayramova1996100601261031
+#> 6:       asifmammadov19970726031
+\end{verbatim}
+
+We use the newly created columns in the \texttt{blocking} function, which relies on the default \CRANpkg{rnndescent} (Nearest Neighbor Descent) algorithm based on cosine distance. Additionally, we set \texttt{verbose\ =\ 1} to monitor progress.
+
+\begin{verbatim}
+result_reclin <- blocking(x = foreigners_1$txt, y = foreigners_2$txt, verbose = 1)
+\end{verbatim}
+
+\begin{verbatim}
+#> ===== creating tokens =====
+#> ===== starting search (nnd, x, y: 100000, 10000, t: 1232) =====
+#> ===== creating graph =====
+\end{verbatim}
+
+Now we examine the results of record linkage.
+
+\begin{itemize}
+\tightlist
+\item
+  We have created 6,469 blocks.
+\item
+  The blocking process utilized 1,232 columns (2 character shingles).
+\item
+  We have 3,916 blocks of 2 elements, 1,604 blocks of 3 elements,\ldots, 2 blocks of 7 elements.
+\end{itemize}
+
+\begin{verbatim}
+result_reclin
+\end{verbatim}
+
+\begin{verbatim}
+#> ========================================================
+#> Blocking based on the nnd method.
+#> Number of blocks: 6469.
+#> Number of columns used for blocking: 1232.
+#> Reduction ratio: 0.9999.
+#> ========================================================
+#> Distribution of the size of the blocks:
+#>    2    3    4    5    6    7 
+#> 3916 1604  926   19    2    2
+\end{verbatim}
+
+Structure of the object is as follows:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{result} -- a \texttt{data.table} with identifiers and block IDs,
+\item
+  \texttt{method} -- name of the ANN algorithm used,
+\item
+  \texttt{deduplication} -- whether deduplication was applied,
+\item
+  \texttt{representation} -- whether shingles or vectors were used,
+\item
+  \texttt{metrics} -- metrics for quality assessment (here \texttt{NULL}),
+\item
+  \texttt{confusion} -- confusion matrix (here \texttt{NULL}),
+\item
+  \texttt{colnames} -- column names used for the comparison,
+\item
+  \texttt{graph} -- an \CRANpkg{igraph} object, mainly for visualization (here \texttt{NULL}).
+\end{itemize}
+
+\begin{verbatim}
+str(result_reclin, 1)
+\end{verbatim}
+
+\begin{verbatim}
+#> List of 8
+#>  $ result        :Classes 'data.table' and 'data.frame': 10000 obs. of  4 variables:
+#>   ..- attr(*, ".internal.selfref")=<externalptr> 
+#>  $ method        : chr "nnd"
+#>  $ deduplication : logi FALSE
+#>  $ representation: chr "shingles"
+#>  $ metrics       : NULL
+#>  $ confusion     : NULL
+#>  $ colnames      : chr [1:1232] "0a" "0b" "0c" "0m" ...
+#>  $ graph         : NULL
+#>  - attr(*, "class")= chr "blocking"
+\end{verbatim}
+
+The resulting \texttt{data.table} has four columns:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{x} -- reference dataset (i.e.~\texttt{foreigners\_1}) -- this may not contain all units of \texttt{foreigners\_1},
+\item
+  \texttt{y} -- query (each row of \texttt{foreigners\_2}) -- this may not contain all units of \texttt{foreigners\_2},
+\item
+  \texttt{block} -- block ID,
+\item
+  \texttt{dist} -- distance between objects.
+\end{itemize}
+
+\begin{verbatim}
+head(result_reclin$result)
+\end{verbatim}
+
+\begin{verbatim}
+#>        x     y block      dist
+#>    <int> <int> <num>     <num>
+#> 1:     3     1     1 0.2216882
+#> 2:     3     2     1 0.2122737
+#> 3:    21     3     2 0.1172652
+#> 4:    57     4     3 0.1863238
+#> 5:    57     5     3 0.1379310
+#> 6:    61     6     4 0.2307692
+\end{verbatim}
+
+Let's examine the first pair. Obviously, there are typos in the \texttt{fname} and \texttt{surname}. Nevertheless, the pair appears to be a match.
+
+\begin{verbatim}
+cbind(t(foreigners_1[3, 1:6]), t(foreigners_2[1, 1:6]))
+\end{verbatim}
+
+\begin{verbatim}
+#>         [,1]         [,2]        
+#> fname   "amio"       "amik"      
+#> sname   ""           ""          
+#> surname "maharrsmov" "maharramof"
+#> date    "19390308"   "19390308"  
+#> region  ""           ""          
+#> country "031"        "031"
+\end{verbatim}
+
+Now we use the \texttt{true\_id} values to evaluate our approach.
+
+\begin{verbatim}
+matches <- merge(x = foreigners_1[, .(x = 1:.N, true_id)],
+                 y = foreigners_2[, .(y = 1:.N, true_id)],
+                 by = "true_id")
+matches[, block := rleid(x)]
+head(matches)
+\end{verbatim}
+
+\begin{verbatim}
+#> Key: <true_id>
+#>    true_id     x     y block
+#>      <num> <int> <int> <int>
+#> 1:       2     3     1     1
+#> 2:       2     3     2     1
+#> 3:      20    21     3     2
+#> 4:      56    57     4     3
+#> 5:      56    57     5     3
+#> 6:      60    61     6     4
+\end{verbatim}
+
+We have 10,000 matched pairs. We use the \texttt{true\_blocks} parameter in the \texttt{blocking} function to specify the true block assignments. We obtain the quality metrics for the assessment of record linkage.
+
+\begin{verbatim}
+result_2_reclin <- blocking(x = foreigners_1$txt, y = foreigners_2$txt, verbose = 1,
+                            true_blocks = matches[, .(x, y, block)])
+\end{verbatim}
+
+\begin{verbatim}
+#> ===== creating tokens =====
+#> ===== starting search (nnd, x, y: 100000, 10000, t: 1232) =====
+#> ===== creating graph =====
+\end{verbatim}
+
+\begin{verbatim}
+result_2_reclin
+\end{verbatim}
+
+\begin{verbatim}
+#> ========================================================
+#> Blocking based on the nnd method.
+#> Number of blocks: 6469.
+#> Number of columns used for blocking: 1232.
+#> Reduction ratio: 0.9999.
+#> ========================================================
+#> Distribution of the size of the blocks:
+#>    2    3    4    5    6    7 
+#> 3916 1604  926   19    2    2 
+#> ========================================================
+#> Evaluation metrics (standard):
+#>      recall   precision         fpr         fnr    accuracy specificity 
+#>     96.7782     78.7000      0.0038      3.2218     99.9957     99.9962 
+#>    f1_score 
+#>     86.8079
+\end{verbatim}
+
 \section{\texorpdfstring{Customizing tooltip design with \pkg{ToOoOlTiPs}}{Customizing tooltip design with }}\label{customizing-tooltip-design-with}
 
 \pkg{ToOoOlTiPs} is a packages for customizing tooltips in interactive graphics, it features these possibilities.
