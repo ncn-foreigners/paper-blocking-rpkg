@@ -107,14 +107,12 @@ head(foreigners_1)
 #> 6:       asifmammadov19970726031
 \end{verbatim}
 
-We use the newly created columns in the \texttt{blocking} function, which relies on the default \CRANpkg{rnndescent} (Nearest Neighbor Descent) algorithm based on cosine distance. Additionally, we set \texttt{verbose\ =\ 1} to monitor progress.
+We use the newly created columns in the \texttt{blocking} function, which relies on the default \CRANpkg{rnndescent} (Nearest Neighbor Descent) algorithm based on cosine distance. Additionally, we set \texttt{verbose\ =\ 1} to monitor progress. Note that a default parameter of the \texttt{blocking} function is \texttt{seed\ =\ 2023}, which sets the random seed.
 
 \begin{verbatim}
-set.seed(2025)
 result_reclin <- blocking(x = foreigners_1$txt, 
                           y = foreigners_2$txt, 
-                          verbose = 1, 
-                          n_threads = 4)
+                          verbose = 1)
 \end{verbatim}
 
 \begin{verbatim}
@@ -128,9 +126,9 @@ Now we examine the results of record linkage.
 \begin{itemize}
 \tightlist
 \item
-  We have created 6464 blocks.
+  We have created 6,469 blocks.
 \item
-  The blocking process utilized 1232 columns (2 character shingles).
+  The blocking process utilized 1,232 columns (2 character shingles).
 \item
   We have 3,916 blocks of 2 elements, 1,604 blocks of 3 elements,\ldots, 2 blocks of 7 elements.
 \end{itemize}
@@ -142,13 +140,13 @@ result_reclin
 \begin{verbatim}
 #> ========================================================
 #> Blocking based on the nnd method.
-#> Number of blocks: 6464.
+#> Number of blocks: 6469.
 #> Number of columns used for blocking: 1232.
 #> Reduction ratio: 0.9999.
 #> ========================================================
 #> Distribution of the size of the blocks:
 #>    2    3    4    5    6    7 
-#> 3912 1597  931   21    1    2
+#> 3916 1604  926   19    2    2
 \end{verbatim}
 
 Structure of the object is as follows:
@@ -263,7 +261,7 @@ We have 10,000 matched pairs. We use the \texttt{true\_blocks} parameter in the 
 \begin{verbatim}
 result_2_reclin <- blocking(x = foreigners_1$txt, 
                             y = foreigners_2$txt, 
-                            verbose = 1, n_threads = 4, 
+                            verbose = 1,
                             true_blocks = matches[, .(x, y, block)])
 \end{verbatim}
 
@@ -280,20 +278,48 @@ result_2_reclin
 \begin{verbatim}
 #> ========================================================
 #> Blocking based on the nnd method.
-#> Number of blocks: 6470.
+#> Number of blocks: 6469.
 #> Number of columns used for blocking: 1232.
 #> Reduction ratio: 0.9999.
 #> ========================================================
 #> Distribution of the size of the blocks:
 #>    2    3    4    5    6    7 
-#> 3923 1592  932   20    1    2 
+#> 3916 1604  926   19    2    2 
 #> ========================================================
 #> Evaluation metrics (standard):
 #>      recall   precision         fpr         fnr    accuracy specificity 
-#>     96.8738     78.7100      0.0038      3.1262     99.9957     99.9962 
+#>     96.7782     78.7000      0.0038      3.2218     99.9957     99.9962 
 #>    f1_score 
-#>     86.8524
+#>     86.8079
 \end{verbatim}
+
+For example, our approach results in a 3.22\% false negative rate (FNR). To improve this, we can increase the \texttt{epsilon} parameter of the NND method from 0.1 to 0.2. To do so, we configure the \texttt{control\_ann} parameter in the blocking function using the \texttt{controls\_ann} and \texttt{control\_nnd} functions.
+
+\begin{verbatim}
+#> ===== creating tokens =====
+#> ===== starting search (nnd, x, y: 100000, 10000, t: 1232) =====
+#> ===== creating graph =====
+\end{verbatim}
+
+\begin{verbatim}
+#> ========================================================
+#> Blocking based on the nnd method.
+#> Number of blocks: 6412.
+#> Number of columns used for blocking: 1232.
+#> Reduction ratio: 0.9999.
+#> ========================================================
+#> Distribution of the size of the blocks:
+#>    2    3    4    5    7 
+#> 3824 1617  948   20    3 
+#> ========================================================
+#> Evaluation metrics (standard):
+#>      recall   precision         fpr         fnr    accuracy specificity 
+#>     96.8686     79.8100      0.0036      3.1314     99.9959     99.9964 
+#>    f1_score 
+#>     87.5158
+\end{verbatim}
+
+That decreases the FNR to 3.13\%.
 
 \section{\texorpdfstring{Customizing tooltip design with \pkg{ToOoOlTiPs}}{Customizing tooltip design with }}\label{customizing-tooltip-design-with}
 

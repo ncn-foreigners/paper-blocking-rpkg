@@ -9,6 +9,7 @@ library(palmerpenguins)
 library(kableExtra)
 
 
+
 ## ----packages, echo=TRUE, message=FALSE, warning=FALSE------------------------
 library(blocking)
 library(data.table)
@@ -33,11 +34,16 @@ head(foreigners_1)
 
 
 ## ----reclin_nnd, echo = TRUE--------------------------------------------------
-set.seed(2025)
 result_reclin <- blocking(x = foreigners_1$txt, 
                           y = foreigners_2$txt, 
-                          verbose = 1, 
-                          n_threads = 4)
+                          verbose = 1)
+
+
+## ----reclin_nnd_calcs---------------------------------------------------------
+blocks_tab <- table(result_reclin$result$block)
+block_ids <- rep(as.numeric(names(blocks_tab)), blocks_tab+1)
+block_size <- as.numeric(names(table(table(block_ids))))
+block_count <- as.vector(table(table(block_ids)))
 
 
 ## ----reclin_nnd_summary, echo = TRUE------------------------------------------
@@ -67,9 +73,18 @@ head(matches)
 ## ----reclin_nnd_true_blocks, echo = TRUE--------------------------------------
 result_2_reclin <- blocking(x = foreigners_1$txt, 
                             y = foreigners_2$txt, 
-                            verbose = 1, n_threads = 4, 
+                            verbose = 1,
                             true_blocks = matches[, .(x, y, block)])
 result_2_reclin
+
+
+## ----reclin_nnd_improved------------------------------------------------------
+result_3_reclin <- blocking(x = foreigners_1$txt, 
+                            y = foreigners_2$txt, 
+                            verbose = 1,
+                            true_blocks = matches[, .(x, y, block)],
+                            control_ann = controls_ann(nnd = control_nnd(epsilon = 0.2)))
+result_3_reclin
 
 
 ## ----penguins-alison, out.width = "100%", out.height = "30%", fig.cap = "Artwork by \\@allison\\_horst", fig.alt="A picture of three different penguins with their species: Chinstrap, Gentoo, and Adelie. "----

@@ -37,6 +37,7 @@ library(plotly)
 library(ggplot2)
 library(palmerpenguins)
 library(kableExtra)
+
 ```
 
 # Introduction
@@ -96,21 +97,26 @@ foreigners_2[, txt := paste0(fname, sname, surname, date, region, country)]
 head(foreigners_1)
 ```
 
-We use the newly created columns in the `blocking` function, which relies on the default \CRANpkg{rnndescent} (Nearest Neighbor Descent) algorithm based on cosine distance. Additionally, we set `verbose = 1` to monitor progress.
+We use the newly created columns in the `blocking` function, which relies on the default \CRANpkg{rnndescent} (Nearest Neighbor Descent) algorithm based on cosine distance. Additionally, we set `verbose = 1` to monitor progress. Note that a default parameter of the `blocking` function is `seed = 2023`, which sets the random seed.
 
 ```{r reclin_nnd, echo = TRUE}
-set.seed(2025)
 result_reclin <- blocking(x = foreigners_1$txt, 
                           y = foreigners_2$txt, 
-                          verbose = 1, 
-                          n_threads = 4)
+                          verbose = 1)
+```
+
+```{r reclin_nnd_calcs}
+blocks_tab <- table(result_reclin$result$block)
+block_ids <- rep(as.numeric(names(blocks_tab)), blocks_tab+1)
+block_size <- as.numeric(names(table(table(block_ids))))
+block_count <- as.vector(table(table(block_ids)))
 ```
 
 Now we examine the results of record linkage.
 
-- We have created `r NROW(unique(result_reclin$result$block))` blocks.
-- The blocking process utilized `r NROW(result_reclin$colnames)` columns (2 character shingles).
-- We have 3,916 blocks of 2 elements, 1,604 blocks of 3 elements,..., 2 blocks of 7 elements.
+- We have created `r format(NROW(unique(result_reclin$result$block)), big.mark = ",")` blocks.
+- The blocking process utilized `r format(NROW(result_reclin$colnames), big.mark = ",")` columns (2 character shingles).
+- We have `r format(block_count[1], big.mark = ",")` blocks of `r block_size[1]` elements, `r format(block_count[2], big.mark = ",")` blocks of `r block_size[2]` elements,..., `r format(block_count[length(block_count)], big.mark = ",")` blocks of `r block_size[length(block_size)]` elements.
 
 ```{r reclin_nnd_summary, echo = TRUE}
 result_reclin
@@ -163,10 +169,23 @@ We have 10,000 matched pairs. We use the `true_blocks` parameter in the `blockin
 ```{r reclin_nnd_true_blocks, echo = TRUE}
 result_2_reclin <- blocking(x = foreigners_1$txt, 
                             y = foreigners_2$txt, 
-                            verbose = 1, n_threads = 4, 
+                            verbose = 1,
                             true_blocks = matches[, .(x, y, block)])
 result_2_reclin
 ```
+
+For example, our approach results in a `r sprintf("%.2f", (result_2_reclin$metrics)[4]*100)`% false negative rate (FNR). To improve this, we can increase the `epsilon` parameter of the NND method from 0.1 to 0.2. To do so, we configure the `control_ann` parameter in the blocking function using the `controls_ann` and `control_nnd` functions. 
+
+```{r reclin_nnd_improved}
+result_3_reclin <- blocking(x = foreigners_1$txt, 
+                            y = foreigners_2$txt, 
+                            verbose = 1,
+                            true_blocks = matches[, .(x, y, block)],
+                            control_ann = controls_ann(nnd = control_nnd(epsilon = 0.2)))
+result_3_reclin
+```
+
+That decreases the FNR to `r sprintf("%.2f", (result_3_reclin$metrics)[4]*100)`%.
 
 # Customizing tooltip design with \pkg{ToOoOlTiPs}
 
