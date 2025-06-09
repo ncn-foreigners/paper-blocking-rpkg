@@ -65,7 +65,7 @@ library(blocking)
 library(data.table)
 ```
 
-We will demonstrate the use of `blocking` function for record linkage with the `foreigners` dataset included in the package. This fictional representation of the foreign population in Poland was generated based on publicly available information, preserving the distributions from administrative registers. It contains 110,000 rows with 100,000 entities. Each row represents one record, with the following columns:
+We demonstrate the use of `blocking` function for record linkage on the `foreigners` dataset included in the package. This fictional representation of the foreign population in Poland was generated based on publicly available information, preserving the distributions from administrative registers. It contains 110,000 rows with 100,000 entities. Each row represents one record, with the following columns:
 
 - `fname` -- first name,
 - `sname` -- second name,
@@ -97,11 +97,13 @@ foreigners_2[, txt := paste0(fname, sname, surname, date, region, country)]
 head(foreigners_1)
 ```
 
+### General use
+
 We use the newly created columns in the `blocking` function, which relies on the default \CRANpkg{rnndescent} (Nearest Neighbor Descent) algorithm based on cosine distance. Additionally, we set `verbose = 1` to monitor progress. Note that a default parameter of the `blocking` function is `seed = 2023`, which sets the random seed.
 
 ```{r reclin_nnd, echo = TRUE}
-result_reclin <- blocking(x = foreigners_1$txt, 
-                          y = foreigners_2$txt, 
+result_reclin <- blocking(x = foreigners_1$txt,
+                          y = foreigners_2$txt,
                           verbose = 1)
 ```
 
@@ -116,7 +118,7 @@ Now we examine the results of record linkage.
 
 - We have created `r format(NROW(unique(result_reclin$result$block)), big.mark = ",")` blocks.
 - The blocking process utilized `r format(NROW(result_reclin$colnames), big.mark = ",")` columns (2 character shingles).
-- We have `r format(block_count[1], big.mark = ",")` blocks of `r block_size[1]` elements, `r format(block_count[2], big.mark = ",")` blocks of `r block_size[2]` elements,..., `r format(block_count[length(block_count)], big.mark = ",")` blocks of `r block_size[length(block_size)]` elements.
+- We have `r format(block_count[1], big.mark = ",")` blocks of `r block_size[1]` elements, `r format(block_count[2], big.mark = ",")` blocks of `r block_size[2]` elements,..., `r format(block_count[NROW(block_count)], big.mark = ",")` blocks of `r block_size[NROW(block_size)]` elements.
 
 ```{r reclin_nnd_summary, echo = TRUE}
 result_reclin
@@ -148,7 +150,7 @@ The resulting `data.table` has four columns:
 head(result_reclin$result)
 ```
 
-Let's examine the first pair. Obviously, there are typos in the `fname` and `surname`. Nevertheless, the pair appears to be a match.
+Let's examine the first pair. Obviously, there are typos in the `fname` and `surname`. Nevertheless, the pair is a match.
 
 ```{r reclin_nnd_example, echo = TRUE}
 cbind(t(foreigners_1[3, 1:6]), t(foreigners_2[1, 1:6]))
@@ -167,25 +169,163 @@ head(matches)
 We have 10,000 matched pairs. We use the `true_blocks` parameter in the `blocking` function to specify the true block assignments. We obtain the quality metrics for the assessment of record linkage.
 
 ```{r reclin_nnd_true_blocks, echo = TRUE}
-result_2_reclin <- blocking(x = foreigners_1$txt, 
-                            y = foreigners_2$txt, 
+result_2_reclin <- blocking(x = foreigners_1$txt,
+                            y = foreigners_2$txt,
                             verbose = 1,
                             true_blocks = matches[, .(x, y, block)])
 result_2_reclin
 ```
 
-For example, our approach results in a `r sprintf("%.2f", (result_2_reclin$metrics)[4]*100)`% false negative rate (FNR). To improve this, we can increase the `epsilon` parameter of the NND method from 0.1 to 0.2. To do so, we configure the `control_ann` parameter in the blocking function using the `controls_ann` and `control_nnd` functions. 
+For example, our approach results in a `r sprintf("%.2f", (result_2_reclin$metrics)[4]*100)`% false negative rate (FNR). To improve this, we can increase the `epsilon` parameter of the NND method from 0.1 to 0.5. To do so, we configure the `control_ann` parameter in the `blocking` function using the `controls_ann` and `control_nnd` functions.
 
-```{r reclin_nnd_improved}
-result_3_reclin <- blocking(x = foreigners_1$txt, 
-                            y = foreigners_2$txt, 
+```{r reclin_nnd_improved, echo = TRUE}
+result_3_reclin <- blocking(x = foreigners_1$txt,
+                            y = foreigners_2$txt,
                             verbose = 1,
                             true_blocks = matches[, .(x, y, block)],
-                            control_ann = controls_ann(nnd = control_nnd(epsilon = 0.2)))
+                            control_ann = controls_ann(nnd = control_nnd(epsilon = 0.5)))
 result_3_reclin
 ```
 
 That decreases the FNR to `r sprintf("%.2f", (result_3_reclin$metrics)[4]*100)`%.
+
+### Integration with the \CRANpkg{reclin2} package
+
+Let us load the \CRANpkg{reclin2} package.
+
+```{r reclin2_load, echo = TRUE}
+library(reclin2)
+```
+
+Now we present record linkage using the `pair_ann` function. It is based on the `pair_minism` function and reuses some of its source code. The `on` parameter specifies the column names for the approximate nearest neighbours (ANN) search. Setting `deduplication = FALSE` enables record linkage. The function works as follows.
+
+```{r reclin_pair_ann, echo = TRUE}
+result_pair_ann <- pair_ann(x = foreigners_1,
+                            y = foreigners_2,
+                            on = c("fname", "sname", "surname", "date", "region", "country"),
+                            deduplication = FALSE)
+head(result_pair_ann)
+```
+
+The `pair_ann` function returns the total number of pairs. This output can be integrated into the pipeline of the \CRANpkg{reclin2} package. We compare pairs across all selected variables using the Jaro-Winkler distance. The similarity scores are summed across the variables and we set `threshold = 4.5` to accept a pair.
+
+```{r reclin_pair_ann_pipeline, echo = TRUE}
+result_pair_ann |>
+  compare_pairs(on = c("fname", "sname", "surname", "date", "region", "country"),
+                comparators = list(cmp_jarowinkler())) |>
+  score_simple("score",
+               on = c("fname", "sname", "surname", "date", "region", "country")) |>
+  select_threshold("threshold", score = "score", threshold = 4.5) |>
+  link(selection = "threshold") |>
+  head()
+```
+
+We observe that the example pairs are matches.
+
+## Deduplication example
+
+We demonstrate deduplication using the `blocking` function on the `RLdata500` dataset from the \CRANpkg{RecordLinkage} package. Note that the dataset is included in the `blocking` package. It contains artificial personal data. Fifty records have been duplicated with randomly generated errors. Each row represents one record, with the following columns:
+
+- `fname_c1` -- first name, first component,
+- `fname_c2` -- first name, second component,
+- `lname_c1` -- last name, first component,
+- `lname_c2` -- last name, second component,
+- `by` -- year of birth,
+- `bm` -- month of birth,
+- `bd` -- day of birth,
+- `rec_id` -- record id,
+- `ent_id` -- entity id.
+
+```{r RLdata500, echo = TRUE}
+data(RLdata500)
+head(RLdata500)
+```
+
+We create a new column (`id_count`) that indicates how many times a given unit occurs and then add leading zeros to the `bm` and `bd` columns. Finally, we create a new string column that concatenates the information from all columns (excluding `rec_id`, `ent_id` and `id_count`) in each row.
+
+```{r RLdata500_concat, echo = TRUE}
+RLdata500[, id_count :=.N, ent_id]
+RLdata500[, bm:=sprintf("%02d", bm)]
+RLdata500[, bd:=sprintf("%02d", bd)]
+RLdata500[, txt:=tolower(paste0(fname_c1,fname_c2,lname_c1,lname_c2,by,bm,bd))]
+head(RLdata500)
+```
+
+As in the previous example, we use the `txt` column in the `blocking` function. This time, we set `ann = hnsw` to use the Hierarchical Navigable Small World (HNSW) algorithm from the \CRANpkg{RcppHNSW} package and `graph = TRUE` to obtain an \CRANpkg{igraph} object for visualization.
+
+```{r dedup_hnsw, echo = TRUE}
+result_dedup_hnsw <- blocking(x = RLdata500$txt,
+                              ann = "hnsw",
+                              graph = TRUE,
+                              verbose = 1)
+```
+
+The results are as follows.
+
+```{r dedup_hnsw_result, echo = TRUE}
+result_dedup_hnsw
+head(result_dedup_hnsw$result)
+```
+
+Now we visualize connections using the obtained graph.
+
+```{r dedup_graph, echo = TRUE}
+plot(result_dedup_hnsw$graph, vertex.size = 1, vertex.label = NA)
+```
+
+We create a long `data.table` with information on blocks and units from the original dataset.
+
+```{r dedup_melted, echo = TRUE}
+df_block_melted <- melt(result_dedup_hnsw$result, id.vars = c("block", "dist"))
+df_block_melted_rec_block <- unique(df_block_melted[, .(rec_id=value, block)])
+head(df_block_melted_rec_block)
+```
+
+We add the block information to the final dataset.
+
+```{r dedup_blocks, echo = TRUE}
+RLdata500[df_block_melted_rec_block, on = "rec_id", block_id := i.block]
+head(RLdata500)
+```
+
+We can check in how many blocks the same entities (`ent_id`) are observed. In our example, all the same entities are in the same blocks.
+
+```{r dedup_uniq_blocs, echo = TRUE}
+RLdata500[, .(uniq_blocks = uniqueN(block_id)), .(ent_id)][, .N, uniq_blocks]
+```
+
+Now we can visualize the distances between the units stored in the `result_dedup_hnsw$result` dataset. Clearly we have a mixture of two groups: matches (close to 0) and non-matches (close to 1).
+
+```{r dedup_hist, echo = TRUE}
+hist(result_dedup_hnsw$result$dist, xlab = "Distances", ylab = "Frequency", breaks = "fd",
+     main = "Distances calculated between units")
+```
+
+Finally, we visualize the result based on the information whether a block contains matches or not.
+
+```{r dedup_density, echo = TRUE}
+df_for_density <- copy(df_block_melted[block %in% RLdata500$block_id])
+df_for_density[, match:= block %in% RLdata500[id_count == 2]$block_id]
+
+plot(density(df_for_density[match==FALSE]$dist), col = "blue", xlim = c(0, 0.8), 
+     main = "Distribution of distances between\nclusters type (match=red, non-match=blue)")
+lines(density(df_for_density[match==TRUE]$dist), col = "red", xlim = c(0, 0.8))
+```
+
+Now we compare the evaluation metrics across all ANN algorithms supported by the `blocking` function, i.e. NND, HNSW, Approximate Nearest Neighbors Oh Yeah (Annoy, from the \CRANpkg{RcppAnnoy} package), Locality-sensitive hashing (LSH, from the \CRANpkg{mlpack} package), and k-Nearest-Neighbors (kNN -- denoted as `"kd"`, from the \CRANpkg{mlpack} package). We use the `rec_id` and `ent_id` columns from the `RLdata500` dataset to specify the true blocks and then calculate evaluation metrics for all algorithms. The results are as follows.
+
+```{r comparision, echo = TRUE}
+true_blocks <- RLdata500[, c("rec_id", "ent_id"), with = FALSE]
+setnames(true_blocks, old = c("rec_id", "ent_id"), c("x", "block"))
+eval_metrics <- list()
+ann <- c("nnd", "hnsw", "annoy", "lsh","kd")
+for (algorithm in ann) {
+  eval_metrics[[algorithm]] <- blocking(x = RLdata500$txt,
+                                ann = algorithm,
+                                true_blocks = true_blocks)$metrics
+}
+do.call(rbind, eval_metrics) * 100
+```
 
 # Customizing tooltip design with \pkg{ToOoOlTiPs}
 

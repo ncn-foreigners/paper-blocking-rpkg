@@ -34,8 +34,8 @@ head(foreigners_1)
 
 
 ## ----reclin_nnd, echo = TRUE--------------------------------------------------
-result_reclin <- blocking(x = foreigners_1$txt, 
-                          y = foreigners_2$txt, 
+result_reclin <- blocking(x = foreigners_1$txt,
+                          y = foreigners_2$txt,
                           verbose = 1)
 
 
@@ -71,20 +71,114 @@ head(matches)
 
 
 ## ----reclin_nnd_true_blocks, echo = TRUE--------------------------------------
-result_2_reclin <- blocking(x = foreigners_1$txt, 
-                            y = foreigners_2$txt, 
+result_2_reclin <- blocking(x = foreigners_1$txt,
+                            y = foreigners_2$txt,
                             verbose = 1,
                             true_blocks = matches[, .(x, y, block)])
 result_2_reclin
 
 
-## ----reclin_nnd_improved------------------------------------------------------
-result_3_reclin <- blocking(x = foreigners_1$txt, 
-                            y = foreigners_2$txt, 
+## ----reclin_nnd_improved, echo = TRUE-----------------------------------------
+result_3_reclin <- blocking(x = foreigners_1$txt,
+                            y = foreigners_2$txt,
                             verbose = 1,
                             true_blocks = matches[, .(x, y, block)],
-                            control_ann = controls_ann(nnd = control_nnd(epsilon = 0.2)))
+                            control_ann = controls_ann(nnd = control_nnd(epsilon = 0.5)))
 result_3_reclin
+
+
+## ----reclin2_load, echo = TRUE------------------------------------------------
+library(reclin2)
+
+
+## ----reclin_pair_ann, echo = TRUE---------------------------------------------
+result_pair_ann <- pair_ann(x = foreigners_1,
+                            y = foreigners_2,
+                            on = c("fname", "sname", "surname", "date", "region", "country"),
+                            deduplication = FALSE)
+head(result_pair_ann)
+
+
+## ----reclin_pair_ann_pipeline, echo = TRUE------------------------------------
+result_pair_ann |>
+  compare_pairs(on = c("fname", "sname", "surname", "date", "region", "country"),
+                comparators = list(cmp_jarowinkler())) |>
+  score_simple("score",
+               on = c("fname", "sname", "surname", "date", "region", "country")) |>
+  select_threshold("threshold", score = "score", threshold = 4.5) |>
+  link(selection = "threshold") |>
+  head()
+
+
+## ----RLdata500, echo = TRUE---------------------------------------------------
+data(RLdata500)
+head(RLdata500)
+
+
+## ----RLdata500_concat, echo = TRUE--------------------------------------------
+RLdata500[, id_count :=.N, ent_id]
+RLdata500[, bm:=sprintf("%02d", bm)]
+RLdata500[, bd:=sprintf("%02d", bd)]
+RLdata500[, txt:=tolower(paste0(fname_c1,fname_c2,lname_c1,lname_c2,by,bm,bd))]
+head(RLdata500)
+
+
+## ----dedup_hnsw, echo = TRUE--------------------------------------------------
+result_dedup_hnsw <- blocking(x = RLdata500$txt,
+                              ann = "hnsw",
+                              graph = TRUE,
+                              verbose = 1)
+
+
+## ----dedup_hnsw_result, echo = TRUE-------------------------------------------
+result_dedup_hnsw
+head(result_dedup_hnsw$result)
+
+
+## ----dedup_graph, echo = TRUE-------------------------------------------------
+plot(result_dedup_hnsw$graph, vertex.size = 1, vertex.label = NA)
+
+
+## ----dedup_melted, echo = TRUE------------------------------------------------
+df_block_melted <- melt(result_dedup_hnsw$result, id.vars = c("block", "dist"))
+df_block_melted_rec_block <- unique(df_block_melted[, .(rec_id=value, block)])
+head(df_block_melted_rec_block)
+
+
+## ----dedup_blocks, echo = TRUE------------------------------------------------
+RLdata500[df_block_melted_rec_block, on = "rec_id", block_id := i.block]
+head(RLdata500)
+
+
+## ----dedup_uniq_blocs, echo = TRUE--------------------------------------------
+RLdata500[, .(uniq_blocks = uniqueN(block_id)), .(ent_id)][, .N, uniq_blocks]
+
+
+## ----dedup_hist, echo = TRUE--------------------------------------------------
+hist(result_dedup_hnsw$result$dist, xlab = "Distances", ylab = "Frequency", breaks = "fd",
+     main = "Distances calculated between units")
+
+
+## ----dedup_density, echo = TRUE-----------------------------------------------
+df_for_density <- copy(df_block_melted[block %in% RLdata500$block_id])
+df_for_density[, match:= block %in% RLdata500[id_count == 2]$block_id]
+
+plot(density(df_for_density[match==FALSE]$dist), col = "blue", xlim = c(0, 0.8), 
+     main = "Distribution of distances between\nclusters type (match=red, non-match=blue)")
+lines(density(df_for_density[match==TRUE]$dist), col = "red", xlim = c(0, 0.8))
+
+
+## ----comparision, echo = TRUE-------------------------------------------------
+true_blocks <- RLdata500[, c("rec_id", "ent_id"), with = FALSE]
+setnames(true_blocks, old = c("rec_id", "ent_id"), c("x", "block"))
+eval_metrics <- list()
+ann <- c("nnd", "hnsw", "annoy", "lsh","kd")
+for (algorithm in ann) {
+  eval_metrics[[algorithm]] <- blocking(x = RLdata500$txt,
+                                ann = algorithm,
+                                true_blocks = true_blocks)$metrics
+}
+do.call(rbind, eval_metrics) * 100
 
 
 ## ----penguins-alison, out.width = "100%", out.height = "30%", fig.cap = "Artwork by \\@allison\\_horst", fig.alt="A picture of three different penguins with their species: Chinstrap, Gentoo, and Adelie. "----
