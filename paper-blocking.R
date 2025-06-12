@@ -135,7 +135,7 @@ result_dedup_hnsw
 head(result_dedup_hnsw$result)
 
 
-## ----dedup_graph, echo = TRUE-------------------------------------------------
+## ----dedup_graph, echo = TRUE, out.width = "100%", fig.width = 6, fig.height=5, layout="l-body"----
 plot(result_dedup_hnsw$graph, vertex.size = 1, vertex.label = NA)
 
 
@@ -154,12 +154,12 @@ head(RLdata500)
 RLdata500[, .(uniq_blocks = uniqueN(block_id)), .(ent_id)][, .N, uniq_blocks]
 
 
-## ----dedup_hist, echo = TRUE--------------------------------------------------
+## ----dedup_hist, echo = TRUE, out.width = "100%", fig.width = 6, fig.height=5, layout="l-body"----
 hist(result_dedup_hnsw$result$dist, xlab = "Distances", ylab = "Frequency", breaks = "fd",
      main = "Distances calculated between units")
 
 
-## ----dedup_density, echo = TRUE-----------------------------------------------
+## ----dedup_density, echo = TRUE, out.width = "100%", fig.width = 6, fig.height=5, layout="l-body"----
 df_for_density <- copy(df_block_melted[block %in% RLdata500$block_id])
 df_for_density[, match:= block %in% RLdata500[id_count == 2]$block_id]
 
@@ -178,6 +178,29 @@ for (algorithm in ann) {
                                 ann = algorithm,
                                 true_blocks = true_blocks)$metrics
 }
+
+set.seed(2025)
+blocks_klsh_10 <- klsh::klsh(r.set = RLdata500[, c("fname_c1", "fname_c2", "lname_c1",
+                                                   "lname_c2", "by", "bm", "bd")],
+                             p = 20,
+                             num.blocks = 10,
+                             k = 2)
+klsh_10_metrics <- klsh::confusion.from.blocking(blocking = blocks_klsh_10, 
+                                                 true_ids = RLdata500$ent_id)[-1]
+klsh_10_metrics$f1_score <- 2 * klsh_10_metrics$precision * klsh_10_metrics$recall / 
+  (klsh_10_metrics$precision + klsh_10_metrics$recall)
+eval_metrics$klsh_10 <- unlist(klsh_10_metrics)
+blocks_klsh_100 <- klsh::klsh(r.set = RLdata500[, c("fname_c1", "fname_c2", "lname_c1",
+                                                    "lname_c2", "by", "bm", "bd")],
+                              p = 20,
+                              num.blocks = 100,
+                              k = 2)
+klsh_100_metrics <- klsh::confusion.from.blocking(blocking = blocks_klsh_100, 
+                                                 true_ids = RLdata500$ent_id)[-1]
+klsh_100_metrics$f1_score <- 2 * klsh_100_metrics$precision * klsh_100_metrics$recall /
+  (klsh_100_metrics$precision + klsh_100_metrics$recall)
+eval_metrics$klsh_100 <- unlist(klsh_100_metrics)
+
 do.call(rbind, eval_metrics) * 100
 
 

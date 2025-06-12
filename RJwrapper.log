@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.6.7)  9 JUN 2025 15:48
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.6.12)  12 JUN 2025 16:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **RJwrapper.tex
 (./RJwrapper.tex
-LaTeX2e <2025-06-01>
+LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2025-05-26>
 (c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/base/report.cls
 Document Class: report 2025/01/22 v1.4n Standard LaTeX document class
@@ -570,7 +570,7 @@ LaTeX Info: Redefining \] on input line 2950.
 ) (c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsfonts/amssymb.sty
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
 ) (c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/tools/array.sty
-Package: array 2025/05/19 v2.6i Tabular extension package (FMi)
+Package: array 2025/06/08 v2.6j Tabular extension package (FMi)
 \col@sep=\dimen293
 \ar@mcellbox=\box69
 \extrarowheight=\dimen294
@@ -805,13 +805,13 @@ Overfull \hbox (2.85963pt too wide) in paragraph at lines 467--467
 
 
 [7]
-<paper-blocking_files/figure-latex/dedup_graph-1.pdf, id=114, 469.755pt x 325.215pt>
+<paper-blocking_files/figure-latex/dedup_graph-1.pdf, id=114, 433.62pt x 361.35pt>
 File: paper-blocking_files/figure-latex/dedup_graph-1.pdf Graphic file (type pdf)
 <use paper-blocking_files/figure-latex/dedup_graph-1.pdf>
 Package pdftex.def Info: paper-blocking_files/figure-latex/dedup_graph-1.pdf  used on input line 542.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+(pdftex.def)             Requested size: 398.33858pt x 331.96634pt.
 
-Overfull \hbox (86.41528pt too wide) in paragraph at lines 542--543
+Overfull \hbox (15.0pt too wide) in paragraph at lines 542--543
 [][] 
  []
 
@@ -829,13 +829,13 @@ Overfull \hbox (45.33206pt too wide) in paragraph at lines 606--606
 []\T1/zi4/m/n/10 hist(result_dedup_hnsw$result$dist, xlab = "Distances", ylab = "Frequency", breaks = "fd",[] 
  []
 
-<paper-blocking_files/figure-latex/dedup_hist-1.pdf, id=126, 469.755pt x 325.215pt>
+<paper-blocking_files/figure-latex/dedup_hist-1.pdf, id=126, 433.62pt x 361.35pt>
 File: paper-blocking_files/figure-latex/dedup_hist-1.pdf Graphic file (type pdf)
 <use paper-blocking_files/figure-latex/dedup_hist-1.pdf>
 Package pdftex.def Info: paper-blocking_files/figure-latex/dedup_hist-1.pdf  used on input line 608.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+(pdftex.def)             Requested size: 398.33858pt x 331.96634pt.
 
-Overfull \hbox (86.41528pt too wide) in paragraph at lines 608--609
+Overfull \hbox (15.0pt too wide) in paragraph at lines 608--609
 [][] 
  []
 
@@ -847,41 +847,60 @@ Overfull \hbox (43.61818pt too wide) in paragraph at lines 619--619
 
 
 [10 <./paper-blocking_files/figure-latex/dedup_hist-1.pdf>]
-<paper-blocking_files/figure-latex/dedup_density-1.pdf, id=137, 469.755pt x 325.215pt>
+<paper-blocking_files/figure-latex/dedup_density-1.pdf, id=137, 433.62pt x 361.35pt>
 File: paper-blocking_files/figure-latex/dedup_density-1.pdf Graphic file (type pdf)
 <use paper-blocking_files/figure-latex/dedup_density-1.pdf>
 Package pdftex.def Info: paper-blocking_files/figure-latex/dedup_density-1.pdf  used on input line 621.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+(pdftex.def)             Requested size: 398.33858pt x 331.96634pt.
 
-Overfull \hbox (86.41528pt too wide) in paragraph at lines 621--622
+Overfull \hbox (15.0pt too wide) in paragraph at lines 621--622
 [][] 
+ []
+
+
+Overfull \hbox (28.33893pt too wide) in paragraph at lines 659--659
+[]\T1/zi4/m/n/10 blocks_klsh_10 <- klsh::klsh(r.set = RLdata500[, c("fname_c1", "fname_c2", "lname_c1",[] 
  []
 
 
 
 [11 <./paper-blocking_files/figure-latex/dedup_density-1.pdf>]
-<figures/penguins.png, id=156, 72.27pt x 42.9605pt>
+Overfull \hbox (18.13889pt too wide) in paragraph at lines 659--659
+[]\T1/zi4/m/n/10 klsh_10_metrics$f1_score <- 2 * klsh_10_metrics$precision * klsh_10_metrics$recall /[] 
+ []
+
+
+Overfull \hbox (33.43895pt too wide) in paragraph at lines 659--659
+[]\T1/zi4/m/n/10 blocks_klsh_100 <- klsh::klsh(r.set = RLdata500[, c("fname_c1", "fname_c2", "lname_c1",[] 
+ []
+
+
+Overfull \hbox (33.43895pt too wide) in paragraph at lines 659--659
+[]\T1/zi4/m/n/10 klsh_100_metrics$f1_score <- 2 * klsh_100_metrics$precision * klsh_100_metrics$recall /[] 
+ []
+
+<figures/penguins.png, id=157, 72.27pt x 42.9605pt>
 File: figures/penguins.png Graphic file (type png)
 <use figures/penguins.png>
-Package pdftex.def Info: figures/penguins.png  used on input line 656.
+Package pdftex.def Info: figures/penguins.png  used on input line 681.
 (pdftex.def)             Requested size: 398.44772pt x 212.57635pt.
-LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 666.
+LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 691.
 (c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ot1ppl.fd
 File: ot1ppl.fd 2001/06/04 font definitions for OT1/ppl.
 )
-LaTeX Font Info:    Trying to load font information for OML+zplm on input line 666.
+LaTeX Font Info:    Trying to load font information for OML+zplm on input line 691.
 (c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/omlzplm.fd
 File: omlzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OML/zplm.
 )
-LaTeX Font Info:    Trying to load font information for OMS+zplm on input line 666.
+LaTeX Font Info:    Trying to load font information for OMS+zplm on input line 691.
 (c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/omszplm.fd
 File: omszplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMS/zplm.
 )
-LaTeX Font Info:    Trying to load font information for OMX+zplm on input line 666.
+LaTeX Font Info:    Trying to load font information for OMX+zplm on input line 691.
 (c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/omxzplm.fd
 File: omxzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMX/zplm.
 )
-LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 666.
+LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 691.
 (c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ot1zplm.fd
 File: ot1zplm.fd 2002/09/08 Fontinst v1.914 font definitions for OT1/zplm.
 )
@@ -890,25 +909,29 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 666.
+(Font)              scaled to size 7.29405pt on input line 691.
 (c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 5.21004pt on input line 666.
+(Font)              scaled to size 5.21004pt on input line 691.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 666.
+(Font)              scaled to size 7.29405pt on input line 691.
 (c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 5.21004pt on input line 666.
-<paper-blocking_files/figure-latex/penguins-ggplot-1.pdf, id=161, 433.62pt x 361.35pt>
+(Font)              scaled to size 5.21004pt on input line 691.
+<paper-blocking_files/figure-latex/penguins-ggplot-1.pdf, id=162, 433.62pt x 361.35pt>
 File: paper-blocking_files/figure-latex/penguins-ggplot-1.pdf Graphic file (type pdf)
 <use paper-blocking_files/figure-latex/penguins-ggplot-1.pdf>
-Package pdftex.def Info: paper-blocking_files/figure-latex/penguins-ggplot-1.pdf  used on input line 695.
+Package pdftex.def Info: paper-blocking_files/figure-latex/penguins-ggplot-1.pdf  used on input line 720.
 (pdftex.def)             Requested size: 398.33858pt x 331.96634pt.
-(./RJwrapper.bbl (./RJwrapper.brf)
+
+
+[12]
+
+[13 <./figures/penguins.png> <./paper-blocking_files/figure-latex/penguins-ggplot-1.pdf>] (./RJwrapper.bbl (./RJwrapper.brf)
 \tf@brf=\write6
 \openout6 = `RJwrapper.brf'.
 
@@ -924,22 +947,18 @@ LaTeX Font Info:    Font shape `U/msb/m/n' will be
 (Font)              scaled to size 7.91925pt on input line 13.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
 (Font)              scaled to size 6.25204pt on input line 13.
-
-
-[12 <./figures/penguins.png>]
-
-[13 <./paper-blocking_files/figure-latex/penguins-ggplot-1.pdf>])
+)
 
 LaTeX Font Warning: Font shape `T1/zi4/m/it' undefined
-(Font)              using `T1/zi4/m/n' instead on input line 716.
+(Font)              using `T1/zi4/m/n' instead on input line 741.
 
 LaTeX Font Info:    Font shape `T1/zi4/m/it' will be
-(Font)              scaled to size 10.20004pt on input line 716.
+(Font)              scaled to size 10.20004pt on input line 741.
 )
 
 [14] (./RJwrapper.aux)
  ***********
-LaTeX2e <2025-06-01>
+LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2025-05-26>
  ***********
 
@@ -951,18 +970,18 @@ Package rerunfilecheck Info: File `RJwrapper.brf' has not changed.
 (rerunfilecheck)             Checksum: 9938796AA4DB3EC408D4462F50BED998;185.
  ) 
 Here is how much of TeX's memory you used:
- 27063 strings out of 469872
- 498082 string characters out of 5482281
- 914635 words of memory out of 5000000
- 54645 multiletter control sequences out of 15000+600000
- 664705 words of font info for 218 fonts, out of 8000000 for 9000
+ 27072 strings out of 469867
+ 498367 string characters out of 5482749
+ 914872 words of memory out of 5000000
+ 54654 multiletter control sequences out of 15000+600000
+ 665097 words of font info for 222 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 117i,12n,131p,1006b,917s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 117i,12n,131p,1006b,924s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4b.pfb><c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb><c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb><c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on RJwrapper.pdf (14 pages, 226150 bytes).
+Output written on RJwrapper.pdf (14 pages, 227690 bytes).
 PDF statistics:
- 235 PDF objects out of 1000 (max. 8388607)
- 196 compressed objects within 2 object streams
+ 236 PDF objects out of 1000 (max. 8388607)
+ 197 compressed objects within 2 object streams
  36 named destinations out of 1000 (max. 500000)
  59526 words of extra memory for PDF output out of 61914 (max. 10000000)
 

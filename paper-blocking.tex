@@ -539,7 +539,7 @@ Now we visualize connections using the obtained graph.
 plot(result_dedup_hnsw$graph, vertex.size = 1, vertex.label = NA)
 \end{verbatim}
 
-\includegraphics{paper-blocking_files/figure-latex/dedup_graph-1.pdf}
+\includegraphics[width=1\linewidth]{paper-blocking_files/figure-latex/dedup_graph-1}
 
 We create a long \texttt{data.table} with information on blocks and units from the original dataset.
 
@@ -605,7 +605,7 @@ hist(result_dedup_hnsw$result$dist, xlab = "Distances", ylab = "Frequency", brea
      main = "Distances calculated between units")
 \end{verbatim}
 
-\includegraphics{paper-blocking_files/figure-latex/dedup_hist-1.pdf}
+\includegraphics[width=1\linewidth]{paper-blocking_files/figure-latex/dedup_hist-1}
 
 Finally, we visualize the result based on the information whether a block contains matches or not.
 
@@ -618,9 +618,9 @@ plot(density(df_for_density[match==FALSE]$dist), col = "blue", xlim = c(0, 0.8),
 lines(density(df_for_density[match==TRUE]$dist), col = "red", xlim = c(0, 0.8))
 \end{verbatim}
 
-\includegraphics{paper-blocking_files/figure-latex/dedup_density-1.pdf}
+\includegraphics[width=1\linewidth]{paper-blocking_files/figure-latex/dedup_density-1}
 
-Now we compare the evaluation metrics across all ANN algorithms supported by the \texttt{blocking} function, i.e.~NND, HNSW, Approximate Nearest Neighbors Oh Yeah (Annoy, from the \CRANpkg{RcppAnnoy} package), Locality-sensitive hashing (LSH, from the \CRANpkg{mlpack} package), and k-Nearest-Neighbors (kNN -- denoted as \texttt{"kd"}, from the \CRANpkg{mlpack} package). We use the \texttt{rec\_id} and \texttt{ent\_id} columns from the \texttt{RLdata500} dataset to specify the true blocks and then calculate evaluation metrics for all algorithms. The results are as follows.
+Now we compare the evaluation metrics across all ANN algorithms supported by the \texttt{blocking} function, i.e.~NND, HNSW, Approximate Nearest Neighbors Oh Yeah (Annoy, from the \CRANpkg{RcppAnnoy} package), Locality-sensitive hashing (LSH, from the \CRANpkg{mlpack} package), and k-Nearest Neighbors (kNN -- denoted as \texttt{"kd"}, from the \CRANpkg{mlpack} package). We use the \texttt{rec\_id} and \texttt{ent\_id} columns from the \texttt{RLdata500} dataset to specify the true blocks and then calculate evaluation metrics for all algorithms. Additionally, we assess blocking using the \texttt{klsh} function from the \CRANpkg{klsh} package, configured to create 10 blocks and 100 blocks, respectively. In both settings, we use 20 random projections and 2-character shingles. The results are as follows (\texttt{klsh\_10} and \texttt{klsh\_100} refer to the \texttt{klsh} algorithm with 10 blocks and 100 blocks, respectively).
 
 \begin{verbatim}
 true_blocks <- RLdata500[, c("rec_id", "ent_id"), with = FALSE]
@@ -632,16 +632,41 @@ for (algorithm in ann) {
                                 ann = algorithm,
                                 true_blocks = true_blocks)$metrics
 }
+
+set.seed(2025)
+blocks_klsh_10 <- klsh::klsh(r.set = RLdata500[, c("fname_c1", "fname_c2", "lname_c1",
+                                                   "lname_c2", "by", "bm", "bd")],
+                             p = 20,
+                             num.blocks = 10,
+                             k = 2)
+klsh_10_metrics <- klsh::confusion.from.blocking(blocking = blocks_klsh_10, 
+                                                 true_ids = RLdata500$ent_id)[-1]
+klsh_10_metrics$f1_score <- 2 * klsh_10_metrics$precision * klsh_10_metrics$recall / 
+  (klsh_10_metrics$precision + klsh_10_metrics$recall)
+eval_metrics$klsh_10 <- unlist(klsh_10_metrics)
+blocks_klsh_100 <- klsh::klsh(r.set = RLdata500[, c("fname_c1", "fname_c2", "lname_c1",
+                                                    "lname_c2", "by", "bm", "bd")],
+                              p = 20,
+                              num.blocks = 100,
+                              k = 2)
+klsh_100_metrics <- klsh::confusion.from.blocking(blocking = blocks_klsh_100, 
+                                                 true_ids = RLdata500$ent_id)[-1]
+klsh_100_metrics$f1_score <- 2 * klsh_100_metrics$precision * klsh_100_metrics$recall /
+  (klsh_100_metrics$precision + klsh_100_metrics$recall)
+eval_metrics$klsh_100 <- unlist(klsh_100_metrics)
+
 do.call(rbind, eval_metrics) * 100
 \end{verbatim}
 
 \begin{verbatim}
-#>       recall precision       fpr fnr accuracy specificity f1_score
-#> nnd      100  5.060729 0.7522053   0 99.24810    99.24779 9.633911
-#> hnsw     100  4.757374 0.8027265   0 99.19760    99.19727 9.082652
-#> annoy    100  4.803074 0.7947073   0 99.20561    99.20529 9.165903
-#> lsh       98  1.120769 3.4667201   2 96.53387    96.53328 2.216192
-#> kd       100  4.306632 0.8909383   0 99.10942    99.10906 8.257638
+#>          recall precision       fpr fnr accuracy specificity f1_score
+#> nnd         100 5.0607287 0.7522053   0 99.24810    99.24779 9.633911
+#> hnsw        100 4.7573739 0.8027265   0 99.19760    99.19727 9.082652
+#> annoy       100 4.8030740 0.7947073   0 99.20561    99.20529 9.165903
+#> lsh          98 1.1207685 3.4667201   2 96.53387    96.53328 2.216192
+#> kd          100 4.3066322 0.8909383   0 99.10942    99.10906 8.257638
+#> klsh_10      82 0.3290794 9.9582999  18 90.03848    90.04170 0.655528
+#> klsh_100     86 3.4649476 0.9607057  14 99.03407    99.03929 6.661503
 \end{verbatim}
 
 \section{\texorpdfstring{Customizing tooltip design with \pkg{ToOoOlTiPs}}{Customizing tooltip design with }}\label{customizing-tooltip-design-with}

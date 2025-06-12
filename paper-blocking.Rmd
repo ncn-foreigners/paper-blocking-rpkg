@@ -269,7 +269,7 @@ head(result_dedup_hnsw$result)
 
 Now we visualize connections using the obtained graph.
 
-```{r dedup_graph, echo = TRUE}
+```{r dedup_graph, echo = TRUE, out.width = "100%", fig.width = 6, fig.height=5, layout="l-body"}
 plot(result_dedup_hnsw$graph, vertex.size = 1, vertex.label = NA)
 ```
 
@@ -296,14 +296,14 @@ RLdata500[, .(uniq_blocks = uniqueN(block_id)), .(ent_id)][, .N, uniq_blocks]
 
 Now we can visualize the distances between the units stored in the `result_dedup_hnsw$result` dataset. Clearly we have a mixture of two groups: matches (close to 0) and non-matches (close to 1).
 
-```{r dedup_hist, echo = TRUE}
+```{r dedup_hist, echo = TRUE, out.width = "100%", fig.width = 6, fig.height=5, layout="l-body"}
 hist(result_dedup_hnsw$result$dist, xlab = "Distances", ylab = "Frequency", breaks = "fd",
      main = "Distances calculated between units")
 ```
 
 Finally, we visualize the result based on the information whether a block contains matches or not.
 
-```{r dedup_density, echo = TRUE}
+```{r dedup_density, echo = TRUE, out.width = "100%", fig.width = 6, fig.height=5, layout="l-body"}
 df_for_density <- copy(df_block_melted[block %in% RLdata500$block_id])
 df_for_density[, match:= block %in% RLdata500[id_count == 2]$block_id]
 
@@ -312,7 +312,7 @@ plot(density(df_for_density[match==FALSE]$dist), col = "blue", xlim = c(0, 0.8),
 lines(density(df_for_density[match==TRUE]$dist), col = "red", xlim = c(0, 0.8))
 ```
 
-Now we compare the evaluation metrics across all ANN algorithms supported by the `blocking` function, i.e. NND, HNSW, Approximate Nearest Neighbors Oh Yeah (Annoy, from the \CRANpkg{RcppAnnoy} package), Locality-sensitive hashing (LSH, from the \CRANpkg{mlpack} package), and k-Nearest-Neighbors (kNN -- denoted as `"kd"`, from the \CRANpkg{mlpack} package). We use the `rec_id` and `ent_id` columns from the `RLdata500` dataset to specify the true blocks and then calculate evaluation metrics for all algorithms. The results are as follows.
+Now we compare the evaluation metrics across all ANN algorithms supported by the `blocking` function, i.e. NND, HNSW, Approximate Nearest Neighbors Oh Yeah (Annoy, from the \CRANpkg{RcppAnnoy} package), Locality-sensitive hashing (LSH, from the \CRANpkg{mlpack} package), and k-Nearest Neighbors (kNN -- denoted as `"kd"`, from the \CRANpkg{mlpack} package). We use the `rec_id` and `ent_id` columns from the `RLdata500` dataset to specify the true blocks and then calculate evaluation metrics for all algorithms. Additionally, we assess blocking using the `klsh` function from the \CRANpkg{klsh} package, configured to create 10 blocks and 100 blocks, respectively. In both settings, we use 20 random projections and 2-character shingles. The results are as follows (`klsh_10` and `klsh_100` refer to the `klsh` algorithm with 10 blocks and 100 blocks, respectively).
 
 ```{r comparision, echo = TRUE}
 true_blocks <- RLdata500[, c("rec_id", "ent_id"), with = FALSE]
@@ -324,6 +324,29 @@ for (algorithm in ann) {
                                 ann = algorithm,
                                 true_blocks = true_blocks)$metrics
 }
+
+set.seed(2025)
+blocks_klsh_10 <- klsh::klsh(r.set = RLdata500[, c("fname_c1", "fname_c2", "lname_c1",
+                                                   "lname_c2", "by", "bm", "bd")],
+                             p = 20,
+                             num.blocks = 10,
+                             k = 2)
+klsh_10_metrics <- klsh::confusion.from.blocking(blocking = blocks_klsh_10, 
+                                                 true_ids = RLdata500$ent_id)[-1]
+klsh_10_metrics$f1_score <- 2 * klsh_10_metrics$precision * klsh_10_metrics$recall / 
+  (klsh_10_metrics$precision + klsh_10_metrics$recall)
+eval_metrics$klsh_10 <- unlist(klsh_10_metrics)
+blocks_klsh_100 <- klsh::klsh(r.set = RLdata500[, c("fname_c1", "fname_c2", "lname_c1",
+                                                    "lname_c2", "by", "bm", "bd")],
+                              p = 20,
+                              num.blocks = 100,
+                              k = 2)
+klsh_100_metrics <- klsh::confusion.from.blocking(blocking = blocks_klsh_100, 
+                                                 true_ids = RLdata500$ent_id)[-1]
+klsh_100_metrics$f1_score <- 2 * klsh_100_metrics$precision * klsh_100_metrics$recall /
+  (klsh_100_metrics$precision + klsh_100_metrics$recall)
+eval_metrics$klsh_100 <- unlist(klsh_100_metrics)
+
 do.call(rbind, eval_metrics) * 100
 ```
 
