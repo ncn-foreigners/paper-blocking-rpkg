@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.6.12)  17 JUN 2025 15:43
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.6.12)  18 JUN 2025 17:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -504,7 +504,7 @@ Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
 )
 \@envbody=\toks40
 )) (c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amsmath.sty
-Package: amsmath 2025/05/18 v2.17x AMS math features
+Package: amsmath 2025/06/16 v2.17y AMS math features
 \@mathmargin=\skip71
 For additional information on amsmath, use the `?' option.
 (c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/amsmath/amstext.sty
@@ -630,30 +630,37 @@ LaTeX Info: Redefining \setlength on input line 86.
 LaTeX Info: Redefining \addtolength on input line 87.
 \calc@Ccount=\count353
 \calc@Cskip=\skip84
+) (c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count354
+\float@exts=\toks48
+\float@box=\box76
+\@float@everytoks=\toks49
+\@floatcapt=\box77
 ) (c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2025-04-14 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count354
+\l__color_backend_stack_int=\count355
 ) (./RJwrapper.aux)
 \openout1 = `RJwrapper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
 (c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
@@ -696,15 +703,15 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Info: Redefining \microtypecontext on input line 54.
-Package microtype Info: Applying patch `item' on input line 54.
-Package microtype Info: Applying patch `toc' on input line 54.
-Package microtype Info: Applying patch `eqnum' on input line 54.
+LaTeX Info: Redefining \microtypecontext on input line 55.
+Package microtype Info: Applying patch `item' on input line 55.
+Package microtype Info: Applying patch `toc' on input line 55.
+Package microtype Info: Applying patch `eqnum' on input line 55.
 
-Package microtype Warning: Unable to apply patch `footnote' on input line 54.
+Package microtype Warning: Unable to apply patch `footnote' on input line 55.
 
-Package microtype Info: Applying patch `verbatim' on input line 54.
-LaTeX Info: Redefining \microtypesetup on input line 54.
+Package microtype Info: Applying patch `verbatim' on input line 55.
+LaTeX Info: Redefining \microtypesetup on input line 55.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -715,7 +722,7 @@ Package microtype Info: Using default expansion set `alltext-nott'.
 LaTeX Warning: Command \showhyphens   has changed.
                Check if current package is valid.
 
-LaTeX Info: Redefining \showhyphens on input line 54.
+LaTeX Info: Redefining \showhyphens on input line 55.
 Package microtype Info: No adjustment of tracking.
 Package microtype Info: No adjustment of interword spacing.
 Package microtype Info: No adjustment of character kerning.
@@ -724,13 +731,14 @@ File: mt-ppl.cfg 2005/11/16 v1.6 microtype config. file: Palatino (RS)
 ) (c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/upquote/upquote.sty
 Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verbatim
 )
-Package backref Info: ** backref set up for natbib ** on input line 54.
-Package hyperref Info: Link coloring ON on input line 54.
+Package backref Info: ** backref set up for natbib ** on input line 55.
+Package hyperref Info: Link coloring ON on input line 55.
 (./RJwrapper.out) (./RJwrapper.out)
 \@outlinefile=\write5
 \openout5 = `RJwrapper.out'.
 
 Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: float package is loaded.
 Package caption Info: longtable package is loaded.
 (c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/caption/ltcaption.sty
 Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
@@ -790,16 +798,16 @@ Overfull \hbox (3.22632pt too wide) in paragraph at lines 199--201
 [6]
 
 [7]
-<paper-blocking_files/figure-latex/dedup-graph-1.pdf, id=114, 433.62pt x 361.35pt>
-File: paper-blocking_files/figure-latex/dedup-graph-1.pdf Graphic file (type pdf)
-<use paper-blocking_files/figure-latex/dedup-graph-1.pdf>
-Package pdftex.def Info: paper-blocking_files/figure-latex/dedup-graph-1.pdf  used on input line 550.
+<paper-blocking_files/figure-latex/connection-graph-1.pdf, id=114, 433.62pt x 361.35pt>
+File: paper-blocking_files/figure-latex/connection-graph-1.pdf Graphic file (type pdf)
+<use paper-blocking_files/figure-latex/connection-graph-1.pdf>
+Package pdftex.def Info: paper-blocking_files/figure-latex/connection-graph-1.pdf  used on input line 550.
 (pdftex.def)             Requested size: 398.33858pt x 331.96634pt.
 
 
 [8]
 
-[9 <./paper-blocking_files/figure-latex/dedup-graph-1.pdf>]
+[9 <./paper-blocking_files/figure-latex/connection-graph-1.pdf>]
 Underfull \hbox (badness 10000) in paragraph at lines 614--615
 []\T1/ppl/m/n/10 (+20) Now we can vi-su-al-ize the dis-tances be-tween the units stored in the
  []
@@ -809,24 +817,24 @@ File: paper-blocking_files/figure-latex/dedup-hist-1.pdf Graphic file (type pdf)
 <use paper-blocking_files/figure-latex/dedup-hist-1.pdf>
 Package pdftex.def Info: paper-blocking_files/figure-latex/dedup-hist-1.pdf  used on input line 624.
 (pdftex.def)             Requested size: 398.33858pt x 331.96634pt.
-<paper-blocking_files/figure-latex/dedup-density-1.pdf, id=128, 433.62pt x 361.35pt>
+
+
+[10]
+<paper-blocking_files/figure-latex/dedup-density-1.pdf, id=132, 433.62pt x 361.35pt>
 File: paper-blocking_files/figure-latex/dedup-density-1.pdf Graphic file (type pdf)
 <use paper-blocking_files/figure-latex/dedup-density-1.pdf>
 Package pdftex.def Info: paper-blocking_files/figure-latex/dedup-density-1.pdf  used on input line 647.
 (pdftex.def)             Requested size: 398.33858pt x 331.96634pt.
 
 
-[10]
-
 [11 <./paper-blocking_files/figure-latex/dedup-hist-1.pdf>]
-<figures/penguins.png, id=152, 72.27pt x 42.9605pt>
+
+[12 <./paper-blocking_files/figure-latex/dedup-density-1.pdf>]
+<figures/penguins.png, id=164, 72.27pt x 42.9605pt>
 File: figures/penguins.png Graphic file (type png)
 <use figures/penguins.png>
 Package pdftex.def Info: figures/penguins.png  used on input line 718.
 (pdftex.def)             Requested size: 398.44772pt x 212.57635pt.
-
-
-[12 <./paper-blocking_files/figure-latex/dedup-density-1.pdf>]
 LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 728.
 (c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/tex/latex/psnfss/ot1ppl.fd
 File: ot1ppl.fd 2001/06/04 font definitions for OT1/ppl.
@@ -865,7 +873,10 @@ File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
 (Font)              scaled to size 5.21004pt on input line 728.
-<paper-blocking_files/figure-latex/penguins-ggplot-1.pdf, id=169, 433.62pt x 361.35pt>
+
+
+[13]
+<paper-blocking_files/figure-latex/penguins-ggplot-1.pdf, id=178, 433.62pt x 361.35pt>
 File: paper-blocking_files/figure-latex/penguins-ggplot-1.pdf Graphic file (type pdf)
 <use paper-blocking_files/figure-latex/penguins-ggplot-1.pdf>
 Package pdftex.def Info: paper-blocking_files/figure-latex/penguins-ggplot-1.pdf  used on input line 757.
@@ -886,20 +897,20 @@ LaTeX Font Info:    Font shape `U/msb/m/n' will be
 (Font)              scaled to size 7.91925pt on input line 13.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
 (Font)              scaled to size 6.25204pt on input line 13.
-
-
-[13 <./figures/penguins.png>]
-
-[14 <./paper-blocking_files/figure-latex/penguins-ggplot-1.pdf>])
+)
 
 LaTeX Font Warning: Font shape `T1/zi4/m/it' undefined
 (Font)              using `T1/zi4/m/n' instead on input line 778.
 
 LaTeX Font Info:    Font shape `T1/zi4/m/it' will be
 (Font)              scaled to size 10.20004pt on input line 778.
-)
 
-[15] (./RJwrapper.aux)
+
+[14 <./figures/penguins.png>]
+
+[15 <./paper-blocking_files/figure-latex/penguins-ggplot-1.pdf>])
+
+[16] (./RJwrapper.aux)
  ***********
 LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2025-05-26>
@@ -913,18 +924,18 @@ Package rerunfilecheck Info: File `RJwrapper.brf' has not changed.
 (rerunfilecheck)             Checksum: 1F809DC8F7B18FE4149D8D60254CBADA;185.
  ) 
 Here is how much of TeX's memory you used:
- 27076 strings out of 469867
- 498450 string characters out of 5482749
- 914061 words of memory out of 5000000
- 54657 multiletter control sequences out of 15000+600000
+ 27137 strings out of 469867
+ 499517 string characters out of 5482749
+ 915482 words of memory out of 5000000
+ 54713 multiletter control sequences out of 15000+600000
  664938 words of font info for 220 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 117i,11n,131p,1006b,930s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 117i,11n,131p,1006b,950s stack positions out of 10000i,1000n,20000p,200000b,200000s
 <c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4b.pfb><c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb><c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb><c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb><c:/Users/48607/AppData/Roaming/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on RJwrapper.pdf (15 pages, 228690 bytes).
+Output written on RJwrapper.pdf (16 pages, 229277 bytes).
 PDF statistics:
- 247 PDF objects out of 1000 (max. 8388607)
- 206 compressed objects within 3 object streams
- 40 named destinations out of 1000 (max. 500000)
+ 251 PDF objects out of 1000 (max. 8388607)
+ 209 compressed objects within 3 object streams
+ 41 named destinations out of 1000 (max. 500000)
  59526 words of extra memory for PDF output out of 61914 (max. 10000000)
 

@@ -545,13 +545,13 @@ Now we visualize connections using the obtained graph.
 plot(result_dedup_hnsw$graph, vertex.size = 1, vertex.label = NA)
 \end{verbatim}
 
-\begin{figure}
+\begin{figure}[H]
 
-{\centering \includegraphics[width=1\linewidth]{paper-blocking_files/figure-latex/dedup-graph-1} 
+{\centering \includegraphics[width=1\linewidth]{paper-blocking_files/figure-latex/connection-graph-1} 
 
 }
 
-\caption{Connection graph}\label{fig:dedup-graph}
+\caption{Connection graph}\label{fig:connection-graph}
 \end{figure}
 
 We create a long \texttt{data.table} with information on blocks and units from the original dataset.
@@ -619,7 +619,7 @@ hist(result_dedup_hnsw$result$dist, xlab = "Distances",
      main = "Distances calculated between units")
 \end{verbatim}
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=1\linewidth]{paper-blocking_files/figure-latex/dedup-hist-1} 
 
@@ -642,7 +642,7 @@ lines(density(df_for_density[match==TRUE]$dist),
       col = "red", xlim = c(0, 0.8))
 \end{verbatim}
 
-\begin{figure}
+\begin{figure}[H]
 
 {\centering \includegraphics[width=1\linewidth]{paper-blocking_files/figure-latex/dedup-density-1} 
 

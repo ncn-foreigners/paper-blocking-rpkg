@@ -141,7 +141,7 @@ result_dedup_hnsw
 head(result_dedup_hnsw$result)
 
 
-## ----dedup-graph, echo = TRUE, out.width = "100%", fig.width = 6, fig.height = 5, layout = "l-body", fig.align = "center", fig.cap = "Connection graph"----
+## ----dedup-graph, echo = TRUE, out.width = "100%", fig.width = 6, fig.height = 5, layout = "l-body", fig.align = "center", fig.cap = "Connection graph", label = "connection-graph", fig.pos = "H"----
 plot(result_dedup_hnsw$graph, vertex.size = 1, vertex.label = NA)
 
 
@@ -160,13 +160,13 @@ head(RLdata500)
 RLdata500[, .(uniq_blocks = uniqueN(block_id)), .(ent_id)][, .N, uniq_blocks]
 
 
-## ----dedup-hist, echo = TRUE, out.width = "100%", fig.width = 6, fig.height = 5, layout = "l-body", fig.align = "center", fig.cap = "Distances calculated between units"----
+## ----dedup-hist, echo = TRUE, out.width = "100%", fig.width = 6, fig.height = 5, layout = "l-body", fig.align = "center", fig.cap = "Distances calculated between units", label = "dedup-hist", fig.pos = "H"----
 hist(result_dedup_hnsw$result$dist, xlab = "Distances",
      ylab = "Frequency", breaks = "fd",
      main = "Distances calculated between units")
 
 
-## ----dedup-density, echo = TRUE, out.width = "100%", fig.width = 6, fig.height=5, layout="l-body", fig.align = 'center', fig.cap = "Distribution of distances between clusters type"----
+## ----dedup-density, echo = TRUE, out.width = "100%", fig.width = 6, fig.height=5, layout="l-body", fig.align = 'center', fig.cap = "Distribution of distances between clusters type", label = "dedup-density", fig.pos = "H"----
 df_for_density <- copy(df_block_melted[block %in% RLdata500$block_id])
 df_for_density[, match:= block %in% RLdata500[id_count == 2]$block_id]
 
