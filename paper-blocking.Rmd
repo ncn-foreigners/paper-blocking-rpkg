@@ -28,11 +28,13 @@ output:
   rjtools::rjournal_article:
     self_contained: yes
     toc: no
+header-includes:
+  - \usepackage{float}
 bibliography: RJreferences.bib
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, cache = FALSE)
 library(plotly)
 library(ggplot2)
 library(palmerpenguins)
@@ -252,7 +254,8 @@ We create a new column (`id_count`) that indicates how many times a given unit o
 RLdata500[, id_count :=.N, ent_id]
 RLdata500[, bm:=sprintf("%02d", bm)]
 RLdata500[, bd:=sprintf("%02d", bd)]
-RLdata500[, txt:=tolower(paste0(fname_c1,fname_c2,lname_c1,lname_c2,by,bm,bd))]
+RLdata500[, txt:=tolower(
+  paste0(fname_c1,fname_c2,lname_c1,lname_c2,by,bm,bd))]
 head(RLdata500)
 ```
 
@@ -274,7 +277,7 @@ head(result_dedup_hnsw$result)
 
 Now we visualize connections using the obtained graph.
 
-```{r dedup_graph, echo = TRUE, out.width = "100%", fig.width = 6, fig.height=5, layout="l-body"}
+```{r dedup-graph, echo = TRUE, out.width = "100%", fig.width = 6, fig.height = 5, layout = "l-body", fig.align = "center", fig.cap = "Connection graph", label = "connection-graph", fig.pos = "H"}
 plot(result_dedup_hnsw$graph, vertex.size = 1, vertex.label = NA)
 ```
 
@@ -299,22 +302,26 @@ We can check in how many blocks the same entities (`ent_id`) are observed. In ou
 RLdata500[, .(uniq_blocks = uniqueN(block_id)), .(ent_id)][, .N, uniq_blocks]
 ```
 
-Now we can visualize the distances between the units stored in the `result_dedup_hnsw$result` dataset. Clearly we have a mixture of two groups: matches (close to 0) and non-matches (close to 1).
+Now we can visualize the distances between the units stored in the \linebreak `result_dedup_hnsw$result` dataset. Clearly we have a mixture of two groups: matches (close to 0) and non-matches (close to 1).
 
-```{r dedup_hist, echo = TRUE, out.width = "100%", fig.width = 6, fig.height=5, layout="l-body"}
-hist(result_dedup_hnsw$result$dist, xlab = "Distances", ylab = "Frequency", breaks = "fd",
+```{r dedup-hist, echo = TRUE, out.width = "100%", fig.width = 6, fig.height = 5, layout = "l-body", fig.align = "center", fig.cap = "Distances calculated between units", label = "dedup-hist", fig.pos = "H"}
+hist(result_dedup_hnsw$result$dist, xlab = "Distances",
+     ylab = "Frequency", breaks = "fd",
      main = "Distances calculated between units")
 ```
 
 Finally, we visualize the result based on the information whether a block contains matches or not.
 
-```{r dedup_density, echo = TRUE, out.width = "100%", fig.width = 6, fig.height=5, layout="l-body"}
+```{r dedup-density, echo = TRUE, out.width = "100%", fig.width = 6, fig.height=5, layout="l-body", fig.align = 'center', fig.cap = "Distribution of distances between clusters type", label = "dedup-density", fig.pos = "H"}
 df_for_density <- copy(df_block_melted[block %in% RLdata500$block_id])
 df_for_density[, match:= block %in% RLdata500[id_count == 2]$block_id]
 
-plot(density(df_for_density[match==FALSE]$dist), col = "blue", xlim = c(0, 0.8), 
-     main = "Distribution of distances between\nclusters type (match=red, non-match=blue)")
-lines(density(df_for_density[match==TRUE]$dist), col = "red", xlim = c(0, 0.8))
+plot(density(df_for_density[match==FALSE]$dist),
+     col = "blue", xlim = c(0, 0.8), 
+     main = "Distribution of distances between\n
+     clusters type (match=red, non-match=blue)")
+lines(density(df_for_density[match==TRUE]$dist),
+      col = "red", xlim = c(0, 0.8))
 ```
 
 Now we compare the evaluation metrics across all ANN algorithms supported by the `blocking` function, i.e. NND, HNSW, Approximate Nearest Neighbors Oh Yeah (Annoy, from the \CRANpkg{RcppAnnoy} package), Locality-sensitive hashing (LSH, from the \CRANpkg{mlpack} package), and k-Nearest Neighbors (kNN -- denoted as `"kd"`, from the \CRANpkg{mlpack} package). We use the `rec_id` and `ent_id` columns from the `RLdata500` dataset to specify the true blocks and then calculate evaluation metrics for all algorithms. Additionally, we assess blocking using the `klsh` function from the \CRANpkg{klsh} package, configured to create 10 blocks and 100 blocks, respectively. In both settings, we use 20 random projections and 2-character shingles. The results are as follows (`klsh_10` and `klsh_100` refer to the `klsh` algorithm with 10 blocks and 100 blocks, respectively).
@@ -331,24 +338,30 @@ for (algorithm in ann) {
 }
 
 set.seed(2025)
-blocks_klsh_10 <- klsh::klsh(r.set = RLdata500[, c("fname_c1", "fname_c2", "lname_c1",
-                                                   "lname_c2", "by", "bm", "bd")],
-                             p = 20,
-                             num.blocks = 10,
-                             k = 2)
-klsh_10_metrics <- klsh::confusion.from.blocking(blocking = blocks_klsh_10, 
-                                                 true_ids = RLdata500$ent_id)[-1]
-klsh_10_metrics$f1_score <- 2 * klsh_10_metrics$precision * klsh_10_metrics$recall / 
+blocks_klsh_10 <- klsh::klsh(
+  r.set = RLdata500[, c("fname_c1", "fname_c2", "lname_c1",
+                        "lname_c2", "by", "bm", "bd")],
+  p = 20,
+  num.blocks = 10,
+  k = 2)
+klsh_10_metrics <- klsh::confusion.from.blocking(
+  blocking = blocks_klsh_10, 
+  true_ids = RLdata500$ent_id)[-1]
+klsh_10_metrics$f1_score <- 2 * klsh_10_metrics$precision *
+  klsh_10_metrics$recall / 
   (klsh_10_metrics$precision + klsh_10_metrics$recall)
 eval_metrics$klsh_10 <- unlist(klsh_10_metrics)
-blocks_klsh_100 <- klsh::klsh(r.set = RLdata500[, c("fname_c1", "fname_c2", "lname_c1",
-                                                    "lname_c2", "by", "bm", "bd")],
-                              p = 20,
-                              num.blocks = 100,
-                              k = 2)
-klsh_100_metrics <- klsh::confusion.from.blocking(blocking = blocks_klsh_100, 
-                                                 true_ids = RLdata500$ent_id)[-1]
-klsh_100_metrics$f1_score <- 2 * klsh_100_metrics$precision * klsh_100_metrics$recall /
+blocks_klsh_100 <- klsh::klsh(
+  r.set = RLdata500[, c("fname_c1", "fname_c2", "lname_c1",
+                        "lname_c2", "by", "bm", "bd")],
+  p = 20,
+  num.blocks = 100,
+  k = 2)
+klsh_100_metrics <- klsh::confusion.from.blocking(
+  blocking = blocks_klsh_100, 
+  true_ids = RLdata500$ent_id)[-1]
+klsh_100_metrics$f1_score <- 2 * klsh_100_metrics$precision * 
+  klsh_100_metrics$recall /
   (klsh_100_metrics$precision + klsh_100_metrics$recall)
 eval_metrics$klsh_100 <- unlist(klsh_100_metrics)
 
@@ -358,7 +371,7 @@ do.call(rbind, eval_metrics) * 100
 
 # Summary
 
-In this paper we have demonstrated the basic use cases of the \CRANpkg{blocking} package. We believe that the software will be useful for researchers working in various fields where integration of multiple sources is an important aspect. 
+In this paper we have demonstrated the basic use cases of the \CRANpkg{blocking} package. We believe that the software will be useful for researchers working in various fields where integration of multiple sources is an important aspect.
 
 # Acknowledgements
 
