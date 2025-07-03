@@ -2,12 +2,11 @@
 # Please edit paper-blocking.Rmd to modify this file
 
 ## ----setup, include=FALSE-----------------------------------------------------
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE)
 library(plotly)
 library(ggplot2)
 library(palmerpenguins)
 library(kableExtra)
-
 
 
 ## ----packages, echo=TRUE, message=FALSE, warning=FALSE------------------------
@@ -85,29 +84,6 @@ result_3_reclin <- blocking(x = foreigners_1$txt,
                             true_blocks = matches[, .(x, y, block)],
                             control_ann = controls_ann(nnd = control_nnd(epsilon = 0.5)))
 result_3_reclin
-
-
-## ----reclin2_load, echo = TRUE------------------------------------------------
-library(reclin2)
-
-
-## ----reclin_pair_ann, echo = TRUE---------------------------------------------
-result_pair_ann <- pair_ann(x = foreigners_1,
-                            y = foreigners_2,
-                            on = c("fname", "sname", "surname", "date", "region", "country"),
-                            deduplication = FALSE)
-head(result_pair_ann)
-
-
-## ----reclin_pair_ann_pipeline, echo = TRUE------------------------------------
-result_pair_ann |>
-  compare_pairs(on = c("fname", "sname", "surname", "date", "region", "country"),
-                comparators = list(cmp_jarowinkler())) |>
-  score_simple("score",
-               on = c("fname", "sname", "surname", "date", "region", "country")) |>
-  select_threshold("threshold", score = "score", threshold = 4.5) |>
-  link(selection = "threshold") |>
-  head()
 
 
 ## ----RLdata500, echo = TRUE---------------------------------------------------
@@ -202,32 +178,4 @@ klsh_100_metrics$f1_score <- 2 * klsh_100_metrics$precision * klsh_100_metrics$r
 eval_metrics$klsh_100 <- unlist(klsh_100_metrics)
 
 do.call(rbind, eval_metrics) * 100
-
-
-## ----penguins-alison, out.width = "100%", out.height = "30%", fig.cap = "Artwork by \\@allison\\_horst", fig.alt="A picture of three different penguins with their species: Chinstrap, Gentoo, and Adelie. "----
-knitr::include_graphics("figures/penguins.png")
-
-
-## ----penguins-tab-interactive, eval = knitr::is_html_output(), layout = "l-body-outset"----
-# knitr::kable(head(penguins), format = "html", caption = "A basic table")
-
-
-## ----penguins-tab-static, eval = knitr::is_latex_output()---------------------
-knitr::kable(head(penguins), format = "latex", caption = "A basic table") %>% 
-  kableExtra::kable_styling(font_size = 7)
-
-
-## ----penguins-plotly, echo = TRUE, out.width="100%", fig.width = 6, fig.height=5, layout="l-body", fig.cap="A basic interactive plot made with the plotly package on palmer penguin data. Three species of penguins are plotted with bill depth on the x-axis and bill length on the y-axis. When hovering on a point, a tooltip will show the exact value of the bill depth and length for that point, along with the species name.", include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.alt = "A scatterplot of bill length against bill depth, both measured in millimetre. The three species are shown in different colours and loosely forms three clusters. Adelie has small bill length and large bill depth, Gentoo has small bill depth but large bill length, and Chinstrap has relatively large bill depth and bill length."----
-# p <- penguins %>%
-#   ggplot(aes(x = bill_depth_mm, y = bill_length_mm,
-#              color = species)) +
-#   geom_point()
-# ggplotly(p)
-
-
-## ----penguins-ggplot, echo = TRUE, out.width="100%", fig.width = 6, fig.height=5, layout="l-body", fig.cap="A basic non-interactive plot made with the ggplot2 package on palmer penguin data. Three species of penguins are plotted with bill depth on the x-axis and bill length on the y-axis. Visit the online article to access the interactive version made with the plotly package.", include=knitr::is_latex_output(), eval=knitr::is_latex_output()----
-penguins %>% 
-  ggplot(aes(x = bill_depth_mm, y = bill_length_mm, 
-             color = species)) + 
-  geom_point()
 

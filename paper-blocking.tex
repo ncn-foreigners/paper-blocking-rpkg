@@ -7,14 +7,24 @@
 \maketitle
 
 \abstract{%
-An abstract of less than 250 words.
+Entity resolution (probabilistic record linkage, deduplication) is essential for estimation based on multiple sources. It aims to link records without common identifiers that refer to the same entity (e.g., person, company). Without identifiers, researchers must specify which records to compare to calculate matching probability and reduce computational complexity. Traditional deterministic blocking uses common variables like names or dates of birth, but assumes error-free, complete data. To address this limitation, we developed the R package \CRANpkg{blocking}, which uses approximate nearest neighbour search and graph algorithms to reduce comparisons. This paper presents the package design, functionalities, and two official statistics case studies.
 }
 
 \section{Introduction}\label{introduction}
 
-Interactive data graphics provides plots that allow users to interact them. One of the most basic types of interaction is through tooltips, where users are provided additional information about elements in the plot by moving the cursor over the plot.
+This paper presents the \CRANpkg{blocking} package that aims to make the linkage and deduplication easier by creating the..
 
-This paper will first review some R packages on interactive graphics and their tooltip implementations. A new package \CRANpkg{ToOoOlTiPs} that provides customized tooltips for plot, is introduced. Some example plots will then be given to showcase how these tooltips help users to better read the graphics.
+The following should be underlined:
+
+\begin{itemize}
+\tightlist
+\item
+  reduce number of comparisons
+\item
+  reduce FNR and other errors
+\item
+  reduce workload on clerical review
+\end{itemize}
 
 \section{Background}\label{background}
 
@@ -22,9 +32,68 @@ Some packages on interactive graphics include \CRANpkg{plotly} \citep{plotly} th
 
 \section{\texorpdfstring{Blocking of records using \texttt{blocking} function}{Blocking of records using blocking function}}\label{blocking-of-records-using-blocking-function}
 
-\section{Integration with existing packages}\label{integration-with-existing-packages}
+\subsection{The main function}\label{the-main-function}
 
-\section{Case study}\label{case-study}
+\subsection{Assessment of results}\label{assessment-of-results}
+
+In the package we have implemented several measures that can be used to assess the results
+
+\textbf{Reduction Ratio}: Provides necessary details about the reduction in comparison pairs if the given blocks are applied to a further record linkage or deduplication procedure. For deduplication:
+
+\[
+\text{RR}_{\text{deduplication}} = 1 - \frac{\sum\limits_{i=1}^{k} \binom{|B_i|}{2}}{\binom{n}{2}},
+\]
+
+where \(k\) is the total number of blocks, \(n\) is the total number of records in the dataset, and \(|B_i|\) is the number of records in the \(i\)-th block. \(\sum\limits_{i=1}^{k} \binom{|B_i|}{2}\) is the number of comparisons after blocking, while \(\binom{n}{2}\) is the total number of possible comparisons without blocking. For record linkage the reduction ratio is defined as follows
+
+\[
+\text{RR}_{\text{record\_linkage}} = 1 - \frac{\sum\limits_{i=1}^{k} |B_{i,x}| \cdot |B_{i,y}|} {(m \cdot n)},
+\]
+
+where \(m\) and \(n\) are the sizes of datasets \(X\) and \(Y\), and \(k\) is the total number of blocks. The term \(|B_{i,x}|\) is the number of unique records from dataset \(X\) in the \(i\)-th block, while \(|B_{i,y}|\) is the number of unique records from dataset \(Y\) in the \(i\)-th block. The expression \(\sum\limits_{i=1}^{k} |B_{i,x}| \cdot |B_{i,y}|\) is the number of comparisons after blocking.
+
+Confusion matrix presents results in comparison to ground-truth \texttt{blocks} in a pairwise manner (e.g., one true positive pair occurs when both records from the comparison pair belong to the same predicted \texttt{block} and to the same ground-truth \texttt{block} in the evaluation data frame).
+
+\begin{itemize}
+\tightlist
+\item
+  True Positive (TP): Record pairs correctly matched in the same block.
+\item
+  False Positive (FP): Records pairs identified as matches that are not true matches in the same block.
+\item
+  True Negative (TN): Record pairs correctly identified as non-matches (different blocks)
+\item
+  False Negative (FN): Records identified as non-matches that are true matches in the same block.
+\end{itemize}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2600}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2400}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2600}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Metric}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Formula}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Metric}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Formula}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+Recall & \(\frac{TP}{TP + FN}\) & Accuracy & \(\frac{TP + TN}{TP + TN + FP + FN}\) \\
+Precision & \(\frac{TP}{TP + FP}\) & Specificity & \(\frac{TN}{TN + FP}\) \\
+F1 Score & \(2 \cdot \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}\) & False Positive Rate & \(\frac{FP}{FP + TN}\) \\
+False Negative Rate & \(\frac{FN}{FN + TP}\) & & \\
+\end{longtable}
+
+\emph{Table: Evaluation Metrics}
+
+\section{Case studies}\label{case-studies}
 
 \subsection{Record linkage example}\label{record-linkage-example}
 
@@ -128,11 +197,11 @@ Now we examine the results of record linkage.
 \begin{itemize}
 \tightlist
 \item
-  We have created 6,469 blocks.
+  We have created 6,470 blocks.
 \item
   The blocking process utilized 1,232 columns (2 character shingles).
 \item
-  We have 3,916 blocks of 2 elements, 1,604 blocks of 3 elements,\ldots, 2 blocks of 7 elements.
+  We have 3,920 blocks of 2 elements, 1,599 blocks of 3 elements,\ldots, 2 blocks of 7 elements.
 \end{itemize}
 
 \begin{verbatim}
@@ -142,13 +211,13 @@ result_reclin
 \begin{verbatim}
 #> ========================================================
 #> Blocking based on the nnd method.
-#> Number of blocks: 6469.
+#> Number of blocks: 6470.
 #> Number of columns used for blocking: 1232.
 #> Reduction ratio: 0.9999.
 #> ========================================================
 #> Distribution of the size of the blocks:
 #>    2    3    4    5    6    7 
-#> 3916 1604  926   19    2    2
+#> 3920 1599  928   19    2    2
 \end{verbatim}
 
 Structure of the object is as follows:
@@ -280,22 +349,22 @@ result_2_reclin
 \begin{verbatim}
 #> ========================================================
 #> Blocking based on the nnd method.
-#> Number of blocks: 6469.
+#> Number of blocks: 6470.
 #> Number of columns used for blocking: 1232.
 #> Reduction ratio: 0.9999.
 #> ========================================================
 #> Distribution of the size of the blocks:
 #>    2    3    4    5    6    7 
-#> 3916 1604  926   19    2    2 
+#> 3920 1599  928   19    2    2 
 #> ========================================================
 #> Evaluation metrics (standard):
 #>      recall   precision         fpr         fnr    accuracy specificity 
-#>     96.7782     78.7000      0.0038      3.2218     99.9957     99.9962 
+#>     96.7532     78.6700      0.0038      3.2468     99.9957     99.9962 
 #>    f1_score 
-#>     86.8079
+#>     86.7795
 \end{verbatim}
 
-For example, our approach results in a 3.22\% false negative rate (FNR). To improve this, we can increase the \texttt{epsilon} parameter of the NND method from 0.1 to 0.5. To do so, we configure the \texttt{control\_ann} parameter in the \texttt{blocking} function using the \texttt{controls\_ann} and \texttt{control\_nnd} functions.
+For example, our approach results in a 3.25\% false negative rate (FNR). To improve this, we can increase the \texttt{epsilon} parameter of the NND method from 0.1 to 0.5. To do so, we configure the \texttt{control\_ann} parameter in the \texttt{blocking} function using the \texttt{controls\_ann} and \texttt{control\_nnd} functions.
 
 \begin{verbatim}
 result_3_reclin <- blocking(x = foreigners_1$txt,
@@ -318,101 +387,22 @@ result_3_reclin
 \begin{verbatim}
 #> ========================================================
 #> Blocking based on the nnd method.
-#> Number of blocks: 6392.
+#> Number of blocks: 6394.
 #> Number of columns used for blocking: 1232.
 #> Reduction ratio: 0.9999.
 #> ========================================================
 #> Distribution of the size of the blocks:
 #>    2    3    4    5    7 
-#> 3798 1613  956   21    4 
+#> 3800 1615  954   21    4 
 #> ========================================================
 #> Evaluation metrics (standard):
 #>      recall   precision         fpr         fnr    accuracy specificity 
-#>     96.8682     80.1100      0.0036      3.1318     99.9960     99.9964 
+#>     96.8776     80.0500      0.0036      3.1224     99.9960     99.9964 
 #>    f1_score 
-#>     87.6957
+#>     87.6636
 \end{verbatim}
 
-That decreases the FNR to 3.13\%.
-
-\subsubsection{\texorpdfstring{Integration with the \CRANpkg{reclin2} package}{Integration with the  package}}\label{integration-with-the-package}
-
-Let us load the \CRANpkg{reclin2} package.
-
-\begin{verbatim}
-library(reclin2)
-\end{verbatim}
-
-Now we present record linkage using the \texttt{pair\_ann} function. It is based on the \texttt{pair\_minism} function and reuses some of its source code. The \texttt{on} parameter specifies the column names for the approximate nearest neighbours (ANN) search. Setting \texttt{deduplication\ =\ FALSE} enables record linkage. The function works as follows.
-
-\begin{verbatim}
-result_pair_ann <- pair_ann(x = foreigners_1,
-                            y = foreigners_2,
-                            on = c("fname", "sname", "surname", "date", "region", "country"),
-                            deduplication = FALSE)
-head(result_pair_ann)
-\end{verbatim}
-
-\begin{verbatim}
-#>   First data set:  100 000 records
-#>   Second data set: 10 000 records
-#>   Total number of pairs: 6 pairs
-#>   Blocking on: 'fname', 'sname', 'surname', 'date', 'region', 'country'
-#> 
-#>       .x    .y block
-#>    <int> <int> <num>
-#> 1:     3     1     1
-#> 2:     3     2     1
-#> 3:    21     3     2
-#> 4:    57     4     3
-#> 5:    57     5     3
-#> 6:    61     6     4
-\end{verbatim}
-
-The \texttt{pair\_ann} function returns the total number of pairs. This output can be integrated into the pipeline of the \CRANpkg{reclin2} package. We compare pairs across all selected variables using the Jaro-Winkler distance. The similarity scores are summed across the variables and we set \texttt{threshold\ =\ 4.5} to accept a pair.
-
-\begin{verbatim}
-result_pair_ann |>
-  compare_pairs(on = c("fname", "sname", "surname", "date", "region", "country"),
-                comparators = list(cmp_jarowinkler())) |>
-  score_simple("score",
-               on = c("fname", "sname", "surname", "date", "region", "country")) |>
-  select_threshold("threshold", score = "score", threshold = 4.5) |>
-  link(selection = "threshold") |>
-  head()
-\end{verbatim}
-
-\begin{verbatim}
-#>   Total number of pairs: 6 pairs
-#> 
-#> Key: <.y>
-#>       .y    .x   fname.x sname.x  surname.x   date.x region.x country.x
-#>    <int> <int>    <char>  <char>     <char>   <char>   <char>    <char>
-#> 1:     1     3      amio         maharrsmov 19390308                031
-#> 2:     2     3      amio         maharrsmov 19390308                031
-#> 3:     3    21      amil           khalilov 19990901    01465       031
-#> 4:     4    57 javansjir          m kayilov 19691011                031
-#> 5:     5    57 javansjir          m kayilov 19691011                031
-#> 6:     6    61    rashad           mehtiyev 19980320                031
-#>    true_id.x                         txt.x   fname.y sname.y  surname.y
-#>        <num>                        <char>    <char>  <char>     <char>
-#> 1:         2     amiomaharrsmov19390308031      amik         maharramof
-#> 2:         2     amiomaharrsmov19390308031      amil         maharramov
-#> 3:        20  amilkhalilov1999090101465031      amul           khalilpv
-#> 4:        56 javansjirm kayilov19691011031 javanshir          mikayilov
-#> 5:        56 javansjirm kayilov19691011031 javsnshir          m kayilov
-#> 6:        60     rashadmehtiyev19980320031    rasgad           meht9yev
-#>      date.y region.y country.y true_id.y                         txt.y
-#>      <char>   <char>    <char>     <num>                        <char>
-#> 1: 19390308                031         2     amikmaharramof19390308031
-#> 2: 19930308                031         2     amilmaharramov19930308031
-#> 3: 19990901    01465       031        20  amulkhalilpv1999090101465031
-#> 4: 19961011                031        56 javanshirmikayilov19961011031
-#> 5: 19691011                031        56 javsnshirm kayilov19691011031
-#> 6: 19890320                031        60     rasgadmeht9yev19890320031
-\end{verbatim}
-
-We observe that the example pairs are matches.
+That decreases the FNR to 3.12\%.
 
 \subsection{Deduplication example}\label{deduplication-example}
 
@@ -660,73 +650,24 @@ do.call(rbind, eval_metrics) * 100
 
 \begin{verbatim}
 #>          recall precision       fpr fnr accuracy specificity f1_score
-#> nnd         100 5.0607287 0.7522053   0 99.24810    99.24779 9.633911
+#> nnd         100 5.1706308 0.7353649   0 99.26493    99.26464 9.832842
 #> hnsw        100 4.7573739 0.8027265   0 99.19760    99.19727 9.082652
 #> annoy       100 4.8030740 0.7947073   0 99.20561    99.20529 9.165903
-#> lsh          98 1.1207685 3.4667201   2 96.53387    96.53328 2.216192
-#> kd          100 4.3066322 0.8909383   0 99.10942    99.10906 8.257638
+#> lsh          98 1.0403397 3.7377706   2 96.26293    96.26223 2.058824
+#> kd          100 5.1921080 0.7321572   0 99.26814    99.26784 9.871668
 #> klsh_10      82 0.3290794 9.9582999  18 90.03848    90.04170 0.655528
 #> klsh_100     86 3.4649476 0.9607057  14 99.03407    99.03929 6.661503
 \end{verbatim}
 
-\section{\texorpdfstring{Customizing tooltip design with \pkg{ToOoOlTiPs}}{Customizing tooltip design with }}\label{customizing-tooltip-design-with}
-
-\pkg{ToOoOlTiPs} is a packages for customizing tooltips in interactive graphics, it features these possibilities.
-
-\section{A gallery of tooltips examples}\label{a-gallery-of-tooltips-examples}
-
-The \CRANpkg{palmerpenguins} data \citep{palmerpenguins} features three penguin species which has a lovely illustration by Alison Horst in Figure \ref{fig:penguins-alison}.
-
-\begin{figure}
-\includegraphics[width=1\linewidth,height=0.3\textheight,alt={A picture of three different penguins with their species: Chinstrap, Gentoo, and Adelie. }]{figures/penguins} \caption{Artwork by \@allison\_horst}\label{fig:penguins-alison}
-\end{figure}
-
-Table \ref{tab:penguins-tab-static} prints at the first few rows of the \texttt{penguins} data:
-
-\begin{table}
-\centering
-\caption{\label{tab:penguins-tab-static}A basic table}
-\centering
-\fontsize{7}{9}\selectfont
-\begin{tabular}[t]{l|l|r|r|r|r|l|r}
-\hline
-species & island & bill\_length\_mm & bill\_depth\_mm & flipper\_length\_mm & body\_mass\_g & sex & year\\
-\hline
-Adelie & Torgersen & 39.1 & 18.7 & 181 & 3750 & male & 2007\\
-\hline
-Adelie & Torgersen & 39.5 & 17.4 & 186 & 3800 & female & 2007\\
-\hline
-Adelie & Torgersen & 40.3 & 18.0 & 195 & 3250 & female & 2007\\
-\hline
-Adelie & Torgersen & NA & NA & NA & NA & NA & 2007\\
-\hline
-Adelie & Torgersen & 36.7 & 19.3 & 193 & 3450 & female & 2007\\
-\hline
-Adelie & Torgersen & 39.3 & 20.6 & 190 & 3650 & male & 2007\\
-\hline
-\end{tabular}
-\end{table}
-
-Figure \ref{fig:penguins-ggplot} shows an plot of the penguins data, made using the \CRANpkg{ggplot2} package.
-
-\begin{verbatim}
-penguins %>% 
-  ggplot(aes(x = bill_depth_mm, y = bill_length_mm, 
-             color = species)) + 
-  geom_point()
-\end{verbatim}
-
-\begin{figure}
-\includegraphics[width=1\linewidth]{paper-blocking_files/figure-latex/penguins-ggplot-1} \caption{A basic non-interactive plot made with the ggplot2 package on palmer penguin data. Three species of penguins are plotted with bill depth on the x-axis and bill length on the y-axis. Visit the online article to access the interactive version made with the plotly package.}\label{fig:penguins-ggplot}
-\end{figure}
-
 \section{Summary}\label{summary}
 
-We have displayed various tooltips that are available in the package \pkg{ToOoOlTiPs}.
+In this paper we have demonstrated the basic use cases of the \CRANpkg{blocking} package. We believe that the software will be useful for researchers working in various fields where integration of multiple sources is an important aspect.
 
 \section{Acknowledgements}\label{acknowledgements}
 
-Work on this package is supported by the National Science Centre, OPUS 20 grant no. 2020/39/B/HS4/00941
+Work on this package is supported by the National Science Centre, OPUS 20 grant no. 2020/39/B/HS4/00941. We also thank participants of the uRos 2024 conference for valuable comments and discussion.
+
+We also have developed a python version of the package \{BlockingPy\} that is available through the PiPy. It has the similar structure but offers more ANN algorithms (e.g.~FAISS) or usage of embeddings. For more details see: Strojny, T., \& Beręsewicz, M. (2025). BlockingPy: approximate nearest neighbours for blocking of records for entity resolution. arXiv preprint arXiv:2504.04266.
 
 \bibliography{RJreferences.bib}
 

@@ -2,7 +2,7 @@
 title: "Blocking: An R Package for Blocking of Records for Record Linkage and Deduplication"
 date: "2025-11-09"
 abstract: >
-  An abstract of less than 250 words.
+  Entity resolution (probabilistic record linkage, deduplication) is essential for estimation based on multiple sources. It aims to link records without common identifiers that refer to the same entity (e.g., person, company). Without identifiers, researchers must specify which records to compare to calculate matching probability and reduce computational complexity. Traditional deterministic blocking uses common variables like names or dates of birth, but assumes error-free, complete data. To address this limitation, we developed the R package \CRANpkg{blocking}, which uses approximate nearest neighbour search and graph algorithms to reduce comparisons. This paper presents the package design, functionalities, and two official statistics case studies.
 draft: true
 author:  
   - name: Maciej Beręsewicz
@@ -32,19 +32,23 @@ bibliography: RJreferences.bib
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, cache = TRUE)
 library(plotly)
 library(ggplot2)
 library(palmerpenguins)
 library(kableExtra)
-
 ```
 
 # Introduction
 
-Interactive data graphics provides plots that allow users to interact them. One of the most basic types of interaction is through tooltips, where users are provided additional information about elements in the plot by moving the cursor over the plot.
+This paper presents the \CRANpkg{blocking} package that aims to make the linkage and deduplication easier by creating the..
 
-This paper will first review some R packages on interactive graphics and their tooltip implementations. A new package \CRANpkg{ToOoOlTiPs} that provides customized tooltips for plot, is introduced. Some example plots will then be given to showcase how these tooltips help users to better read the graphics.
+The following should be underlined:
+
++ reduce number of comparisons
++ reduce FNR and other errors
++ reduce workload on clerical review
+
 
 # Background
 
@@ -52,9 +56,43 @@ Some packages on interactive graphics include \CRANpkg{plotly} [@plotly] that in
 
 # Blocking of records using `blocking` function
 
-# Integration with existing packages
+## The main function
 
-# Case study
+## Assessment of results
+
+In the package we have implemented several measures that can be used to assess the results
+
+**Reduction Ratio**: Provides necessary details about the reduction in comparison pairs if the given blocks are applied to a further record linkage or deduplication procedure. For deduplication:
+
+$$
+\text{RR}_{\text{deduplication}} = 1 - \frac{\sum\limits_{i=1}^{k} \binom{|B_i|}{2}}{\binom{n}{2}},
+$$
+
+where $k$ is the total number of blocks, $n$ is the total number of records in the dataset, and $|B_i|$ is the number of records in the $i$-th block. $\sum\limits_{i=1}^{k} \binom{|B_i|}{2}$ is the number of comparisons after blocking, while $\binom{n}{2}$ is the total number of possible comparisons without blocking. For record linkage the reduction ratio is defined as follows
+
+$$
+\text{RR}_{\text{record\_linkage}} = 1 - \frac{\sum\limits_{i=1}^{k} |B_{i,x}| \cdot |B_{i,y}|} {(m \cdot n)},
+$$
+
+where $m$ and $n$ are the sizes of datasets $X$ and $Y$, and $k$ is the total number of blocks. The term $|B_{i,x}|$ is the number of unique records from dataset $X$ in the $i$-th block, while $|B_{i,y}|$ is the number of unique records from dataset $Y$ in the $i$-th block. The expression $\sum\limits_{i=1}^{k} |B_{i,x}| \cdot |B_{i,y}|$ is the number of comparisons after blocking.
+
+Confusion matrix presents results in comparison to ground-truth \texttt{blocks} in a pairwise manner (e.g., one true positive pair occurs when both records from the comparison pair belong to the same predicted \texttt{block} and to the same ground-truth \texttt{block} in the evaluation data frame). 
+
++ True Positive (TP): Record pairs correctly matched in the same block.
++ False Positive (FP): Records pairs identified as matches that are not true matches in the same block.
++ True Negative (TN): Record pairs correctly identified as non-matches (different blocks)
++ False Negative (FN): Records identified as non-matches that are true matches in the same block.
+
+| **Metric** | **Formula** | **Metric** | **Formula** |
+|------------|-------------|------------|-------------|
+| Recall | $\frac{TP}{TP + FN}$ | Accuracy | $\frac{TP + TN}{TP + TN + FP + FN}$ |
+| Precision | $\frac{TP}{TP + FP}$ | Specificity | $\frac{TN}{TN + FP}$ |
+| F1 Score | $2 \cdot \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}$ | False Positive Rate | $\frac{FP}{FP + TN}$ |
+| False Negative Rate | $\frac{FN}{FN + TP}$ | | |
+
+*Table: Evaluation Metrics*
+
+# Case studies
 
 ## Record linkage example
 
@@ -189,39 +227,6 @@ result_3_reclin
 
 That decreases the FNR to `r sprintf("%.2f", (result_3_reclin$metrics)[4]*100)`%.
 
-### Integration with the \CRANpkg{reclin2} package
-
-Let us load the \CRANpkg{reclin2} package.
-
-```{r reclin2_load, echo = TRUE}
-library(reclin2)
-```
-
-Now we present record linkage using the `pair_ann` function. It is based on the `pair_minism` function and reuses some of its source code. The `on` parameter specifies the column names for the approximate nearest neighbours (ANN) search. Setting `deduplication = FALSE` enables record linkage. The function works as follows.
-
-```{r reclin_pair_ann, echo = TRUE}
-result_pair_ann <- pair_ann(x = foreigners_1,
-                            y = foreigners_2,
-                            on = c("fname", "sname", "surname", "date", "region", "country"),
-                            deduplication = FALSE)
-head(result_pair_ann)
-```
-
-The `pair_ann` function returns the total number of pairs. This output can be integrated into the pipeline of the \CRANpkg{reclin2} package. We compare pairs across all selected variables using the Jaro-Winkler distance. The similarity scores are summed across the variables and we set `threshold = 4.5` to accept a pair.
-
-```{r reclin_pair_ann_pipeline, echo = TRUE}
-result_pair_ann |>
-  compare_pairs(on = c("fname", "sname", "surname", "date", "region", "country"),
-                comparators = list(cmp_jarowinkler())) |>
-  score_simple("score",
-               on = c("fname", "sname", "surname", "date", "region", "country")) |>
-  select_threshold("threshold", score = "score", threshold = 4.5) |>
-  link(selection = "threshold") |>
-  head()
-```
-
-We observe that the example pairs are matches.
-
 ## Deduplication example
 
 We demonstrate deduplication using the `blocking` function on the `RLdata500` dataset from the \CRANpkg{RecordLinkage} package. Note that the dataset is included in the `blocking` package. It contains artificial personal data. Fifty records have been duplicated with randomly generated errors. Each row represents one record, with the following columns:
@@ -350,50 +355,14 @@ eval_metrics$klsh_100 <- unlist(klsh_100_metrics)
 do.call(rbind, eval_metrics) * 100
 ```
 
-# Customizing tooltip design with \pkg{ToOoOlTiPs}
-
-\pkg{ToOoOlTiPs} is a packages for customizing tooltips in interactive graphics, it features these possibilities.
-
-# A gallery of tooltips examples
-
-The \CRANpkg{palmerpenguins} data [@palmerpenguins] features three penguin species which has a lovely illustration by Alison Horst in Figure \@ref(fig:penguins-alison).
-
-```{r penguins-alison, out.width = "100%", out.height = "30%", fig.cap = "Artwork by \\@allison\\_horst", fig.alt="A picture of three different penguins with their species: Chinstrap, Gentoo, and Adelie. "}
-knitr::include_graphics("figures/penguins.png")
-```
-
-Table `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\@ref(tab:penguins-tab-interactive)', '\\@ref(tab:penguins-tab-static)'))` prints at the first few rows of the `penguins` data:
-
-```{r penguins-tab-interactive, eval = knitr::is_html_output(), layout = "l-body-outset"}
-knitr::kable(head(penguins), format = "html", caption = "A basic table")
-```
-
-```{r penguins-tab-static, eval = knitr::is_latex_output()}
-knitr::kable(head(penguins), format = "latex", caption = "A basic table") %>% 
-  kableExtra::kable_styling(font_size = 7)
-```
-
-Figure `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\@ref(fig:penguins-plotly)', '\\@ref(fig:penguins-ggplot)'))` shows an `r ifelse(knitr::is_html_output(), 'interactive', '')` plot of the penguins data, made using the `r knitr::asis_output(ifelse(knitr::is_html_output(), '\\CRANpkg{plotly}', '\\CRANpkg{ggplot2}'))` package.
-
-```{r penguins-plotly, echo = TRUE, out.width="100%", fig.width = 6, fig.height=5, layout="l-body", fig.cap="A basic interactive plot made with the plotly package on palmer penguin data. Three species of penguins are plotted with bill depth on the x-axis and bill length on the y-axis. When hovering on a point, a tooltip will show the exact value of the bill depth and length for that point, along with the species name.", include=knitr::is_html_output(), eval=knitr::is_html_output(), fig.alt = "A scatterplot of bill length against bill depth, both measured in millimetre. The three species are shown in different colours and loosely forms three clusters. Adelie has small bill length and large bill depth, Gentoo has small bill depth but large bill length, and Chinstrap has relatively large bill depth and bill length."}
-p <- penguins %>% 
-  ggplot(aes(x = bill_depth_mm, y = bill_length_mm, 
-             color = species)) + 
-  geom_point()
-ggplotly(p)
-```
-
-```{r penguins-ggplot, echo = TRUE, out.width="100%", fig.width = 6, fig.height=5, layout="l-body", fig.cap="A basic non-interactive plot made with the ggplot2 package on palmer penguin data. Three species of penguins are plotted with bill depth on the x-axis and bill length on the y-axis. Visit the online article to access the interactive version made with the plotly package.", include=knitr::is_latex_output(), eval=knitr::is_latex_output()}
-penguins %>% 
-  ggplot(aes(x = bill_depth_mm, y = bill_length_mm, 
-             color = species)) + 
-  geom_point()
-```
 
 # Summary
 
-We have displayed various tooltips that are available in the package \pkg{ToOoOlTiPs}.
+In this paper we have demonstrated the basic use cases of the \CRANpkg{blocking} package. We believe that the software will be useful for researchers working in various fields where integration of multiple sources is an important aspect. 
 
 # Acknowledgements
 
-Work on this package is supported by the National Science Centre, OPUS 20 grant no. 2020/39/B/HS4/00941
+Work on this package is supported by the National Science Centre, OPUS 20 grant no. 2020/39/B/HS4/00941. We also thank participants of the uRos 2024 conference for valuable comments and discussion. 
+
+We also have developed a python version of the package {BlockingPy} that is available through the PiPy. It has the similar structure but offers more ANN algorithms (e.g. FAISS) or usage of embeddings. For more details see: Strojny, T., & Beręsewicz, M. (2025). BlockingPy: approximate nearest neighbours for blocking of records for entity resolution. arXiv preprint arXiv:2504.04266.
+
