@@ -1,4 +1,4 @@
-\begin{thebibliography}{5}
+\begin{thebibliography}{15}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -22,6 +22,29 @@ A.~Dasylva and A.~Goussanou.
 \newblock On the consistent estimation of linkage errors without training data.
 \newblock \emph{Japanese Journal of Statistics and Data Science}, 5\penalty0 (1):\penalty0 181--216, 2022.
 
+\bibitem[Enamorado et~al.(2019)Enamorado, Fifield, and Imai]{enamorado2019using}
+T.~Enamorado, B.~Fifield, and K.~Imai.
+\newblock Using a probabilistic model to assist merging of large-scale administrative records.
+\newblock \emph{American Political Science Review}, 113\penalty0 (2):\penalty0 353--371, 2019.
+
+\bibitem[Enamorado et~al.(2023)Enamorado, Fifield, and Imai]{fastLink}
+T.~Enamorado, B.~Fifield, and K.~Imai.
+\newblock \emph{fastLink: Fast Probabilistic Record Linkage with Missing Data}, 2023.
+\newblock URL \url{https://CRAN.R-project.org/package=fastLink}.
+\newblock R package version 0.6.1.
+
+\bibitem[{Howard, II}(2020)]{Phonetic2020}
+J.~P. {Howard, II}.
+\newblock Phonetic spelling algorithm implementations for {R}.
+\newblock \emph{Journal of Statistical Software}, 95\penalty0 (8):\penalty0 1--21, 2020.
+\newblock \doi{10.18637/jss.v095.i08}.
+
+\bibitem[{Howard, II}(2021)]{phonics}
+J.~P. {Howard, II}.
+\newblock \emph{{phonics}: Phonetic Spelling Algorithms in R}, 2021.
+\newblock URL \url{https://jameshoward.us/phonics-in-r/}.
+\newblock R package version 1.3.10.
+
 \bibitem[Papadakis et~al.(2020)Papadakis, Skoutas, Thanos, and Palpanas]{Papadakis2020}
 G.~Papadakis, D.~Skoutas, E.~Thanos, and T.~Palpanas.
 \newblock Blocking and filtering techniques for entity resolution: A survey.
@@ -30,10 +53,46 @@ G.~Papadakis, D.~Skoutas, E.~Thanos, and T.~Palpanas.
 \newblock \doi{10.1145/3377455}.
 \newblock URL \url{https://doi.org/10.1145/3377455}.
 
+\bibitem[Sariyar and Borg(2010)]{RecordLinkage-rjournal}
+M.~Sariyar and A.~Borg.
+\newblock {The RecordLinkage Package: Detecting Errors in Data}.
+\newblock \emph{{The R Journal}}, 2\penalty0 (2):\penalty0 61--67, 2010.
+\newblock \doi{10.32614/RJ-2010-017}.
+\newblock URL \url{https://doi.org/10.32614/RJ-2010-017}.
+
+\bibitem[Sariyar and Borg(2025)]{RecordLinkage}
+M.~Sariyar and A.~Borg.
+\newblock \emph{RecordLinkage: Record Linkage Functions for Linking and Deduplicating Data Sets}, 2025.
+\newblock URL \url{https://CRAN.R-project.org/package=RecordLinkage}.
+\newblock R package version 0.4-12.5.
+
+\bibitem[Steorts(2020)]{klsh}
+R.~Steorts.
+\newblock \emph{klsh: Blocking for Record Linkage}, 2020.
+\newblock URL \url{https://CRAN.R-project.org/package=klsh}.
+\newblock R package version 0.1.0.
+
 \bibitem[Steorts et~al.(2014)Steorts, Ventura, Sadinle, and Fienberg]{Steorts2014}
 R.~C. Steorts, S.~L. Ventura, M.~Sadinle, and S.~E. Fienberg.
 \newblock A comparison of blocking methods for record linkage.
 \newblock In J.~Domingo-Ferrer, editor, \emph{Privacy in Statistical Databases}, pages 253--268, Cham, 2014. Springer International Publishing.
 \newblock ISBN 978-3-319-11257-2.
+
+\bibitem[van~der Laan(2022)]{reclin2-rjournal}
+D.~J. van~der Laan.
+\newblock reclin2: a toolkit for record linkage and deduplication.
+\newblock \emph{R Journal}, 14\penalty0 (2), 2022.
+
+\bibitem[{van der Laan}(2024)]{reclin2}
+J.~{van der Laan}.
+\newblock \emph{reclin2: Record Linkage Toolkit}, 2024.
+\newblock URL \url{https://CRAN.R-project.org/package=reclin2}.
+\newblock R package version 0.5.0.
+
+\bibitem[{van der Loo}(2014)]{stringdist}
+M.~{van der Loo}.
+\newblock The stringdist package for approximate string matching.
+\newblock \emph{The {R} {J}ournal}, 6:\penalty0 111--122, 2014.
+\newblock URL \url{https://CRAN.R-project.org/package=stringdist}.
 
 \end{thebibliography}

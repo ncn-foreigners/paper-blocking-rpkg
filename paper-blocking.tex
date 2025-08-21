@@ -14,29 +14,50 @@ Entity resolution (probabilistic record linkage, deduplication) is essential for
 
 \subsection{Blocking for record linkage}\label{blocking-for-record-linkage}
 
-Entity resolution (probabilistic record linkage, deduplication) is essential for estimation based on multiple sources (for recent review see \citet{Binette2022}). The goal is to link records without common identifiers that refer to the same entity (e.g., person, company). This situation is often observed in administrative records, in particular for foreign-born populations. For instance in the The Social Insurance Institution register in Poland at the end of 2023 included 1,206 mln records which refereed to possibly 1,105 mln individuals out of which about 10\% had missing information in the personal identifier (PESEL) and about 50\% cases missing address details. Please note that the exact number after individuals will be certainly lower than 1,105 mln as the 10\% of may include duplicates.
+Entity resolution (probabilistic record linkage, deduplication) is essential for estimation based on multiple sources (for recent review see \citet{Binette2022}). The goal is to link records without common identifiers that refer to the same entity (e.g., person, company). This situation is often observed in administrative records, in particular for foreign-born populations. For instance, the Social Insurance Institution register in Poland at the end of 2023 included 1.206 million records which referred to possibly 1.105 million individuals, out of which about 10\% had missing information in the personal identifier (PESEL) and about 50\% of cases had missing address details. Please note that the exact number of individuals will be certainly lower than 1.105 million as the 10\% may include duplicates.
 
-This drives a need to link records without identifiers but often requires certain assumptions such as how to reduce large number of possible comparisons as it is not possible to compare all pairs of records in a large dataset (e.g., for the mentioned example this would lead to over 600 bln comparisons). That is why \emph{blocking} methods are applied to reduce number of comparisons prior the final record linkage / deduplication stage not only because of computational reasons but also clerical review workload.
+This drives a need to link records without identifiers but often requires certain assumptions such as how to reduce the large number of possible comparisons as it is not possible to compare all pairs of records in a large dataset (e.g., for the mentioned example this would lead to over 600 billion comparisons). That is why \emph{blocking} methods are applied to reduce the number of comparisons prior to the final record linkage/deduplication stage not only because of computational reasons but also due to clerical review workload.
 
-Blocking is a method of reducing number of possible comparisons by assuming that certain variables should be exactly met. For instance, standard methods is based on assuming that sex or age (or some other combination) should match exactly while other characteristics of the records could be varying. Another standard method is to use phonetic algorithms such as SOUNDEX or its improvements for non-English languages. Further, due to use large language models one may also consider using embeddings to search for closest neighbour and threat this as a possible pair. For review of blocking methods see \citet{Steorts2014} or \citet{Papadakis2020} and in the Section \ref{sec-software} we will discuss R packages that implement blocking methods.
+Blocking is a method of reducing the number of possible comparisons by assuming that certain variables should be exactly matched. For instance, a standard method is based on assuming that sex or age (or some other combination) should match exactly while other characteristics of the records could be varying. Another standard method is to use phonetic algorithms such as SOUNDEX or its improvements for non-English languages. Furthermore, due to the use of large language models one may also consider using embeddings to search for the closest neighbor and treat this as a possible pair. For a review of blocking methods see \citet{Steorts2014} or \citet{Papadakis2020} and in Section \ref{sec-software} we will discuss R packages that implement blocking methods.
 
-Reducing number of pairs has its costs: missing comparisons which lead to an increasing false positive rate (FPR) and false negative rate (FNR) of the linkage study. In order to assess this error a subset of pairs or simulation studies should be applied. Alternatively, one may consider approaches proposed by \citet{dasylva2021estimating} and \citet{dasylva2022consistent} who proposed methods to estimate FPR and FNR without access to the audit sample.
+Reducing the number of pairs has its costs: missing comparisons which lead to an increased false positive rate (FPR) and false negative rate (FNR) of the linkage study. In order to assess this error, a subset of pairs or simulation studies should be applied. Alternatively, one may consider approaches proposed by \citet{dasylva2021estimating} and \citet{dasylva2022consistent} who proposed methods to estimate FPR and FNR without access to the audit sample.
 
 \subsection{Existing software and our contribution}\label{sec-software}
 
-This paper presents the \CRANpkg{blocking} package that aims to make the
-linkage and deduplication easier by creating the..
-
-The following should be underlined:
+The R system offers several packages that implements various blocking techniques which we grouped by the following classification:
 
 \begin{itemize}
 \tightlist
 \item
-  reduce number of comparisons
+  deterministic grouping:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \CRANpkg{reclin2} \citep[\citet{reclin2-rjournal}]{reclin2} which allows to pair records using the \texttt{pair\_blocking()} with a prespecified list of columns in a \texttt{data.frame}, and the \texttt{pair\_minsim()} function that allows to specify the minimal similarity score (e.g.~1 out of 3 variables should match exactly).
+  \item
+    \CRANpkg{RecordLinkage} \citep[\citet{RecordLinkage-rjournal}]{RecordLinkage} which allows to specify blocking variable in the \texttt{blockfld} in either in \texttt{compare.dedup()} or \texttt{compare.linkage()} functions in a form of a vector (either character or numeric).
+  \item
+    \CRANpkg{fastLink} \citep[\citet{enamorado2019using}]{fastLink} which implements various blocking methods via the \texttt{blockData()} function such as exact matching, window matching (e.g., no more than 2 years difference between birth year) or k-means clustering algorithm. It should be noted that the \texttt{fastLink} returns splits dataset(s) into a separate lists while \texttt{reclin2} and \texttt{RecordLinkage} package create a single dataset.
+  \end{itemize}
 \item
-  reduce FNR and other errors
+  phonetic grouping:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \CRANpkg{RecordLinkage} allows to directly specify the phonetic comparison via the \texttt{phonetic} argument of the \texttt{compare.dedup()} or \texttt{compare.linkage()} function via the \texttt{soundex()} function. However, this is not used for blocking but for comparison of strings
+  \item
+    It should be noted that \CRANpkg{stringdist} \citep{stringdist} also implements SOUNDEX algorithm while the \CRANpkg{phonics} \citep[\citet{Phonetic2020}]{phonics} implements various phonetic algorithms that could be applied prior the blocking procedure (e.g., create a new column).
+  \end{itemize}
 \item
-  reduce workload on clerical review
+  probabilistic blocking:
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \CRANpkg{klsh} \citep{klsh} is the only R package that implements probabilistic blocking using the k-means variant of locality sensitive hashing. The main \texttt{klsh()} function implements this approach and a resulting object is a list with row identifiers along for the pre specified number of blocks (via the \texttt{num.blocks} argument of the \texttt{klsh()} function).
+  \end{itemize}
 \end{itemize}
 
 \subsection{Outline of article}\label{outline-of-article}
