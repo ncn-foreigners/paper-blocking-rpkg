@@ -98,41 +98,32 @@ result_dedup_hnsw <- blocking(x = RLdata500$txt,
 result_dedup_hnsw
 
 
-## ----dedup-graph, echo = TRUE, out.width = "100%", fig.width = 3, fig.height = 3, layout = "l-body", fig.align = "center", fig.cap = "Connection graph", label = "connection-graph", fig.pos = "H"----
-plot(result_dedup_hnsw$graph, vertex.size = 1, vertex.label = NA)
-
-
 ## ----dedup_melted, echo = TRUE------------------------------------------------
 df_block_melted <- melt(result_dedup_hnsw$result, id.vars = c("block", "dist"))
 df_block_melted_rec_block <- unique(df_block_melted[, .(rec_id=value, block)])
-head(df_block_melted_rec_block)
-
-
-## ----dedup_blocks, echo = TRUE------------------------------------------------
 RLdata500[df_block_melted_rec_block, on = "rec_id", block_id := i.block]
-head(RLdata500)
-
-
-## ----dedup_uniq_blocs, echo = TRUE--------------------------------------------
 RLdata500[, .(uniq_blocks = uniqueN(block_id)), .(ent_id)][, .N, uniq_blocks]
 
 
-## ----dedup-hist, echo = TRUE, out.width = "100%", fig.width = 5, fig.height = 3, layout = "l-body", fig.align = "center", fig.cap = "Distances calculated between units", label = "dedup-hist", fig.pos = "H"----
-hist(result_dedup_hnsw$result$dist, xlab = "Distances",
-     ylab = "Frequency", breaks = "fd",
-     main = "Distances calculated between units")
+## ----dedup-density, echo = TRUE-----------------------------------------------
+#| label: dedup-density
+#| fig-cap: "Distribution of distances between clusters type"
+#| fig.width: 6
+#| fig.height: 5
+#| fig.align: "center"
+#| fig.pos: "H"
+#| layout: "l-body"
+#| out.width: "100%"
 
-
-## ----dedup-density, echo = TRUE, out.width = "100%", fig.width = 6, fig.height=5, layout="l-body", fig.align = 'center', fig.cap = "Distribution of distances between clusters type", label = "dedup-density", fig.pos = "H"----
 df_for_density <- copy(df_block_melted[block %in% RLdata500$block_id])
 df_for_density[, match:= block %in% RLdata500[id_count == 2]$block_id]
 
 plot(density(df_for_density[match==FALSE]$dist),
-     col = "blue", xlim = c(0, 0.8), 
-     main = "Distribution of distances between\n
-     clusters type (match=red, non-match=blue)")
+     col = "blue", xlim = c(0, 0.8), main = "", xlab = "Distance")
 lines(density(df_for_density[match==TRUE]$dist),
       col = "red", xlim = c(0, 0.8))
+legend("topright",  legend = c("Non-matches", "Matches"), 
+       col = c("blue", "red"),  lty = 1, lwd = 2)
 
 
 ## ----comparision, echo = TRUE-------------------------------------------------
@@ -174,5 +165,5 @@ klsh_100_metrics$f1_score <- 2 * klsh_100_metrics$precision *
   (klsh_100_metrics$precision + klsh_100_metrics$recall)
 eval_metrics$klsh_100 <- unlist(klsh_100_metrics)
 
-do.call(rbind, eval_metrics) * 100
+round(do.call(rbind, eval_metrics) * 100, 2)
 

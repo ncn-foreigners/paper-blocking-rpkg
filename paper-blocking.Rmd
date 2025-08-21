@@ -360,58 +360,42 @@ The results are as follows.
 result_dedup_hnsw
 ```
 
-Now we visualize connections using the obtained graph.
-
-```{r dedup-graph, echo = TRUE, out.width = "100%", fig.width = 3, fig.height = 3, layout = "l-body", fig.align = "center", fig.cap = "Connection graph", label = "connection-graph", fig.pos = "H"}
-plot(result_dedup_hnsw$graph, vertex.size = 1, vertex.label = NA)
-```
-
 We create a long `data.table` with information on blocks and units from
-the original dataset.
+the original dataset. We add the block information to the final dataset.
+We can check in how many blocks the same entities (`ent_id`) are
+observed. In our example, all the same entities are in the same blocks.
+
 
 ```{r dedup_melted, echo = TRUE}
 df_block_melted <- melt(result_dedup_hnsw$result, id.vars = c("block", "dist"))
 df_block_melted_rec_block <- unique(df_block_melted[, .(rec_id=value, block)])
-head(df_block_melted_rec_block)
-```
-
-We add the block information to the final dataset.
-
-```{r dedup_blocks, echo = TRUE}
 RLdata500[df_block_melted_rec_block, on = "rec_id", block_id := i.block]
-head(RLdata500)
-```
-
-We can check in how many blocks the same entities (`ent_id`) are
-observed. In our example, all the same entities are in the same blocks.
-
-```{r dedup_uniq_blocs, echo = TRUE}
 RLdata500[, .(uniq_blocks = uniqueN(block_id)), .(ent_id)][, .N, uniq_blocks]
 ```
 
-Now we can visualize the distances between the units stored in the
-\linebreak `result_dedup_hnsw$result` dataset. Clearly we have a mixture
-of two groups: matches (close to 0) and non-matches (close to 1).
-
-```{r dedup-hist, echo = TRUE, out.width = "100%", fig.width = 5, fig.height = 3, layout = "l-body", fig.align = "center", fig.cap = "Distances calculated between units", label = "dedup-hist", fig.pos = "H"}
-hist(result_dedup_hnsw$result$dist, xlab = "Distances",
-     ylab = "Frequency", breaks = "fd",
-     main = "Distances calculated between units")
-```
 
 Finally, we visualize the result based on the information whether a
 block contains matches or not.
 
-```{r dedup-density, echo = TRUE, out.width = "100%", fig.width = 6, fig.height=5, layout="l-body", fig.align = 'center', fig.cap = "Distribution of distances between clusters type", label = "dedup-density", fig.pos = "H"}
+```{r dedup-density, echo = TRUE}
+#| label: dedup-density
+#| fig-cap: "Distribution of distances between clusters type"
+#| fig.width: 6
+#| fig.height: 5
+#| fig.align: "center"
+#| fig.pos: "H"
+#| layout: "l-body"
+#| out.width: "100%"
+
 df_for_density <- copy(df_block_melted[block %in% RLdata500$block_id])
 df_for_density[, match:= block %in% RLdata500[id_count == 2]$block_id]
 
 plot(density(df_for_density[match==FALSE]$dist),
-     col = "blue", xlim = c(0, 0.8), 
-     main = "Distribution of distances between\n
-     clusters type (match=red, non-match=blue)")
+     col = "blue", xlim = c(0, 0.8), main = "", xlab = "Distance")
 lines(density(df_for_density[match==TRUE]$dist),
       col = "red", xlim = c(0, 0.8))
+legend("topright",  legend = c("Non-matches", "Matches"), 
+       col = c("blue", "red"),  lty = 1, lwd = 2)
 ```
 
 Now we compare the evaluation metrics across all ANN algorithms
@@ -467,7 +451,7 @@ klsh_100_metrics$f1_score <- 2 * klsh_100_metrics$precision *
   (klsh_100_metrics$precision + klsh_100_metrics$recall)
 eval_metrics$klsh_100 <- unlist(klsh_100_metrics)
 
-do.call(rbind, eval_metrics) * 100
+round(do.call(rbind, eval_metrics) * 100, 2)
 ```
 
 # Summary
@@ -477,14 +461,17 @@ In this paper we have demonstrated the basic use cases of the
 for researchers working in various fields where integration of multiple
 sources is an important aspect.
 
+Users interested in integration with the \CRANpkg{reclin2} package we refer to
+the documentation of the `pair_ann()` function and the vignette entitled [`"Integration with existing packages"`](https://cran.r-project.org/web/packages/blocking/vignettes/v3-integration.html)
+
 # Acknowledgements
 
 Work on this package is supported by the National Science Centre, OPUS
 20 grant no. 2020/39/B/HS4/00941. We also thank participants of the uRos
 2024 conference for valuable comments and discussion.
 
-We also have developed a python version of the package {BlockingPy} that
-is available through the PiPy. It has the similar structure but offers
+We also have developed a python version of the package [{BlockingPy}](https://blockingpy.readthedocs.io/en/latest/) that
+is available through the PyPi It has the similar structure but offers
 more ANN algorithms (e.g. FAISS) or usage of embeddings. For more
 details see: Strojny, T., & Beręsewicz, M. (2025). BlockingPy:
 approximate nearest neighbours for blocking of records for entity
