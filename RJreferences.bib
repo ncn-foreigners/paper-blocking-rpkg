@@ -1,36 +1,87 @@
 % put bibtex entries here!
-@Book{plotly,
-    author = {Carson Sievert},
-    title = {{Interactive Web-Based Data Visualizatio}n with R, plotly, and shiny},
-    publisher = {Chapman and Hall/CRC},
-    year = {2020},
-    isbn = {9781138331457},
-    url = {https://plotly-r.com},
-  }
 
-@Manual{crosstalk,
-  title = {{crosstalk}: Inter-Widget Interactivity for HTML Widgets},
-  author = {Joe Cheng and Carson Sievert},
-  year = {2021},
-  note = {R package version 1.1.1},
-  url = {https://CRAN.R-project.org/package=crosstalk},
+@article{Binette2022,
+author = {Olivier Binette  and Rebecca C. Steorts },
+title = {(Almost) all of entity resolution},
+journal = {Science Advances},
+volume = {8},
+number = {12},
+pages = {eabi8021},
+year = {2022},
+doi = {10.1126/sciadv.abi8021},
+URL = {https://www.science.org/doi/abs/10.1126/sciadv.abi8021},
+eprint = {https://www.science.org/doi/pdf/10.1126/sciadv.abi8021},
+abstract = {Whether the goal is to estimate the number of people that live in a congressional district, to estimate the number of individuals that have died in an armed conflict, or to disambiguate individual authors using bibliographic data, all these applications have a common theme—integrating information from multiple sources. Before such questions can be answered, databases must be cleaned and integrated in a systematic and accurate way, commonly known as structured entity resolution (record linkage or deduplication). Here, we review motivational applications and seminal papers that have led to the growth of this area. We review modern probabilistic and Bayesian methods in statistics, computer science, machine learning, database management, economics, political science, and other disciplines that are used throughout industry and academia in applications such as human rights, official statistics, medicine, and citation networks, among others. Last, we discuss current research topics of practical importance. This article reviews entity resolution or record linkage in both statistics and computer science.}}
+
+@InProceedings{Steorts2014,
+author="Steorts, Rebecca C.
+and Ventura, Samuel L.
+and Sadinle, Mauricio
+and Fienberg, Stephen E.",
+editor="Domingo-Ferrer, Josep",
+title="A Comparison of Blocking Methods for Record Linkage",
+booktitle="Privacy in Statistical Databases",
+year="2014",
+publisher="Springer International Publishing",
+address="Cham",
+pages="253--268",
+abstract="Record linkage seeks to merge databases and to remove duplicates when unique identifiers are not available. Most approaches use blocking techniques to reduce the computational complexity associated with record linkage. We review traditional blocking techniques, which typically partition the records according to a set of field attributes, and consider two variants of a method known as locality sensitive hashing, sometimes referred to as ``private blocking.'' We compare these approaches in terms of their recall, reduction ratio, and computational complexity. We evaluate these methods using different synthetic datafiles and conclude with a discussion of privacy-related issues.",
+isbn="978-3-319-11257-2"
 }
 
-@article{RJ-2021-050,
-  author = {Earo Wang and Dianne Cook},
-  title = {Conversations in time: interactive visualisation to explore
-          structured temporal data},
-  year = {2021},
-  journal = {The R Journal},
-  doi = {10.32614/RJ-2021-050},
-  url = {https://journal.r-project.org/archive/2021/RJ-2021-050/index.html}
+@article{Papadakis2020,
+author = {Papadakis, George and Skoutas, Dimitrios and Thanos, Emmanouil and Palpanas, Themis},
+title = {Blocking and Filtering Techniques for Entity Resolution: A Survey},
+year = {2020},
+issue_date = {March 2021},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {53},
+number = {2},
+issn = {0360-0300},
+url = {https://doi.org/10.1145/3377455},
+doi = {10.1145/3377455},
+abstract = {Entity Resolution (ER), a core task of Data Integration, detects different entity profiles that correspond to the same real-world object. Due to its inherently quadratic complexity, a series of techniques accelerate it so that it scales to voluminous data. In this survey, we review a large number of relevant works under two different but related frameworks: Blocking and Filtering. The former restricts comparisons to entity pairs that are more likely to match, while the latter identifies quickly entity pairs that are likely to satisfy predetermined similarity thresholds. We also elaborate on hybrid approaches that combine different characteristics. For each framework we provide a comprehensive list of the relevant works, discussing them in the greater context. We conclude with the most promising directions for future work in the field.},
+journal = {ACM Comput. Surv.},
+month = mar,
+articleno = {31},
+numpages = {42},
+keywords = {Blocking, entity resolution, filtering}
 }
 
-@Manual{palmerpenguins,
-  title = {{palmerpenguins}: Palmer Archipelago (Antarctica) penguin data},
-  author = {Allison Marie Horst and Alison Presmanes Hill and Kristen B Gorman},
+
+
+@Article{Phonetic2020,
+  title = {Phonetic Spelling Algorithm Implementations for {R}},
+  author = {James P. {Howard, II}},
+  journal = {Journal of Statistical Software},
   year = {2020},
-  note = {R package version 0.1.0},
-  url = {https://allisonhorst.github.io/palmerpenguins/},
+  volume = {95},
+  number = {8},
+  pages = {1--21},
+  doi = {10.18637/jss.v095.i08},
 }
 
+
+@article{dasylva2021estimating,
+  title={Estimating the false negatives due to blocking in record linkage.},
+  author={Dasylva, Abel and Goussanou, Arthur},
+  journal={Survey Methodology},
+  volume={47},
+  number={2},
+  pages={299--312},
+  year={2021},
+  publisher={Statistics Canada}
+}
+
+
+@article{dasylva2022consistent,
+  title={On the consistent estimation of linkage errors without training data},
+  author={Dasylva, Abel and Goussanou, Arthur},
+  journal={Japanese Journal of Statistics and Data Science},
+  volume={5},
+  number={1},
+  pages={181--216},
+  year={2022},
+  publisher={Springer}
+}

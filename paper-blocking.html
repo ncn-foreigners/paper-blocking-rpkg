@@ -2595,41 +2595,73 @@ font-size: 20px;
 
 <div class="d-article">
 <h2 data-number="1" id="introduction"><span class="header-section-number">1</span> Introduction</h2>
-<p>This paper presents the <a href="https://cran.r-project.org/package=blocking">blocking</a> package that aims to make the linkage and deduplication easier by creating the..</p>
+<h3 data-number="1.1" id="probabilistic-record-linkage"><span class="header-section-number">1.1</span> Probabilistic record linkage</h3>
+<p>This paper presents the <a href="https://cran.r-project.org/package=blocking">blocking</a> package that aims to make the
+linkage and deduplication easier by creating the..</p>
 <p>The following should be underlined:</p>
 <ul>
 <li>reduce number of comparisons</li>
 <li>reduce FNR and other errors</li>
 <li>reduce workload on clerical review</li>
 </ul>
-<h2 data-number="2" id="background"><span class="header-section-number">2</span> Background</h2>
-<p>Some packages on interactive graphics include <a href="https://cran.r-project.org/package=plotly">plotly</a> <span class="citation" data-cites="plotly">(<a href="#ref-plotly" role="doc-biblioref">Sievert 2020</a>)</span> that interfaces with Javascript for web-based interactive graphics, <a href="https://cran.r-project.org/package=crosstalk">crosstalk</a> <span class="citation" data-cites="crosstalk">(<a href="#ref-crosstalk" role="doc-biblioref">Cheng and Sievert 2021</a>)</span> that specializes cross-linking elements across individual graphics. The recent R Journal paper <a href="https://cran.r-project.org/package=tsibbletalk">tsibbletalk</a> <span class="citation" data-cites="RJ-2021-050">(<a href="#ref-RJ-2021-050" role="doc-biblioref">Wang and Cook 2021</a>)</span> provides a good example of including interactive graphics into an article for the journal. It has both a set of linked plots, and also an animated gif example, illustrating linking between time series plots and feature summaries.</p>
-<h2 data-number="3" id="blocking-of-records-using-blocking-function"><span class="header-section-number">3</span> Blocking of records using <code>blocking</code> function</h2>
-<h3 data-number="3.1" id="the-main-function"><span class="header-section-number">3.1</span> The main function</h3>
-<h3 data-number="3.2" id="assessment-of-results"><span class="header-section-number">3.2</span> Assessment of results</h3>
-<p>In the package we have implemented several measures that can be used to assess the results</p>
-<p><strong>Reduction Ratio</strong>: Provides necessary details about the reduction in comparison pairs if the given blocks are applied to a further record linkage or deduplication procedure. For deduplication:</p>
+<h3 data-number="1.2" id="existing-software"><span class="header-section-number">1.2</span> Existing software</h3>
+<p>Some packages on interactive graphics include <a href="https://cran.r-project.org/package=plotly">plotly</a> <span class="citation" data-cites="plotly">(<a href="#ref-plotly" role="doc-biblioref">Sievert 2020</a>)</span>
+that interfaces with Javascript for web-based interactive graphics,
+<a href="https://cran.r-project.org/package=crosstalk">crosstalk</a> <span class="citation" data-cites="crosstalk">(<a href="#ref-crosstalk" role="doc-biblioref">Cheng and Sievert 2021</a>)</span> that specializes cross-linking elements
+across individual graphics. The recent R Journal paper
+<a href="https://cran.r-project.org/package=tsibbletalk">tsibbletalk</a> <span class="citation" data-cites="RJ-2021-050">(<a href="#ref-RJ-2021-050" role="doc-biblioref">Wang and Cook 2021</a>)</span> provides a good example of
+including interactive graphics into an article for the journal. It has
+both a set of linked plots, and also an animated gif example,
+illustrating linking between time series plots and feature summaries.</p>
+<h3 data-number="1.3" id="outline-of-article"><span class="header-section-number">1.3</span> Outline of article</h3>
+<p>The paper has the following structure. In the section <a href="#sec-blocks"><strong>??</strong></a> we provide description of the main functionalities of the <code>blocking</code> package and how we can assess the result. In the section <a href="#sec-case"><strong>??</strong></a> we provide two case studies: probabilistic record linkage and deduplication. These examples show how our package can improve pipeline of entity resolution and work with existing R packages.</p>
+<h2 data-number="2" id="sec-blocks"><span class="header-section-number">2</span> Blocking of records using <code>blocking</code> function</h2>
+<h3 data-number="2.1" id="the-main-function"><span class="header-section-number">2.1</span> The main function</h3>
+<h3 data-number="2.2" id="assessment-of-results"><span class="header-section-number">2.2</span> Assessment of results</h3>
+<p>In the package we have implemented several measures that can be used to
+assess the results</p>
+<p><strong>Reduction Ratio</strong>: Provides necessary details about the reduction in
+comparison pairs if the given blocks are applied to a further record
+linkage or deduplication procedure. For deduplication:</p>
 <p><span class="math display">\[
 \text{RR}_{\text{deduplication}} = 1 - \frac{\sum\limits_{i=1}^{k} \binom{|B_i|}{2}}{\binom{n}{2}},
 \]</span></p>
-<p>where <span class="math inline">\(k\)</span> is the total number of blocks, <span class="math inline">\(n\)</span> is the total number of records in the dataset, and <span class="math inline">\(|B_i|\)</span> is the number of records in the <span class="math inline">\(i\)</span>-th block. <span class="math inline">\(\sum\limits_{i=1}^{k} \binom{|B_i|}{2}\)</span> is the number of comparisons after blocking, while <span class="math inline">\(\binom{n}{2}\)</span> is the total number of possible comparisons without blocking. For record linkage the reduction ratio is defined as follows</p>
+<p>where <span class="math inline">\(k\)</span> is the total number of blocks, <span class="math inline">\(n\)</span> is the total number of
+records in the dataset, and <span class="math inline">\(|B_i|\)</span> is the number of records in the
+<span class="math inline">\(i\)</span>-th block. <span class="math inline">\(\sum\limits_{i=1}^{k} \binom{|B_i|}{2}\)</span> is the number of
+comparisons after blocking, while <span class="math inline">\(\binom{n}{2}\)</span> is the total number of
+possible comparisons without blocking. For record linkage the reduction
+ratio is defined as follows</p>
 <p><span class="math display">\[
 \text{RR}_{\text{record\_linkage}} = 1 - \frac{\sum\limits_{i=1}^{k} |B_{i,x}| \cdot |B_{i,y}|} {(m \cdot n)},
 \]</span></p>
-<p>where <span class="math inline">\(m\)</span> and <span class="math inline">\(n\)</span> are the sizes of datasets <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, and <span class="math inline">\(k\)</span> is the total number of blocks. The term <span class="math inline">\(|B_{i,x}|\)</span> is the number of unique records from dataset <span class="math inline">\(X\)</span> in the <span class="math inline">\(i\)</span>-th block, while <span class="math inline">\(|B_{i,y}|\)</span> is the number of unique records from dataset <span class="math inline">\(Y\)</span> in the <span class="math inline">\(i\)</span>-th block. The expression <span class="math inline">\(\sum\limits_{i=1}^{k} |B_{i,x}| \cdot |B_{i,y}|\)</span> is the number of comparisons after blocking.</p>
-<p>Confusion matrix presents results in comparison to ground-truth in a pairwise manner (e.g., one true positive pair occurs when both records from the comparison pair belong to the same predicted and to the same ground-truth in the evaluation data frame).</p>
+<p>where <span class="math inline">\(m\)</span> and <span class="math inline">\(n\)</span> are the sizes of datasets <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, and <span class="math inline">\(k\)</span> is the
+total number of blocks. The term <span class="math inline">\(|B_{i,x}|\)</span> is the number of unique
+records from dataset <span class="math inline">\(X\)</span> in the <span class="math inline">\(i\)</span>-th block, while <span class="math inline">\(|B_{i,y}|\)</span> is the
+number of unique records from dataset <span class="math inline">\(Y\)</span> in the <span class="math inline">\(i\)</span>-th block. The
+expression <span class="math inline">\(\sum\limits_{i=1}^{k} |B_{i,x}| \cdot |B_{i,y}|\)</span> is the
+number of comparisons after blocking.</p>
+<p>Confusion matrix presents results in comparison to ground-truth
+in a pairwise manner (e.g., one true positive pair
+occurs when both records from the comparison pair belong to the same
+predicted and to the same ground-truth in
+the evaluation data frame).</p>
 <ul>
-<li>True Positive (TP): Record pairs correctly matched in the same block.</li>
-<li>False Positive (FP): Records pairs identified as matches that are not true matches in the same block.</li>
-<li>True Negative (TN): Record pairs correctly identified as non-matches (different blocks)</li>
-<li>False Negative (FN): Records identified as non-matches that are true matches in the same block.</li>
+<li>True Positive (TP): Record pairs correctly matched in the same
+block.</li>
+<li>False Positive (FP): Records pairs identified as matches that are
+not true matches in the same block.</li>
+<li>True Negative (TN): Record pairs correctly identified as non-matches
+(different blocks)</li>
+<li>False Negative (FN): Records identified as non-matches that are true
+matches in the same block.</li>
 </ul>
 <table>
 <colgroup>
-<col style="width: 24%" />
-<col style="width: 26%" />
-<col style="width: 24%" />
-<col style="width: 26%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
 </colgroup>
 <thead>
 <tr class="header">
@@ -2667,8 +2699,8 @@ font-size: 20px;
 </tbody>
 </table>
 <p><em>Table: Evaluation Metrics</em></p>
-<h2 data-number="4" id="case-studies"><span class="header-section-number">4</span> Case studies</h2>
-<h3 data-number="4.1" id="record-linkage-example"><span class="header-section-number">4.1</span> Record linkage example</h3>
+<h2 data-number="3" id="sec-case"><span class="header-section-number">3</span> Case studies</h2>
+<h3 data-number="3.1" id="record-linkage-example"><span class="header-section-number">3.1</span> Record linkage example</h3>
 <p>Let us first load the required packages.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2676,7 +2708,12 @@ font-size: 20px;
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com">data.table</a></span><span class="op">)</span></span></code></pre>
 </div>
 </div>
-<p>We demonstrate the use of <code>blocking</code> function for record linkage on the <code>foreigners</code> dataset included in the package. This fictional representation of the foreign population in Poland was generated based on publicly available information, preserving the distributions from administrative registers. It contains 110,000 rows with 100,000 entities. Each row represents one record, with the following columns:</p>
+<p>We demonstrate the use of <code>blocking</code> function for record linkage on the
+<code>foreigners</code> dataset included in the package. This fictional
+representation of the foreign population in Poland was generated based
+on publicly available information, preserving the distributions from
+administrative registers. It contains 110,000 rows with 100,000
+entities. Each row represents one record, with the following columns:</p>
 <ul>
 <li><code>fname</code> – first name,</li>
 <li><code>sname</code> – second name,</li>
@@ -2700,14 +2737,18 @@ font-size: 20px;
 5:   amil        maharramov 1993/03/08            031       2
 6:  gadir        jahangirov 1991/08/29            031       3</code></pre>
 </div>
-<p>We split the dataset into two separate files: one containing the first appearance of each entity in the <code>foreigners</code> dataset, and the other containing its subsequent appearances.</p>
+<p>We split the dataset into two separate files: one containing the first
+appearance of each entity in the <code>foreigners</code> dataset, and the other
+containing its subsequent appearances.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">foreigners_1</span> <span class="op">&lt;-</span> <span class="va">foreigners</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/duplicated.html">duplicated</a></span><span class="op">(</span><span class="va">foreigners</span><span class="op">$</span><span class="va">true_id</span><span class="op">)</span>, <span class="op">]</span></span>
 <span><span class="va">foreigners_2</span> <span class="op">&lt;-</span> <span class="va">foreigners</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/duplicated.html">duplicated</a></span><span class="op">(</span><span class="va">foreigners</span><span class="op">$</span><span class="va">true_id</span><span class="op">)</span>, <span class="op">]</span></span></code></pre>
 </div>
 </div>
-<p>Now in both datasets we remove slashes from the <code>date</code> column and create a new string column that concatenates the information from all columns (excluding <code>true_id</code>) in each row.</p>
+<p>Now in both datasets we remove slashes from the <code>date</code> column and create
+a new string column that concatenates the information from all columns
+(excluding <code>true_id</code>) in each row.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">foreigners_1</span><span class="op">[</span>, <span class="va">date</span> <span class="op">:=</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html">gsub</a></span><span class="op">(</span><span class="st">&quot;/&quot;</span>, <span class="st">&quot;&quot;</span>, <span class="va">date</span><span class="op">)</span><span class="op">]</span></span>
@@ -2733,8 +2774,12 @@ font-size: 20px;
 5: zaurbayramova1996100601261031
 6:       asifmammadov19970726031</code></pre>
 </div>
-<h4 class="unnumbered" data-number="4.1.1" id="general-use">General use</h4>
-<p>We use the newly created columns in the <code>blocking</code> function, which relies on the default <a href="https://cran.r-project.org/package=rnndescent">rnndescent</a> (Nearest Neighbor Descent) algorithm based on cosine distance. Additionally, we set <code>verbose = 1</code> to monitor progress. Note that a default parameter of the <code>blocking</code> function is <code>seed = 2023</code>, which sets the random seed.</p>
+<h4 class="unnumbered" data-number="3.1.1" id="general-use">General use</h4>
+<p>We use the newly created columns in the <code>blocking</code> function, which
+relies on the default <a href="https://cran.r-project.org/package=rnndescent">rnndescent</a> (Nearest Neighbor Descent)
+algorithm based on cosine distance. Additionally, we set <code>verbose = 1</code>
+to monitor progress. Note that a default parameter of the <code>blocking</code>
+function is <code>seed = 2023</code>, which sets the random seed.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">result_reclin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ncn-foreigners.ue.poznan.pl/blocking/reference/blocking.html">blocking</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">foreigners_1</span><span class="op">$</span><span class="va">txt</span>,</span>
@@ -2750,9 +2795,18 @@ font-size: 20px;
 </div>
 <p>Now we examine the results of record linkage.</p>
 <ul>
-<li>We have created 6,470 blocks.</li>
-<li>The blocking process utilized 1,232 columns (2 character shingles).</li>
-<li>We have 3,920 blocks of 2 elements, 1,599 blocks of 3 elements,…, 2 blocks of 7 elements.</li>
+<li>We have created
+6,470
+blocks.</li>
+<li>The blocking process utilized
+1,232 columns (2
+character shingles).</li>
+<li>We have 3,920 blocks of
+2 elements,
+1,599 blocks of
+3 elements,…,
+2 blocks of
+7 elements.</li>
 </ul>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2777,7 +2831,8 @@ Distribution of the size of the blocks:
 <li><code>metrics</code> – metrics for quality assessment (here <code>NULL</code>),</li>
 <li><code>confusion</code> – confusion matrix (here <code>NULL</code>),</li>
 <li><code>colnames</code> – column names used for the comparison,</li>
-<li><code>graph</code> – an <a href="https://cran.r-project.org/package=igraph">igraph</a> object, mainly for visualization (here <code>NULL</code>).</li>
+<li><code>graph</code> – an <a href="https://cran.r-project.org/package=igraph">igraph</a> object, mainly for visualization
+(here <code>NULL</code>).</li>
 </ul>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2797,8 +2852,10 @@ Distribution of the size of the blocks:
 </div>
 <p>The resulting <code>data.table</code> has four columns:</p>
 <ul>
-<li><code>x</code> – reference dataset (i.e. <code>foreigners_1</code>) – this may not contain all units of <code>foreigners_1</code>,</li>
-<li><code>y</code> – query (each row of <code>foreigners_2</code>) – this may not contain all units of <code>foreigners_2</code>,</li>
+<li><code>x</code> – reference dataset (i.e. <code>foreigners_1</code>) – this may not
+contain all units of <code>foreigners_1</code>,</li>
+<li><code>y</code> – query (each row of <code>foreigners_2</code>) – this may not contain
+all units of <code>foreigners_2</code>,</li>
 <li><code>block</code> – block ID,</li>
 <li><code>dist</code> – distance between objects.</li>
 </ul>
@@ -2815,7 +2872,8 @@ Distribution of the size of the blocks:
 5:    57     5     3 0.1379310
 6:    61     6     4 0.2307692</code></pre>
 </div>
-<p>Let’s examine the first pair. Obviously, there are typos in the <code>fname</code> and <code>surname</code>. Nevertheless, the pair is a match.</p>
+<p>Let’s examine the first pair. Obviously, there are typos in the <code>fname</code>
+and <code>surname</code>. Nevertheless, the pair is a match.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">foreigners_1</span><span class="op">[</span><span class="fl">3</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">foreigners_2</span><span class="op">[</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">6</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></code></pre>
@@ -2847,7 +2905,9 @@ country &quot;031&quot;        &quot;031&quot;       </code></pre>
 5:      56    57     5     3
 6:      60    61     6     4</code></pre>
 </div>
-<p>We have 10,000 matched pairs. We use the <code>true_blocks</code> parameter in the <code>blocking</code> function to specify the true block assignments. We obtain the quality metrics for the assessment of record linkage.</p>
+<p>We have 10,000 matched pairs. We use the <code>true_blocks</code> parameter in the
+<code>blocking</code> function to specify the true block assignments. We obtain the
+quality metrics for the assessment of record linkage.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">result_2_reclin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ncn-foreigners.ue.poznan.pl/blocking/reference/blocking.html">blocking</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">foreigners_1</span><span class="op">$</span><span class="va">txt</span>,</span>
@@ -2877,7 +2937,12 @@ Evaluation metrics (standard):
 specificity    f1_score 
     99.9962     86.7795 </code></pre>
 </div>
-<p>For example, our approach results in a 3.25% false negative rate (FNR). To improve this, we can increase the <code>epsilon</code> parameter of the NND method from 0.1 to 0.5. To do so, we configure the <code>control_ann</code> parameter in the <code>blocking</code> function using the <code>controls_ann</code> and <code>control_nnd</code> functions.</p>
+<p>For example, our approach results in a
+3.25% false negative
+rate (FNR). To improve this, we can increase the <code>epsilon</code> parameter of
+the NND method from 0.1 to 0.5. To do so, we configure the <code>control_ann</code>
+parameter in the <code>blocking</code> function using the <code>controls_ann</code> and
+<code>control_nnd</code> functions.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">result_3_reclin</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ncn-foreigners.ue.poznan.pl/blocking/reference/blocking.html">blocking</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">foreigners_1</span><span class="op">$</span><span class="va">txt</span>,</span>
@@ -2908,9 +2973,15 @@ Evaluation metrics (standard):
 specificity    f1_score 
     99.9964     87.6636 </code></pre>
 </div>
-<p>That decreases the FNR to 3.12%.</p>
-<h3 data-number="4.2" id="deduplication-example"><span class="header-section-number">4.2</span> Deduplication example</h3>
-<p>We demonstrate deduplication using the <code>blocking</code> function on the <code>RLdata500</code> dataset from the <a href="https://cran.r-project.org/package=RecordLinkage">RecordLinkage</a> package. Note that the dataset is included in the <code>blocking</code> package. It contains artificial personal data. Fifty records have been duplicated with randomly generated errors. Each row represents one record, with the following columns:</p>
+<p>That decreases the FNR to
+3.12%.</p>
+<h3 data-number="3.2" id="deduplication-example"><span class="header-section-number">3.2</span> Deduplication example</h3>
+<p>We demonstrate deduplication using the <code>blocking</code> function on the
+<code>RLdata500</code> dataset from the <a href="https://cran.r-project.org/package=RecordLinkage">RecordLinkage</a> package. Note that
+the dataset is included in the <code>blocking</code> package. It contains
+artificial personal data. Fifty records have been duplicated with
+randomly generated errors. Each row represents one record, with the
+following columns:</p>
 <ul>
 <li><code>fname_c1</code> – first name, first component,</li>
 <li><code>fname_c2</code> – first name, second component,</li>
@@ -2944,7 +3015,11 @@ specificity    f1_score
 5:     72
 6:    142</code></pre>
 </div>
-<p>We create a new column (<code>id_count</code>) that indicates how many times a given unit occurs and then add leading zeros to the <code>bm</code> and <code>bd</code> columns. Finally, we create a new string column that concatenates the information from all columns (excluding <code>rec_id</code>, <code>ent_id</code> and <code>id_count</code>) in each row.</p>
+<p>We create a new column (<code>id_count</code>) that indicates how many times a
+given unit occurs and then add leading zeros to the <code>bm</code> and <code>bd</code>
+columns. Finally, we create a new string column that concatenates the
+information from all columns (excluding <code>rec_id</code>, <code>ent_id</code> and
+<code>id_count</code>) in each row.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">RLdata500</span><span class="op">[</span>, <span class="va">id_count</span> <span class="op">:=</span><span class="va">.N</span>, <span class="va">ent_id</span><span class="op">]</span></span>
@@ -2971,7 +3046,11 @@ specificity    f1_score
 5:     72        1    ralfkrueger19660113
 6:    142        1  juergenfranke19290704</code></pre>
 </div>
-<p>As in the previous example, we use the <code>txt</code> column in the <code>blocking</code> function. This time, we set <code>ann = hnsw</code> to use the Hierarchical Navigable Small World (HNSW) algorithm from the <a href="https://cran.r-project.org/package=RcppHNSW">RcppHNSW</a> package and <code>graph = TRUE</code> to obtain an <a href="https://cran.r-project.org/package=igraph">igraph</a> object for visualization.</p>
+<p>As in the previous example, we use the <code>txt</code> column in the <code>blocking</code>
+function. This time, we set <code>ann = hnsw</code> to use the Hierarchical
+Navigable Small World (HNSW) algorithm from the <a href="https://cran.r-project.org/package=RcppHNSW">RcppHNSW</a>
+package and <code>graph = TRUE</code> to obtain an <a href="https://cran.r-project.org/package=igraph">igraph</a> object for
+visualization.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">result_dedup_hnsw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ncn-foreigners.ue.poznan.pl/blocking/reference/blocking.html">blocking</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">RLdata500</span><span class="op">$</span><span class="va">txt</span>,</span>
@@ -3021,7 +3100,8 @@ Figure 1: Connection graph
 </p>
 </div>
 </div>
-<p>We create a long <code>data.table</code> with information on blocks and units from the original dataset.</p>
+<p>We create a long <code>data.table</code> with information on blocks and units from
+the original dataset.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">df_block_melted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/melt.data.table.html">melt</a></span><span class="op">(</span><span class="va">result_dedup_hnsw</span><span class="op">$</span><span class="va">result</span>, id.vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;block&quot;</span>, <span class="st">&quot;dist&quot;</span><span class="op">)</span><span class="op">)</span></span>
@@ -3060,7 +3140,8 @@ Figure 1: Connection graph
 5:     72        1    ralfkrueger19660113        2
 6:    142        1  juergenfranke19290704       35</code></pre>
 </div>
-<p>We can check in how many blocks the same entities (<code>ent_id</code>) are observed. In our example, all the same entities are in the same blocks.</p>
+<p>We can check in how many blocks the same entities (<code>ent_id</code>) are
+observed. In our example, all the same entities are in the same blocks.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">RLdata500</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>uniq_blocks <span class="op">=</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/duplicated.html">uniqueN</a></span><span class="op">(</span><span class="va">block_id</span><span class="op">)</span><span class="op">)</span>, <span class="fu">.</span><span class="op">(</span><span class="va">ent_id</span><span class="op">)</span><span class="op">]</span><span class="op">[</span>, <span class="va">.N</span>, <span class="va">uniq_blocks</span><span class="op">]</span></span></code></pre>
@@ -3069,7 +3150,9 @@ Figure 1: Connection graph
          &lt;int&gt; &lt;int&gt;
 1:           1   450</code></pre>
 </div>
-<p>Now we can visualize the distances between the units stored in the <code>result_dedup_hnsw$result</code> dataset. Clearly we have a mixture of two groups: matches (close to 0) and non-matches (close to 1).</p>
+<p>Now we can visualize the distances between the units stored in the
+<code>result_dedup_hnsw$result</code> dataset. Clearly we have a mixture
+of two groups: matches (close to 0) and non-matches (close to 1).</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span><span class="op">(</span><span class="va">result_dedup_hnsw</span><span class="op">$</span><span class="va">result</span><span class="op">$</span><span class="va">dist</span>, xlab <span class="op">=</span> <span class="st">&quot;Distances&quot;</span>,</span>
@@ -3083,7 +3166,8 @@ Figure 2: Distances calculated between units
 </p>
 </div>
 </div>
-<p>Finally, we visualize the result based on the information whether a block contains matches or not.</p>
+<p>Finally, we visualize the result based on the information whether a
+block contains matches or not.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">df_for_density</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/copy.html">copy</a></span><span class="op">(</span><span class="va">df_block_melted</span><span class="op">[</span><span class="va">block</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">RLdata500</span><span class="op">$</span><span class="va">block_id</span><span class="op">]</span><span class="op">)</span></span>
@@ -3103,7 +3187,19 @@ Figure 3: Distribution of distances between clusters type
 </p>
 </div>
 </div>
-<p>Now we compare the evaluation metrics across all ANN algorithms supported by the <code>blocking</code> function, i.e. NND, HNSW, Approximate Nearest Neighbors Oh Yeah (Annoy, from the <a href="https://cran.r-project.org/package=RcppAnnoy">RcppAnnoy</a> package), Locality-sensitive hashing (LSH, from the <a href="https://cran.r-project.org/package=mlpack">mlpack</a> package), and k-Nearest Neighbors (kNN – denoted as <code>&quot;kd&quot;</code>, from the <a href="https://cran.r-project.org/package=mlpack">mlpack</a> package). We use the <code>rec_id</code> and <code>ent_id</code> columns from the <code>RLdata500</code> dataset to specify the true blocks and then calculate evaluation metrics for all algorithms. Additionally, we assess blocking using the <code>klsh</code> function from the <a href="https://cran.r-project.org/package=klsh">klsh</a> package, configured to create 10 blocks and 100 blocks, respectively. In both settings, we use 20 random projections and 2-character shingles. The results are as follows (<code>klsh_10</code> and <code>klsh_100</code> refer to the <code>klsh</code> algorithm with 10 blocks and 100 blocks, respectively).</p>
+<p>Now we compare the evaluation metrics across all ANN algorithms
+supported by the <code>blocking</code> function, i.e. NND, HNSW, Approximate
+Nearest Neighbors Oh Yeah (Annoy, from the <a href="https://cran.r-project.org/package=RcppAnnoy">RcppAnnoy</a> package),
+Locality-sensitive hashing (LSH, from the <a href="https://cran.r-project.org/package=mlpack">mlpack</a> package), and
+k-Nearest Neighbors (kNN – denoted as <code>&quot;kd&quot;</code>, from the <a href="https://cran.r-project.org/package=mlpack">mlpack</a>
+package). We use the <code>rec_id</code> and <code>ent_id</code> columns from the <code>RLdata500</code>
+dataset to specify the true blocks and then calculate evaluation metrics
+for all algorithms. Additionally, we assess blocking using the <code>klsh</code>
+function from the <a href="https://cran.r-project.org/package=klsh">klsh</a> package, configured to create 10 blocks
+and 100 blocks, respectively. In both settings, we use 20 random
+projections and 2-character shingles. The results are as follows
+(<code>klsh_10</code> and <code>klsh_100</code> refer to the <code>klsh</code> algorithm with 10 blocks
+and 100 blocks, respectively).</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">true_blocks</span> <span class="op">&lt;-</span> <span class="va">RLdata500</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;rec_id&quot;</span>, <span class="st">&quot;ent_id&quot;</span><span class="op">)</span>, with <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span>
@@ -3155,15 +3251,25 @@ kd          100 5.1921080 0.7321572   0 99.26814    99.26784 9.871668
 klsh_10      82 0.3290794 9.9582999  18 90.03848    90.04170 0.655528
 klsh_100     86 3.4649476 0.9607057  14 99.03407    99.03929 6.661503</code></pre>
 </div>
-<h2 data-number="5" id="summary"><span class="header-section-number">5</span> Summary</h2>
-<p>In this paper we have demonstrated the basic use cases of the <a href="https://cran.r-project.org/package=blocking">blocking</a> package. We believe that the software will be useful for researchers working in various fields where integration of multiple sources is an important aspect.</p>
-<h2 data-number="6" id="acknowledgements"><span class="header-section-number">6</span> Acknowledgements</h2>
-<p>Work on this package is supported by the National Science Centre, OPUS 20 grant no. 2020/39/B/HS4/00941. We also thank participants of the uRos 2024 conference for valuable comments and discussion.</p>
-<p>We also have developed a python version of the package {BlockingPy} that is available through the PiPy. It has the similar structure but offers more ANN algorithms (e.g. FAISS) or usage of embeddings. For more details see: Strojny, T., &amp; Beręsewicz, M. (2025). BlockingPy: approximate nearest neighbours for blocking of records for entity resolution. arXiv preprint arXiv:2504.04266.</p>
+<h2 data-number="4" id="summary"><span class="header-section-number">4</span> Summary</h2>
+<p>In this paper we have demonstrated the basic use cases of the
+<a href="https://cran.r-project.org/package=blocking">blocking</a> package. We believe that the software will be useful
+for researchers working in various fields where integration of multiple
+sources is an important aspect.</p>
+<h2 data-number="5" id="acknowledgements"><span class="header-section-number">5</span> Acknowledgements</h2>
+<p>Work on this package is supported by the National Science Centre, OPUS
+20 grant no. 2020/39/B/HS4/00941. We also thank participants of the uRos
+2024 conference for valuable comments and discussion.</p>
+<p>We also have developed a python version of the package {BlockingPy} that
+is available through the PiPy. It has the similar structure but offers
+more ANN algorithms (e.g. FAISS) or usage of embeddings. For more
+details see: Strojny, T., &amp; Beręsewicz, M. (2025). BlockingPy:
+approximate nearest neighbours for blocking of records for entity
+resolution. arXiv preprint arXiv:2504.04266.</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
-<h3 class="appendix" data-number="6.1" id="cran-packages-used"><span class="header-section-number">6.1</span> CRAN packages used</h3>
+<h3 class="appendix" data-number="5.1" id="cran-packages-used"><span class="header-section-number">5.1</span> CRAN packages used</h3>
 <p><a href="https://cran.r-project.org/package=blocking">blocking</a>, <a href="https://cran.r-project.org/package=plotly">plotly</a>, <a href="https://cran.r-project.org/package=crosstalk">crosstalk</a>, <a href="https://cran.r-project.org/package=tsibbletalk">tsibbletalk</a>, <a href="https://cran.r-project.org/package=rnndescent">rnndescent</a>, <a href="https://cran.r-project.org/package=igraph">igraph</a>, <a href="https://cran.r-project.org/package=RecordLinkage">RecordLinkage</a>, <a href="https://cran.r-project.org/package=RcppHNSW">RcppHNSW</a>, <a href="https://cran.r-project.org/package=RcppAnnoy">RcppAnnoy</a>, <a href="https://cran.r-project.org/package=mlpack">mlpack</a>, <a href="https://cran.r-project.org/package=klsh">klsh</a></p>
-<h3 class="appendix" data-number="6.2" id="cran-task-views-implied-by-cited-packages"><span class="header-section-number">6.2</span> CRAN Task Views implied by cited packages</h3>
+<h3 class="appendix" data-number="5.2" id="cran-task-views-implied-by-cited-packages"><span class="header-section-number">5.2</span> CRAN Task Views implied by cited packages</h3>
 <p><a href="https://cran.r-project.org/view=DynamicVisualizations">DynamicVisualizations</a>, <a href="https://cran.r-project.org/view=GraphicalModels">GraphicalModels</a>, <a href="https://cran.r-project.org/view=MachineLearning">MachineLearning</a>, <a href="https://cran.r-project.org/view=NetworkAnalysis">NetworkAnalysis</a>, <a href="https://cran.r-project.org/view=OfficialStatistics">OfficialStatistics</a>, <a href="https://cran.r-project.org/view=Optimization">Optimization</a>, <a href="https://cran.r-project.org/view=TimeSeries">TimeSeries</a>, <a href="https://cran.r-project.org/view=WebTechnologies">WebTechnologies</a></p>
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-crosstalk" class="csl-entry" role="listitem">

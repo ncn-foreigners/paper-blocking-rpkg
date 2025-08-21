@@ -1,0 +1,39 @@
+\begin{thebibliography}{5}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Binette and Steorts(2022)]{Binette2022}
+O.~Binette and R.~C. Steorts.
+\newblock (almost) all of entity resolution.
+\newblock \emph{Science Advances}, 8\penalty0 (12):\penalty0 eabi8021, 2022.
+\newblock \doi{10.1126/sciadv.abi8021}.
+\newblock URL \url{https://www.science.org/doi/abs/10.1126/sciadv.abi8021}.
+
+\bibitem[Dasylva and Goussanou(2021)]{dasylva2021estimating}
+A.~Dasylva and A.~Goussanou.
+\newblock Estimating the false negatives due to blocking in record linkage.
+\newblock \emph{Survey Methodology}, 47\penalty0 (2):\penalty0 299--312, 2021.
+
+\bibitem[Dasylva and Goussanou(2022)]{dasylva2022consistent}
+A.~Dasylva and A.~Goussanou.
+\newblock On the consistent estimation of linkage errors without training data.
+\newblock \emph{Japanese Journal of Statistics and Data Science}, 5\penalty0 (1):\penalty0 181--216, 2022.
+
+\bibitem[Papadakis et~al.(2020)Papadakis, Skoutas, Thanos, and Palpanas]{Papadakis2020}
+G.~Papadakis, D.~Skoutas, E.~Thanos, and T.~Palpanas.
+\newblock Blocking and filtering techniques for entity resolution: A survey.
+\newblock \emph{ACM Comput. Surv.}, 53\penalty0 (2), Mar. 2020.
+\newblock ISSN 0360-0300.
+\newblock \doi{10.1145/3377455}.
+\newblock URL \url{https://doi.org/10.1145/3377455}.
+
+\bibitem[Steorts et~al.(2014)Steorts, Ventura, Sadinle, and Fienberg]{Steorts2014}
+R.~C. Steorts, S.~L. Ventura, M.~Sadinle, and S.~E. Fienberg.
+\newblock A comparison of blocking methods for record linkage.
+\newblock In J.~Domingo-Ferrer, editor, \emph{Privacy in Statistical Databases}, pages 253--268, Cham, 2014. Springer International Publishing.
+\newblock ISBN 978-3-319-11257-2.
+
+\end{thebibliography}
