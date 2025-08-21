@@ -77,7 +77,7 @@ This is the solely package in the R ecosystem that allows to easily apply modern
 
 \subsection{Outline of article}\label{outline-of-article}
 
-The paper has the following structure. In the section \ref{sec-blocks} we provide description of the main functionalities of the \texttt{blocking} package and how we can assess the result. In the section \ref{sec-case} we provide two case studies: probabilistic record linkage and deduplication. These examples show how our package can improve pipeline of entity resolution and work with existing R packages.
+The paper has the following structure. In the Section \ref{sec-blocks} we provide description of the main functionalities of the \texttt{blocking} package and how we can assess the result. In the Section \ref{sec-case} we provide two case studies: probabilistic record linkage and deduplication. These examples show how our package can improve pipeline of entity resolution and work with existing R packages.
 
 \section{\texorpdfstring{Blocking of records using \texttt{blocking} function}{Blocking of records using blocking function}}\label{sec-blocks}
 
@@ -216,8 +216,8 @@ False Negative Rate & \(\frac{FN}{FN + TP}\) & & \\
 Let us first load the required packages.
 
 \begin{verbatim}
-library(blocking)
-library(data.table)
+library("blocking")
+library("data.table")
 \end{verbatim}
 
 We demonstrate the use of \texttt{blocking} function for record linkage on the
@@ -245,8 +245,10 @@ entities. Each row represents one record, with the following columns:
   \texttt{true\_id} -- person ID.
 \end{itemize}
 
+Next, we load the data
+
 \begin{verbatim}
-data(foreigners)
+data("foreigners")
 head(foreigners)
 \end{verbatim}
 
@@ -270,8 +272,8 @@ foreigners_1 <- foreigners[!duplicated(foreigners$true_id), ]
 foreigners_2 <- foreigners[duplicated(foreigners$true_id), ]
 \end{verbatim}
 
-Now in both datasets we remove slashes from the \texttt{date} column and create
-a new string column that concatenates the information from all columns
+Now in both datasets we remove separators in the \texttt{date} column and create
+a new character column that concatenates the information from all columns
 (excluding \texttt{true\_id}) in each row.
 
 \begin{verbatim}
@@ -304,8 +306,8 @@ head(foreigners_1)
 \subsubsection{General use}\label{general-use}
 
 We use the newly created columns in the \texttt{blocking} function, which
-relies on the default \CRANpkg{rnndescent} (Nearest Neighbor Descent)
-algorithm based on cosine distance. Additionally, we set \texttt{verbose\ =\ 1}
+relies on the default \CRANpkg{rnndescent} algorithm based on the cosine distance.
+Additionally, we set \texttt{verbose\ =\ 1}
 to monitor progress. Note that a default parameter of the \texttt{blocking}
 function is \texttt{seed\ =\ 2023}, which sets the random seed.
 
@@ -321,26 +323,18 @@ result_reclin <- blocking(x = foreigners_1$txt,
 #> ===== creating graph =====
 \end{verbatim}
 
-Now we examine the results of record linkage.
+\begin{verbatim}
+blocks_tab <- table(result_reclin$result$block)
+block_ids <- rep(as.numeric(names(blocks_tab)), blocks_tab+1)
+block_size <- as.numeric(names(table(table(block_ids))))
+block_count <- as.vector(table(table(block_ids)))
+\end{verbatim}
 
-\begin{itemize}
-\tightlist
-\item
-  We have created
-  6,470
-  blocks.
-\item
-  The blocking process utilized
-  1,232 columns (2
-  character shingles).
-\item
-  We have 3,920 blocks of
-  2 elements,
-  1,599 blocks of
-  3 elements,\ldots,
-  2 blocks of
-  7 elements.
-\end{itemize}
+Now we examine the results of record linkage by printing the \texttt{result\_reclin} object. We have created
+6,470 blocks based on
+1,232 columns (2 character shingles). Blocks are small as we e have 3,920 blocks of 2 elements,
+1,599 blocks of 3 elements,\ldots,
+2 blocks of 7 elements.
 
 \begin{verbatim}
 result_reclin
@@ -358,48 +352,7 @@ result_reclin
 #> 3920 1599  928   19    2    2
 \end{verbatim}
 
-Structure of the object is as follows:
-
-\begin{itemize}
-\tightlist
-\item
-  \texttt{result} -- a \texttt{data.table} with identifiers and block IDs,
-\item
-  \texttt{method} -- name of the ANN algorithm used,
-\item
-  \texttt{deduplication} -- whether deduplication was applied,
-\item
-  \texttt{representation} -- whether shingles or vectors were used,
-\item
-  \texttt{metrics} -- metrics for quality assessment (here \texttt{NULL}),
-\item
-  \texttt{confusion} -- confusion matrix (here \texttt{NULL}),
-\item
-  \texttt{colnames} -- column names used for the comparison,
-\item
-  \texttt{graph} -- an \CRANpkg{igraph} object, mainly for visualization
-  (here \texttt{NULL}).
-\end{itemize}
-
-\begin{verbatim}
-str(result_reclin, 1)
-\end{verbatim}
-
-\begin{verbatim}
-#> List of 8
-#>  $ result        :Classes 'data.table' and 'data.frame': 10000 obs. of  4 variables:
-#>   ..- attr(*, ".internal.selfref")=<externalptr> 
-#>  $ method        : chr "nnd"
-#>  $ deduplication : logi FALSE
-#>  $ representation: chr "shingles"
-#>  $ metrics       : NULL
-#>  $ confusion     : NULL
-#>  $ colnames      : chr [1:1232] "0a" "0b" "0c" "0m" ...
-#>  $ graph         : NULL
-#>  - attr(*, "class")= chr "blocking"
-\end{verbatim}
-
-The resulting \texttt{data.table} has four columns:
+In order to access the result one should use \texttt{result\_reclin\$result}. The resulting \texttt{data.table} has four columns (as presented below):
 
 \begin{itemize}
 \tightlist
@@ -407,10 +360,9 @@ The resulting \texttt{data.table} has four columns:
   \texttt{x} -- reference dataset (i.e.~\texttt{foreigners\_1}) -- this may not
   contain all units of \texttt{foreigners\_1},
 \item
-  \texttt{y} -- query (each row of \texttt{foreigners\_2}) -- this may not contain
-  all units of \texttt{foreigners\_2},
+  \texttt{y} -- query (each row of \texttt{foreigners\_2}) -- this will contain all units of \texttt{foreigners\_2},
 \item
-  \texttt{block} -- block ID,
+  \texttt{block} -- the block ID,
 \item
   \texttt{dist} -- distance between objects.
 \end{itemize}
@@ -469,8 +421,8 @@ head(matches)
 #> 6:      60    61     6     4
 \end{verbatim}
 
-We have 10,000 matched pairs. We use the \texttt{true\_blocks} parameter in the
-\texttt{blocking} function to specify the true block assignments. We obtain the
+We have 10,000 matched pairs which can be used in the \texttt{true\_blocks} argument in the
+\texttt{blocking()} function to specify the true block assignments. We obtain the
 quality metrics for the assessment of record linkage.
 
 \begin{verbatim}
@@ -556,10 +508,10 @@ That decreases the FNR to
 
 \subsection{Deduplication example}\label{deduplication-example}
 
-We demonstrate deduplication using the \texttt{blocking} function on the
+Next, we demonstrate deduplication using the \texttt{blocking} function on the
 \texttt{RLdata500} dataset from the \CRANpkg{RecordLinkage} package. Note that
 the dataset is included in the \texttt{blocking} package. It contains
-artificial personal data. Fifty records have been duplicated with
+artificial personal data and fifty records have been duplicated with
 randomly generated errors. Each row represents one record, with the
 following columns:
 
@@ -574,11 +526,7 @@ following columns:
 \item
   \texttt{lname\_c2} -- last name, second component,
 \item
-  \texttt{by} -- year of birth,
-\item
-  \texttt{bm} -- month of birth,
-\item
-  \texttt{bd} -- day of birth,
+  \texttt{by}, \texttt{bm}, \texttt{bd} -- year, month and day of birth,
 \item
   \texttt{rec\_id} -- record id,
 \item
@@ -586,7 +534,7 @@ following columns:
 \end{itemize}
 
 \begin{verbatim}
-data(RLdata500)
+data("RLdata500")
 head(RLdata500)
 \end{verbatim}
 
@@ -611,8 +559,7 @@ information from all columns (excluding \texttt{rec\_id}, \texttt{ent\_id} and
 RLdata500[, id_count :=.N, ent_id]
 RLdata500[, bm:=sprintf("%02d", bm)]
 RLdata500[, bd:=sprintf("%02d", bd)]
-RLdata500[, txt:=tolower(
-  paste0(fname_c1,fname_c2,lname_c1,lname_c2,by,bm,bd))]
+RLdata500[, txt:=tolower(paste0(fname_c1,fname_c2,lname_c1,lname_c2,by,bm,bd))]
 head(RLdata500)
 \end{verbatim}
 

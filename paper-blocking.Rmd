@@ -37,13 +37,6 @@ execute:
   cache: true
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, cache = FALSE)
-library(plotly)
-library(ggplot2)
-library(kableExtra)
-```
-
 # Introduction
 
 ## Blocking for record linkage
@@ -173,8 +166,8 @@ the evaluation data frame).
 Let us first load the required packages.
 
 ```{r packages, echo=TRUE, message=FALSE, warning=FALSE}
-library(blocking)
-library(data.table)
+library("blocking")
+library("data.table")
 ```
 
 We demonstrate the use of `blocking` function for record linkage on the
@@ -192,8 +185,10 @@ entities. Each row represents one record, with the following columns:
 -   `country` -- country,
 -   `true_id` -- person ID.
 
+Next, we load the data 
+
 ```{r foreigners, echo = TRUE}
-data(foreigners)
+data("foreigners")
 head(foreigners)
 ```
 
@@ -206,8 +201,8 @@ foreigners_1 <- foreigners[!duplicated(foreigners$true_id), ]
 foreigners_2 <- foreigners[duplicated(foreigners$true_id), ]
 ```
 
-Now in both datasets we remove slashes from the `date` column and create
-a new string column that concatenates the information from all columns
+Now in both datasets we remove separators in the `date` column and create
+a new character column that concatenates the information from all columns
 (excluding `true_id`) in each row.
 
 ```{r concat, echo = TRUE}
@@ -221,8 +216,8 @@ head(foreigners_1)
 ### General use
 
 We use the newly created columns in the `blocking` function, which
-relies on the default \CRANpkg{rnndescent} (Nearest Neighbor Descent)
-algorithm based on cosine distance. Additionally, we set `verbose = 1`
+relies on the default \CRANpkg{rnndescent} algorithm based on the cosine distance. 
+Additionally, we set `verbose = 1`
 to monitor progress. Note that a default parameter of the `blocking`
 function is `seed = 2023`, which sets the random seed.
 
@@ -239,53 +234,28 @@ block_size <- as.numeric(names(table(table(block_ids))))
 block_count <- as.vector(table(table(block_ids)))
 ```
 
-Now we examine the results of record linkage.
-
--   We have created
-    `r format(NROW(unique(result_reclin$result$block)), big.mark = ",")`
-    blocks.
--   The blocking process utilized
-    `r format(NROW(result_reclin$colnames), big.mark = ",")` columns (2
-    character shingles).
--   We have `r format(block_count[1], big.mark = ",")` blocks of
-    `r block_size[1]` elements,
-    `r format(block_count[2], big.mark = ",")` blocks of
-    `r block_size[2]` elements,...,
-    `r format(block_count[NROW(block_count)], big.mark = ",")` blocks of
-    `r block_size[NROW(block_size)]` elements.
+Now we examine the results of record linkage by printing the `result_reclin` object. We have created
+`r format(NROW(unique(result_reclin$result$block)), big.mark = ",")` blocks based on
+`r format(NROW(result_reclin$colnames), big.mark = ",")` columns (2 character shingles). Blocks are small as we e have `r format(block_count[1], big.mark = ",")` blocks of `r block_size[1]` elements, 
+`r format(block_count[2], big.mark = ",")` blocks of `r block_size[2]` elements,..., 
+`r format(block_count[NROW(block_count)], big.mark = ",")` blocks of `r block_size[NROW(block_size)]` elements.
 
 ```{r reclin_nnd_summary, echo = TRUE}
 result_reclin
 ```
 
-Structure of the object is as follows:
-
--   `result` -- a `data.table` with identifiers and block IDs,
--   `method` -- name of the ANN algorithm used,
--   `deduplication` -- whether deduplication was applied,
--   `representation` -- whether shingles or vectors were used,
--   `metrics` -- metrics for quality assessment (here `NULL`),
--   `confusion` -- confusion matrix (here `NULL`),
--   `colnames` -- column names used for the comparison,
--   `graph` -- an \CRANpkg{igraph} object, mainly for visualization
-    (here `NULL`).
-
-```{r reclin_nnd_str, echo = TRUE}
-str(result_reclin, 1)
-```
-
-The resulting `data.table` has four columns:
+In order to access the result one should use `result_reclin$result`. The resulting `data.table` has four columns (as presented below):
 
 -   `x` -- reference dataset (i.e. `foreigners_1`) -- this may not
     contain all units of `foreigners_1`,
--   `y` -- query (each row of `foreigners_2`) -- this may not contain
-    all units of `foreigners_2`,
--   `block` -- block ID,
+-   `y` -- query (each row of `foreigners_2`) -- this will contain all units of `foreigners_2`,
+-   `block` -- the block ID,
 -   `dist` -- distance between objects.
 
 ```{r reclin_nnd_result, echo = TRUE}
 head(result_reclin$result)
 ```
+
 
 Let's examine the first pair. Obviously, there are typos in the `fname`
 and `surname`. Nevertheless, the pair is a match.
@@ -304,8 +274,8 @@ matches[, block := rleid(x)]
 head(matches)
 ```
 
-We have 10,000 matched pairs. We use the `true_blocks` parameter in the
-`blocking` function to specify the true block assignments. We obtain the
+We have 10,000 matched pairs which can be used in the `true_blocks` argument in the
+`blocking()` function to specify the true block assignments. We obtain the
 quality metrics for the assessment of record linkage.
 
 ```{r reclin_nnd_true_blocks, echo = TRUE}
@@ -337,10 +307,10 @@ That decreases the FNR to
 
 ## Deduplication example
 
-We demonstrate deduplication using the `blocking` function on the
+Next, we demonstrate deduplication using the `blocking` function on the
 `RLdata500` dataset from the \CRANpkg{RecordLinkage} package. Note that
 the dataset is included in the `blocking` package. It contains
-artificial personal data. Fifty records have been duplicated with
+artificial personal data and fifty records have been duplicated with
 randomly generated errors. Each row represents one record, with the
 following columns:
 
@@ -348,14 +318,12 @@ following columns:
 -   `fname_c2` -- first name, second component,
 -   `lname_c1` -- last name, first component,
 -   `lname_c2` -- last name, second component,
--   `by` -- year of birth,
--   `bm` -- month of birth,
--   `bd` -- day of birth,
+-   `by`, `bm`, `bd` -- year, month and day of birth,
 -   `rec_id` -- record id,
 -   `ent_id` -- entity id.
 
 ```{r RLdata500, echo = TRUE}
-data(RLdata500)
+data("RLdata500")
 head(RLdata500)
 ```
 
@@ -369,8 +337,7 @@ information from all columns (excluding `rec_id`, `ent_id` and
 RLdata500[, id_count :=.N, ent_id]
 RLdata500[, bm:=sprintf("%02d", bm)]
 RLdata500[, bd:=sprintf("%02d", bd)]
-RLdata500[, txt:=tolower(
-  paste0(fname_c1,fname_c2,lname_c1,lname_c2,by,bm,bd))]
+RLdata500[, txt:=tolower(paste0(fname_c1,fname_c2,lname_c1,lname_c2,by,bm,bd))]
 head(RLdata500)
 ```
 
@@ -391,12 +358,11 @@ The results are as follows.
 
 ```{r dedup_hnsw_result, echo = TRUE}
 result_dedup_hnsw
-head(result_dedup_hnsw$result)
 ```
 
 Now we visualize connections using the obtained graph.
 
-```{r dedup-graph, echo = TRUE, out.width = "100%", fig.width = 6, fig.height = 5, layout = "l-body", fig.align = "center", fig.cap = "Connection graph", label = "connection-graph", fig.pos = "H"}
+```{r dedup-graph, echo = TRUE, out.width = "100%", fig.width = 3, fig.height = 3, layout = "l-body", fig.align = "center", fig.cap = "Connection graph", label = "connection-graph", fig.pos = "H"}
 plot(result_dedup_hnsw$graph, vertex.size = 1, vertex.label = NA)
 ```
 
@@ -427,7 +393,7 @@ Now we can visualize the distances between the units stored in the
 \linebreak `result_dedup_hnsw$result` dataset. Clearly we have a mixture
 of two groups: matches (close to 0) and non-matches (close to 1).
 
-```{r dedup-hist, echo = TRUE, out.width = "100%", fig.width = 6, fig.height = 5, layout = "l-body", fig.align = "center", fig.cap = "Distances calculated between units", label = "dedup-hist", fig.pos = "H"}
+```{r dedup-hist, echo = TRUE, out.width = "100%", fig.width = 5, fig.height = 3, layout = "l-body", fig.align = "center", fig.cap = "Distances calculated between units", label = "dedup-hist", fig.pos = "H"}
 hist(result_dedup_hnsw$result$dist, xlab = "Distances",
      ylab = "Frequency", breaks = "fd",
      main = "Distances calculated between units")
@@ -455,7 +421,7 @@ Locality-sensitive hashing (LSH, from the \CRANpkg{mlpack} package), and
 k-Nearest Neighbors (kNN -- denoted as `"kd"`, from the \CRANpkg{mlpack}
 package). We use the `rec_id` and `ent_id` columns from the `RLdata500`
 dataset to specify the true blocks and then calculate evaluation metrics
-for all algorithms. Additionally, we assess blocking using the `klsh`
+for all algorithms. Additionally, we assess blocking using the `klsh()`
 function from the \CRANpkg{klsh} package, configured to create 10 blocks
 and 100 blocks, respectively. In both settings, we use 20 random
 projections and 2-character shingles. The results are as follows
@@ -463,6 +429,7 @@ projections and 2-character shingles. The results are as follows
 and 100 blocks, respectively).
 
 ```{r comparision, echo = TRUE}
+set.seed(2025)
 true_blocks <- RLdata500[, c("rec_id", "ent_id"), with = FALSE]
 setnames(true_blocks, old = c("rec_id", "ent_id"), c("x", "block"))
 eval_metrics <- list()
@@ -473,7 +440,6 @@ for (algorithm in ann) {
                                 true_blocks = true_blocks)$metrics
 }
 
-set.seed(2025)
 blocks_klsh_10 <- klsh::klsh(
   r.set = RLdata500[, c("fname_c1", "fname_c2", "lname_c1",
                         "lname_c2", "by", "bm", "bd")],
