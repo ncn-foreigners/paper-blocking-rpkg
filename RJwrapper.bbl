@@ -1,4 +1,4 @@
-\begin{thebibliography}{15}
+\begin{thebibliography}{25}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -12,6 +12,24 @@ O.~Binette and R.~C. Steorts.
 \newblock \doi{10.1126/sciadv.abi8021}.
 \newblock URL \url{https://www.science.org/doi/abs/10.1126/sciadv.abi8021}.
 
+\bibitem[Csardi and Nepusz(2006)]{igraph2006}
+G.~Csardi and T.~Nepusz.
+\newblock The igraph software package for complex network research.
+\newblock \emph{InterJournal}, Complex Systems:\penalty0 1695, 2006.
+\newblock URL \url{https://igraph.org}.
+
+\bibitem[Csárdi et~al.(2025)Csárdi, Nepusz, Traag, Horvát, Zanini, Noom, and Müller]{igraph2025}
+G.~Csárdi, T.~Nepusz, V.~Traag, S.~Horvát, F.~Zanini, D.~Noom, and K.~Müller.
+\newblock \emph{{igraph}: Network Analysis and Visualization in R}, 2025.
+\newblock URL \url{https://CRAN.R-project.org/package=igraph}.
+\newblock R package version 2.1.4.
+
+\bibitem[Curtin et~al.(2023)Curtin, Edel, Shrit, Agrawal, Basak, Balamuta, Birmingham, Dutt, Eddelbuettel, Garg, Jaiswal, Kaushik, Kim, Mukherjee, Sai, Sharma, Parihar, Swain, and Sanderson]{mlpack2023}
+R.~R. Curtin, M.~Edel, O.~Shrit, S.~Agrawal, S.~Basak, J.~J. Balamuta, R.~Birmingham, K.~Dutt, D.~Eddelbuettel, R.~Garg, S.~Jaiswal, A.~Kaushik, S.~Kim, A.~Mukherjee, N.~G. Sai, N.~Sharma, Y.~S. Parihar, R.~Swain, and C.~Sanderson.
+\newblock mlpack 4: a fast, header-only c++ machine learning library.
+\newblock \emph{Journal of Open Source Software}, 8\penalty0 (82), 2023.
+\newblock \doi{10.21105/joss.05026}.
+
 \bibitem[Dasylva and Goussanou(2021)]{dasylva2021estimating}
 A.~Dasylva and A.~Goussanou.
 \newblock Estimating the false negatives due to blocking in record linkage.
@@ -21,6 +39,12 @@ A.~Dasylva and A.~Goussanou.
 A.~Dasylva and A.~Goussanou.
 \newblock On the consistent estimation of linkage errors without training data.
 \newblock \emph{Japanese Journal of Statistics and Data Science}, 5\penalty0 (1):\penalty0 181--216, 2022.
+
+\bibitem[Eddelbuettel(2024)]{RcppAnnoy}
+D.~Eddelbuettel.
+\newblock \emph{{RcppAnnoy}: `{Rcpp}' Bindings for `{Annoy}', a Library for Approximate Nearest Neighbors}, 2024.
+\newblock URL \url{https://CRAN.R-project.org/package=RcppAnnoy}.
+\newblock R package version 0.0.22.
 
 \bibitem[Enamorado et~al.(2019)Enamorado, Fifield, and Imai]{enamorado2019using}
 T.~Enamorado, B.~Fifield, and K.~Imai.
@@ -45,6 +69,31 @@ J.~P. {Howard, II}.
 \newblock URL \url{https://jameshoward.us/phonics-in-r/}.
 \newblock R package version 1.3.10.
 
+\bibitem[Kalinowski and Falbel(2025)]{ragnar}
+T.~Kalinowski and D.~Falbel.
+\newblock \emph{{ragnar}: Retrieval-Augmented Generation (RAG) Workflows}, 2025.
+\newblock URL \url{https://CRAN.R-project.org/package=ragnar}.
+\newblock R package version 0.2.0.
+
+\bibitem[Melville(2024{\natexlab{a}})]{RcppHNSW}
+J.~Melville.
+\newblock \emph{{RcppHNSW}: `{Rcpp}' Bindings for `{hnswlib}', a Library for Approximate Nearest Neighbors}, 2024{\natexlab{a}}.
+\newblock URL \url{https://CRAN.R-project.org/package=RcppHNSW}.
+\newblock R package version 0.6.0.
+
+\bibitem[Melville(2024{\natexlab{b}})]{rnndescent}
+J.~Melville.
+\newblock \emph{{rnndescent}: Nearest Neighbor Descent Method for Approximate Nearest Neighbors}, 2024{\natexlab{b}}.
+\newblock URL \url{https://CRAN.R-project.org/package=rnndescent}.
+\newblock R package version 0.1.6.
+
+\bibitem[Mullen et~al.(2018)Mullen, Benoit, Keyes, Selivanov, and Arnold]{tokenizers}
+L.~A. Mullen, K.~Benoit, O.~Keyes, D.~Selivanov, and J.~Arnold.
+\newblock Fast, consistent tokenization of natural language text.
+\newblock \emph{Journal of Open Source Software}, 3:\penalty0 655, 2018.
+\newblock \doi{10.21105/joss.00655}.
+\newblock URL \url{https://doi.org/10.21105/joss.00655}.
+
 \bibitem[Papadakis et~al.(2020)Papadakis, Skoutas, Thanos, and Palpanas]{Papadakis2020}
 G.~Papadakis, D.~Skoutas, E.~Thanos, and T.~Palpanas.
 \newblock Blocking and filtering techniques for entity resolution: A survey.
@@ -65,6 +114,18 @@ M.~Sariyar and A.~Borg.
 \newblock \emph{RecordLinkage: Record Linkage Functions for Linking and Deduplicating Data Sets}, 2025.
 \newblock URL \url{https://CRAN.R-project.org/package=RecordLinkage}.
 \newblock R package version 0.4-12.5.
+
+\bibitem[Selivanov et~al.(2023)Selivanov, Bickel, and Wang]{text2vec}
+D.~Selivanov, M.~Bickel, and Q.~Wang.
+\newblock \emph{text2vec: Modern Text Mining Framework for R}, 2023.
+\newblock URL \url{https://CRAN.R-project.org/package=text2vec}.
+\newblock R package version 0.6.4.
+
+\bibitem[{Singh Parihar} et~al.(2025){Singh Parihar}, Curtin, Eddelbuettel, and Balamuta]{mlpack2025}
+Y.~{Singh Parihar}, R.~Curtin, D.~Eddelbuettel, and J.~Balamuta.
+\newblock \emph{{mlpack}: `{Rcpp}' Integration for the `{mlpack}' Library}, 2025.
+\newblock URL \url{https://CRAN.R-project.org/package=mlpack}.
+\newblock R package version 4.6.2.
 
 \bibitem[Steorts(2020)]{klsh}
 R.~Steorts.

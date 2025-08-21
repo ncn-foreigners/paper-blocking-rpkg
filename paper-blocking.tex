@@ -1,5 +1,5 @@
 % !TeX root = RJwrapper.tex
-\title{Blocking: An R Package for Blocking of Records for Record Linkage and Deduplication}
+\title{blocking: An R Package for Blocking of Records for Record Linkage and Deduplication}
 
 
 \author{by Maciej Beręsewicz and Adam Struzik}
@@ -20,7 +20,7 @@ This drives a need to link records without identifiers but often requires certai
 
 Blocking is a method of reducing the number of possible comparisons by assuming that certain variables should be exactly matched. For instance, a standard method is based on assuming that sex or age (or some other combination) should match exactly while other characteristics of the records could be varying. Another standard method is to use phonetic algorithms such as SOUNDEX or its improvements for non-English languages. Furthermore, due to the use of large language models one may also consider using embeddings to search for the closest neighbor and treat this as a possible pair. For a review of blocking methods see \citet{Steorts2014} or \citet{Papadakis2020} and in Section \ref{sec-software} we will discuss R packages that implement blocking methods.
 
-Reducing the number of pairs has its costs: missing comparisons which lead to an increased false positive rate (FPR) and false negative rate (FNR) of the linkage study. In order to assess this error, a subset of pairs or simulation studies should be applied. Alternatively, one may consider approaches proposed by \citet{dasylva2021estimating} and \citet{dasylva2022consistent} who proposed methods to estimate FPR and FNR without access to the audit sample.
+Reducing the number of pairs has its costs: missing comparisons which lead to an increased false positive rate (FPR) and false negative rate (FNR) of the linkage study. In order to assess this error, a subset of pairs or simulation studies should be applied. Alternatively, one may consider approaches proposed by \citet{dasylva2021estimating} and \citet{dasylva2022consistent} who proposed methods to estimate FPR and FNR without access to an audit sample.
 
 \subsection{Existing software and our contribution}\label{sec-software}
 
@@ -29,7 +29,7 @@ The R system offers several packages that implements various blocking techniques
 \begin{itemize}
 \tightlist
 \item
-  deterministic grouping:
+  deterministic blocking:
 
   \begin{itemize}
   \tightlist
@@ -41,7 +41,7 @@ The R system offers several packages that implements various blocking techniques
     \CRANpkg{fastLink} \citep[\citet{enamorado2019using}]{fastLink} which implements various blocking methods via the \texttt{blockData()} function such as exact matching, window matching (e.g., no more than 2 years difference between birth year) or k-means clustering algorithm. It should be noted that the \texttt{fastLink} returns splits dataset(s) into a separate lists while \texttt{reclin2} and \texttt{RecordLinkage} package create a single dataset.
   \end{itemize}
 \item
-  phonetic grouping:
+  phonetic blocking:
 
   \begin{itemize}
   \tightlist
@@ -60,6 +60,21 @@ The R system offers several packages that implements various blocking techniques
   \end{itemize}
 \end{itemize}
 
+Unfortunately, practice is more complicated as missing data can be present in important variables (such as birth date) or typos in the names and surnames. That is why we decided to develop \CRANpkg{blocking} that leverage approximate nearest neighbours (ANN) algorithms and graphs to create a large number of small blocks that can be further used in the analysis. The basic idea behind the package can be expressed in the following steps:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  create shingles via the \CRANpkg{tokenizers} \citep{tokenizers} and \CRANpkg{text2vec} \citep{text2vec} packages or a matrix of vectors (e.g.~embeddings via the \CRANpkg{ragnar} \citep{ragnar} package).
+\item
+  search for nearest neighbours using approximate algorithms implemented in the \CRANpkg{rnndescent} \citep{rnndescent}, \CRANpkg{RcppHNSW} \citep{RcppHNSW}, \CRANpkg{mlpack} \citep[\citet{mlpack2025}]{mlpack2023}, and \CRANpkg{RcppAnnoy} \citep{RcppAnnoy}.
+\item
+  create blocks using \CRANpkg{igraph} \citep[\citet{igraph2006}]{igraph2025}.
+\end{enumerate}
+
+This is the solely package in the R ecosystem that allows to easily apply modern ANN algorithms and significantly speed-up the record linkage / deduplication problems. In addition, we have developed the \texttt{pair\_ann()} function to seamless integrate with the \CRANpkg{reclin2} package.
+
 \subsection{Outline of article}\label{outline-of-article}
 
 The paper has the following structure. In the section \ref{sec-blocks} we provide description of the main functionalities of the \texttt{blocking} package and how we can assess the result. In the section \ref{sec-case} we provide two case studies: probabilistic record linkage and deduplication. These examples show how our package can improve pipeline of entity resolution and work with existing R packages.
@@ -68,7 +83,53 @@ The paper has the following structure. In the section \ref{sec-blocks} we provid
 
 \subsection{The main function}\label{the-main-function}
 
-\subsection{Assessment of results}\label{assessment-of-results}
+The main functionality is available via the \texttt{blocking()} function which contains the following main arguments:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{x,\ y} -- reference datasets, where \texttt{y\ =\ NULL} which indicate that the deduplication is applied,
+\item
+  \texttt{representation} -- whether \texttt{x} and \texttt{y} should be represented as shingles or vectors (provided by the user in the \texttt{model} argument),
+\item
+  \texttt{ann} -- what ANN algorithm should be applied, by default we use the \CRANpkg{rnndescent} package as it allows supports sparse matrices,
+\item
+  \texttt{distance} -- what should be applied (default is \texttt{cosine} distance),
+\item
+  \texttt{graph} -- whether the plot of the graph of connected records should be returned (default \texttt{FALSE}),
+\item
+  \texttt{true\_blocks} -- if a subset of true blocks is available it can be provided here so we measures of quality presented in Section \ref{sec-assess} are returned,
+\item
+  \texttt{n\_threads} -- how many threads are applied for computation,
+\item
+  \texttt{control\_txt} -- controls provided in the \texttt{controls\_txt()} on how the \texttt{x,\ y} are processed,
+\item
+  \texttt{control\_ann} -- controls provided in the \texttt{controls\_ann()} allows user to fine-tune ANN algorithm (see documentation of the \texttt{controls\_ann()} function and \texttt{control\_*} functions with the names referring to a specific algorithm, e.g., \texttt{control\_nnd()} for the NND algorithm).
+\end{itemize}
+
+This function return an object of \texttt{blocking} class with the following elements:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{result} -- data.table with indices (rows) of x, y, block and distance between points
+\item
+  \texttt{method} -- name of the ANN algorithm used,
+\item
+  \texttt{deduplication} -- information whether deduplication was applied,
+\item
+  \texttt{representation} -- information whether shingles or vectors were used,
+\item
+  \texttt{metrics} -- metrics for quality assessment, if true\_blocks is provided,
+\item
+  \texttt{confusion} -- confusion matrix, if \texttt{true\_blocks} is provided,
+\item
+  \texttt{colnames} -- variable names (\texttt{colnames}) used for search,
+\item
+  \texttt{graph} -- igraph class object.
+\end{itemize}
+
+\subsection{Assessment of results}\label{sec-assess}
 
 In the package we have implemented several measures that can be used to
 assess the results

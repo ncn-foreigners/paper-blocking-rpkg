@@ -1,5 +1,5 @@
 ---
-title: "Blocking: An R Package for Blocking of Records for Record Linkage and Deduplication"
+title: "blocking: An R Package for Blocking of Records for Record Linkage and Deduplication"
 date: "2025-11-09"
 abstract: >
   Entity resolution (probabilistic record linkage, deduplication) is essential for estimation based on multiple sources. It aims to link records without common identifiers that refer to the same entity (e.g., person, company). Without identifiers, researchers must specify which records to compare to calculate matching probability and reduce computational complexity. Traditional deterministic blocking uses common variables like names or dates of birth, but assumes error-free, complete data. To address this limitation, we developed the R package \CRANpkg{blocking}, which uses approximate nearest neighbour search and graph algorithms to reduce number of  comparisons. This paper presents the package design, functionalities, and two case studies.
@@ -14,7 +14,7 @@ author:
       - Centre for the Methodology of Population Studies
     url: https://maciejberesewicz.com
     orcid: 0000-0002-8281-4301
-    email:  maciej.beresewicz@poznan.pl
+    email: maciej.beresewicz@poznan.pl
   - name: Adam Struzik
     affiliation:
       - Adam Mickiewicz University
@@ -33,6 +33,8 @@ output:
 header-includes:
   - \usepackage{float}
 bibliography: RJreferences.bib
+execute:
+  cache: true
 ---
 
 ```{r setup, include=FALSE}
@@ -46,40 +48,70 @@ library(kableExtra)
 
 ## Blocking for record linkage
 
-Entity resolution (probabilistic record linkage, deduplication) is essential for estimation based on multiple sources (for recent review see @Binette2022). The goal is to link records without common identifiers that refer to the same entity (e.g., person, company). This situation is often observed in administrative records, in particular for foreign-born populations. For instance, the Social Insurance Institution register in Poland at the end of 2023 included 1.206 million records which referred to possibly 1.105 million individuals, out of which about 10% had missing information in the personal identifier (PESEL) and about 50% of cases had missing address details. Please note that the exact number of individuals will be certainly lower than 1.105 million as the 10% may include duplicates.
+Entity resolution (probabilistic record linkage, deduplication) is essential for estimation based on multiple sources (for recent review see @Binette2022). The goal is to link records without common identifiers that refer to the same entity (e.g., person, company). This situation is often observed in administrative records, in particular for foreign-born populations. For instance, the Social Insurance Institution register in Poland at the end of 2023 included 1.206 million records which referred to possibly 1.105 million individuals, out of which about 10% had missing information in the personal identifier (PESEL) and about 50% of cases had missing address details. Please note that the exact number of individuals will be certainly lower than 1.105 million as the 10% may include duplicates. <!---- add citation to the conference here --->
 
 This drives a need to link records without identifiers but often requires certain assumptions such as how to reduce the large number of possible comparisons as it is not possible to compare all pairs of records in a large dataset (e.g., for the mentioned example this would lead to over 600 billion comparisons). That is why *blocking* methods are applied to reduce the number of comparisons prior to the final record linkage/deduplication stage not only because of computational reasons but also due to clerical review workload.
 
 Blocking is a method of reducing the number of possible comparisons by assuming that certain variables should be exactly matched. For instance, a standard method is based on assuming that sex or age (or some other combination) should match exactly while other characteristics of the records could be varying. Another standard method is to use phonetic algorithms such as SOUNDEX or its improvements for non-English languages. Furthermore, due to the use of large language models one may also consider using embeddings to search for the closest neighbor and treat this as a possible pair. For a review of blocking methods see @Steorts2014 or @Papadakis2020 and in Section \@ref(sec-software) we will discuss R packages that implement blocking methods.
 
-Reducing the number of pairs has its costs: missing comparisons which lead to an increased false positive rate (FPR) and false negative rate (FNR) of the linkage study. In order to assess this error, a subset of pairs or simulation studies should be applied. Alternatively, one may consider approaches proposed by @dasylva2021estimating and @dasylva2022consistent who proposed methods to estimate FPR and FNR without access to the audit sample.
+Reducing the number of pairs has its costs: missing comparisons which lead to an increased false positive rate (FPR) and false negative rate (FNR) of the linkage study. In order to assess this error, a subset of pairs or simulation studies should be applied. Alternatively, one may consider approaches proposed by @dasylva2021estimating and @dasylva2022consistent who proposed methods to estimate FPR and FNR without access to an audit sample.
 
 ## Existing software and our contribution {#sec-software}
 
 The R system offers several packages that implements various blocking techniques which we grouped by the following classification:
 
-+ deterministic grouping: 
++ deterministic blocking: 
     + \CRANpkg{reclin2} [@reclin2, @reclin2-rjournal] which allows to pair records using the `pair_blocking()` with a prespecified list of columns in a `data.frame`, and the `pair_minsim()` function that allows to specify the minimal similarity score (e.g. 1 out of 3 variables should match exactly).
     + \CRANpkg{RecordLinkage} [@RecordLinkage, @RecordLinkage-rjournal] which allows to specify blocking variable in the `blockfld` in either in `compare.dedup()` or `compare.linkage()` functions in a form of a vector (either character or numeric).
     + \CRANpkg{fastLink} [@fastLink, @enamorado2019using] which implements various blocking methods via the `blockData()` function such as exact matching, window matching (e.g., no more than 2 years difference between birth year) or k-means clustering algorithm. It should be noted that the `fastLink` returns splits dataset(s) into a separate lists while `reclin2` and `RecordLinkage` package create a single dataset.
 
-+ phonetic grouping: 
++ phonetic blocking: 
     + \CRANpkg{RecordLinkage} allows to directly specify the phonetic comparison via the `phonetic` argument of the `compare.dedup()` or `compare.linkage()` function via the `soundex()` function. However, this is not used for blocking but for comparison of strings
-    + It should be noted that \CRANpkg{stringdist} [@stringdist] also implements SOUNDEX algorithm while the \CRANpkg{phonics} [@phonics, @Phonetic2020] implements various phonetic algorithms that could be applied prior the blocking procedure (e.g., create a new column).
+    + It should be noted that \CRANpkg{stringdist} [@stringdist] also implements SOUNDEX algorithm while the \CRANpkg{phonics} [@phonics, @Phonetic2020] implements various phonetic algorithms that could be applied prior the blocking procedure (e.g., create a new column). 
     
 + probabilistic blocking:
     + \CRANpkg{klsh} [@klsh] is the only R package that implements probabilistic blocking using the k-means variant of locality sensitive hashing. The main `klsh()` function implements this approach and a resulting object is a list with row identifiers along for the pre specified number of blocks (via the `num.blocks` argument of the  `klsh()` function).
 
+Unfortunately, practice is more complicated as missing data can be present in important variables (such as birth date) or typos in the names and surnames. That is why we decided to develop \CRANpkg{blocking} that leverage approximate nearest neighbours (ANN) algorithms and graphs to create a large number of small blocks that can be further used in the analysis. The basic idea behind the package can be expressed in the following steps:
+
+1. create shingles via the \CRANpkg{tokenizers} [@tokenizers] and \CRANpkg{text2vec} [@text2vec] packages or a matrix of vectors (e.g. embeddings via the \CRANpkg{ragnar} [@ragnar] package).
+2. search for nearest neighbours using approximate algorithms implemented in the \CRANpkg{rnndescent} [@rnndescent], \CRANpkg{RcppHNSW} [@RcppHNSW], \CRANpkg{mlpack} [@mlpack2023, @mlpack2025], and \CRANpkg{RcppAnnoy} [@RcppAnnoy].
+3. create blocks using \CRANpkg{igraph} [@igraph2025, @igraph2006].
+
+This is the solely package in the R ecosystem that allows to easily apply modern ANN algorithms and significantly speed-up the record linkage / deduplication problems. In addition, we have developed the `pair_ann()` function to seamless integrate with the \CRANpkg{reclin2} package.
 
 ## Outline of article
 
-The paper has the following structure. In the section \@ref(sec-blocks) we provide description of the main functionalities of the `blocking` package and how we can assess the result. In the section \@ref(sec-case) we provide two case studies: probabilistic record linkage and deduplication. These examples show how our package can improve pipeline of entity resolution and work with existing R packages.
+The paper has the following structure. In the Section \@ref(sec-blocks) we provide description of the main functionalities of the `blocking` package and how we can assess the result. In the Section \@ref(sec-case) we provide two case studies: probabilistic record linkage and deduplication. These examples show how our package can improve pipeline of entity resolution and work with existing R packages.
 
 # Blocking of records using `blocking` function {#sec-blocks}
 
 ## The main function
 
-## Assessment of results
+The main functionality is available via the `blocking()` function which contains the following main arguments:
+
++ `x, y` -- reference datasets, where `y = NULL` which indicate that the deduplication is applied,
++ `representation` -- whether `x` and `y` should be represented as shingles or vectors (provided by the user in the `model` argument),
++ `ann` -- what ANN algorithm should be applied, by default we use the \CRANpkg{rnndescent} package as it allows supports sparse matrices,
++ `distance` -- what should be applied (default is `cosine` distance),
++ `graph` -- whether the plot of the graph of connected records should be returned (default `FALSE`),
++ `true_blocks` -- if a subset of true blocks is available it can be provided here so we measures of quality presented in Section \@ref(sec-assess) are returned,
++ `n_threads` -- how many threads are applied for computation,
++ `control_txt` -- controls provided in the `controls_txt()` on how the `x, y` are processed,
++ `control_ann` -- controls provided in the `controls_ann()` allows user to fine-tune ANN algorithm (see documentation of the `controls_ann()` function and `control_*` functions with the names referring to a specific algorithm, e.g., `control_nnd()` for the NND algorithm).
+
+This function return an object of `blocking` class with the following elements:
+
++ `result` -- data.table with indices (rows) of x, y, block and distance between points
++ `method` -- name of the ANN algorithm used,
++ `deduplication` -- information whether deduplication was applied,
++ `representation` -- information whether shingles or vectors were used,
++ `metrics` -- metrics for quality assessment, if true_blocks is provided,
++ `confusion` -- confusion matrix, if `true_blocks` is provided,
++ `colnames` -- variable names (`colnames`) used for search,
++ `graph` -- igraph class object.
+
+## Assessment of results {#sec-assess}
 
 In the package we have implemented several measures that can be used to
 assess the results

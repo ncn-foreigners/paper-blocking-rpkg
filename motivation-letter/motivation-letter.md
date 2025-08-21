@@ -4,38 +4,41 @@ fontsize: 12pt
 ---
 
 \thispagestyle{empty}
+
 \today
 
-Editor   
-The R Journal  
+Editor\
+The R Journal\
 \bigskip
 
-Dear Professor Cook,
-\bigskip
+Dear Professor Hyndman, \bigskip
 
-Please consider our article titled "ToOoOlTiPs: An R Package for Customizable Tooltips in Interactive Graphics" for publication in the R Journal.
+Please consider our article titled "blocking: An R Package for Blocking
+of Records for Record Linkage and Deduplication" for publication in the
+R Journal.
 
-The manuscript introduces the new package called `ToOoOlTiPs` which provides examples on how to use interactive graphics in journal articles, and general tips for making an interesting contribution.
+The manuscript introduces the new package called `blocking` and the goal
+is to provide blocking methods for record linkage and deduplication
+using approximate nearest neighbour (ANN) algorithms and graph
+techniques. It supports multiple ANN implementations via `rnndescent`,
+`RcppHNSW`, `RcppAnnoy`, and `mlpack` packages, and provides integration
+with the `reclin2` package.
 
-We believe the readers of the R Journal will find this article helpful for their work because it provides generally useful instructions that will work for many purposes. 
+The package generates shingles from character strings and similarity
+vectors for record comparison, and includes evaluation metrics for
+assessing blocking performance including false positive rate (FPR) and
+false negative rate (FNR) estimates.
+
+We believe the readers of the R Journal will find this article helpful
+for their work, in particular those who integrate data from various sources.
 
 \bigskip
 \bigskip
 
 Regards,
-    
-    
-    
-    
-Quietest Quokka  
-Department of Letter Q  
-University of Little Mates  
-Somewhere, Australia  
-qquo@ulm.edu
 
-\bigskip
-
-NOTES: Modify this file with information about your article. 
-
-1. It may be invisible to you, so be aware that after each address line there are two spaces, this makes the line break correctly.
-2. It is also reasonable to submit an .md format of your motivating letter instead of a pdf. 
+Maciej Beręsewicz\
+Department of Statistics\
+Poznań University of Economics and Business\
+Poznań, Poland\
+[maciej.beresewicz\@ue.poznan.pl](mailto:maciej.beresewicz@ue.poznan.pl){.email}

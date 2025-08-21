@@ -13,3 +13,13 @@
 \backcite {phonics}{{2}{2.1.2}{subsection.2.1.2}}
 \backcite {Phonetic2020}{{2}{2.1.2}{subsection.2.1.2}}
 \backcite {klsh}{{2}{2.1.2}{subsection.2.1.2}}
+\backcite {tokenizers}{{2}{1}{Item.1}}
+\backcite {text2vec}{{2}{1}{Item.1}}
+\backcite {ragnar}{{2}{1}{Item.1}}
+\backcite {rnndescent}{{2}{2}{Item.2}}
+\backcite {RcppHNSW}{{2}{2}{Item.2}}
+\backcite {mlpack2023}{{2}{2}{Item.2}}
+\backcite {mlpack2025}{{2}{2}{Item.2}}
+\backcite {RcppAnnoy}{{2}{2}{Item.2}}
+\backcite {igraph2025}{{2}{3}{Item.3}}
+\backcite {igraph2006}{{2}{3}{Item.3}}
