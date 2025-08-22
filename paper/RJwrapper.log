@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.8.20)  22 AUG 2025 15:29
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.8.20)  22 AUG 2025 15:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -850,7 +850,7 @@ Package microtype Info: Loading generic protrusion settings for font family
 [8{/Users/berenz/Library/TinyTeX/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}]
 
 [9]
-<paper-blocking_files/figure-latex/dedup-density-1.pdf, id=239, 400.49625pt x 285.065pt>
+<paper-blocking_files/figure-latex/dedup-density-1.pdf, id=238, 400.49625pt x 285.065pt>
 File: paper-blocking_files/figure-latex/dedup-density-1.pdf Graphic file (type pdf)
 <use paper-blocking_files/figure-latex/dedup-density-1.pdf>
 Package pdftex.def Info: paper-blocking_files/figure-latex/dedup-density-1.pdf  used on input line 765.
@@ -890,18 +890,18 @@ Package rerunfilecheck Info: File `RJwrapper.brf' has not changed.
 (rerunfilecheck)             Checksum: BDE232DCAE4DA44FF7410BE951EAC972;1697.
  ) 
 Here is how much of TeX's memory you used:
- 27334 strings out of 469720
- 497110 string characters out of 5479434
+ 27331 strings out of 469720
+ 497083 string characters out of 5479434
  917505 words of memory out of 5000000
  54886 multiletter control sequences out of 15000+600000
- 671566 words of font info for 283 fonts, out of 8000000 for 9000
+ 671481 words of font info for 281 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
  117i,12n,131p,1006b,946s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </Users/berenz/Library/TinyTeX/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4b.pfb></Users/berenz/Library/TinyTeX/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb></Users/berenz/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/berenz/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></Users/berenz/Library/TinyTeX/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></Users/berenz/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></Users/berenz/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></Users/berenz/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on RJwrapper.pdf (14 pages, 188874 bytes).
+Output written on RJwrapper.pdf (14 pages, 188825 bytes).
 PDF statistics:
- 400 PDF objects out of 1000 (max. 8388607)
- 360 compressed objects within 4 object streams
+ 399 PDF objects out of 1000 (max. 8388607)
+ 359 compressed objects within 4 object streams
  67 named destinations out of 1000 (max. 500000)
  56442 words of extra memory for PDF output out of 61914 (max. 10000000)
 
