@@ -4,6 +4,7 @@
 ## ----packages, echo=TRUE, message=FALSE, warning=FALSE------------------------
 library("blocking")
 library("data.table")
+library("reclin2")
 
 
 ## ----foreigners, echo = TRUE--------------------------------------------------
@@ -13,15 +14,15 @@ head(foreigners)
 
 ## ----split, echo = TRUE-------------------------------------------------------
 foreigners_1 <- foreigners[!duplicated(foreigners$true_id), ]
+foreigners_1[, x := 1:.N]
 foreigners_2 <- foreigners[duplicated(foreigners$true_id), ]
+foreigners_2[, y := 1:.N]
 
 
 ## ----concat, echo = TRUE------------------------------------------------------
-foreigners_1[, date := gsub("/", "", date)]
-foreigners_1[, txt := paste0(fname, sname, surname, date, region, country)]
-foreigners_2[, date := gsub("/", "", date)]
-foreigners_2[, txt := paste0(fname, sname, surname, date, region, country)]
-head(foreigners_1)
+foreigners_1[, txt := paste0(fname, sname, surname, gsub("/", "", date), region, country)]
+foreigners_2[, txt := paste0(fname, sname, surname, gsub("/", "", date), region, country)]
+head(foreigners_1[, .(true_id, txt)])
 
 
 ## ----reclin_nnd, echo = TRUE--------------------------------------------------
@@ -46,12 +47,12 @@ head(result_reclin$result)
 
 
 ## ----reclin_nnd_example, echo = TRUE------------------------------------------
-cbind(t(foreigners_1[3, 1:6]), t(foreigners_2[1, 1:6]))
+rbind(foreigners_1[3, 1:7], foreigners_2[1:2, 1:7])
 
 
 ## ----reclin_nnd_matches, echo = TRUE------------------------------------------
-matches <- merge(x = foreigners_1[, .(x = 1:.N, true_id)],
-                 y = foreigners_2[, .(y = 1:.N, true_id)],
+matches <- merge(x = foreigners_1[, .(x, true_id)],
+                 y = foreigners_2[, .(y, true_id)],
                  by = "true_id")
 matches[, block := rleid(x)]
 head(matches)
@@ -74,6 +75,18 @@ result_3_reclin <- blocking(x = foreigners_1$txt,
 result_3_reclin
 
 
+## ----reclin2-example, echo = TRUE---------------------------------------------
+foreigners_1[result_3_reclin$result, on = "x", block:= i.block]
+foreigners_2[result_3_reclin$result, on = "y", block:= i.block]
+
+pair_blocking(x = foreigners_1, 
+              y = foreigners_2, on = "block") |>
+  compare_pairs(on = c("fname", "surname", "date"),
+                default_comparator = cmp_jarowinkler()) |>
+  score_simple("score", on = c("fname", "surname", "date")) |>
+  head(n= 4)
+
+
 ## ----RLdata500, echo = TRUE---------------------------------------------------
 data("RLdata500")
 head(RLdata500)
@@ -81,16 +94,14 @@ head(RLdata500)
 
 ## ----RLdata500_concat, echo = TRUE--------------------------------------------
 RLdata500[, id_count :=.N, ent_id]
-RLdata500[, bm:=sprintf("%02d", bm)]
-RLdata500[, bd:=sprintf("%02d", bd)]
-RLdata500[, txt:=tolower(paste0(fname_c1,fname_c2,lname_c1,lname_c2,by,bm,bd))]
-head(RLdata500)
+RLdata500[, txt:=tolower(paste0(fname_c1,fname_c2,lname_c1,lname_c2,by,
+                                sprintf("%02d", bm),sprintf("%02d", bd)))]
+head(RLdata500[, .(rec_id, id_count, txt)])
 
 
 ## ----dedup_hnsw, echo = TRUE--------------------------------------------------
 result_dedup_hnsw <- blocking(x = RLdata500$txt,
                               ann = "hnsw",
-                              graph = TRUE,
                               verbose = 1)
 
 
@@ -105,15 +116,15 @@ RLdata500[df_block_melted_rec_block, on = "rec_id", block_id := i.block]
 RLdata500[, .(uniq_blocks = uniqueN(block_id)), .(ent_id)][, .N, uniq_blocks]
 
 
-## ----dedup-density, echo = TRUE-----------------------------------------------
+## ----echo = TRUE--------------------------------------------------------------
 #| label: dedup-density
 #| fig-cap: "Distribution of distances between clusters type"
 #| fig.width: 6
 #| fig.height: 5
 #| fig.align: "center"
-#| fig.pos: "H"
+#| fig.pos: "ht!"
 #| layout: "l-body"
-#| out.width: "100%"
+#| out.width: "80%"
 
 df_for_density <- copy(df_block_melted[block %in% RLdata500$block_id])
 df_for_density[, match:= block %in% RLdata500[id_count == 2]$block_id]
@@ -144,25 +155,32 @@ blocks_klsh_10 <- klsh::klsh(
   p = 20,
   num.blocks = 10,
   k = 2)
+
 klsh_10_metrics <- klsh::confusion.from.blocking(
   blocking = blocks_klsh_10, 
   true_ids = RLdata500$ent_id)[-1]
+
 klsh_10_metrics$f1_score <- 2 * klsh_10_metrics$precision *
   klsh_10_metrics$recall / 
   (klsh_10_metrics$precision + klsh_10_metrics$recall)
+
 eval_metrics$klsh_10 <- unlist(klsh_10_metrics)
+
 blocks_klsh_100 <- klsh::klsh(
   r.set = RLdata500[, c("fname_c1", "fname_c2", "lname_c1",
                         "lname_c2", "by", "bm", "bd")],
   p = 20,
   num.blocks = 100,
   k = 2)
+
 klsh_100_metrics <- klsh::confusion.from.blocking(
   blocking = blocks_klsh_100, 
   true_ids = RLdata500$ent_id)[-1]
+
 klsh_100_metrics$f1_score <- 2 * klsh_100_metrics$precision * 
   klsh_100_metrics$recall /
   (klsh_100_metrics$precision + klsh_100_metrics$recall)
+
 eval_metrics$klsh_100 <- unlist(klsh_100_metrics)
 
 round(do.call(rbind, eval_metrics) * 100, 2)
