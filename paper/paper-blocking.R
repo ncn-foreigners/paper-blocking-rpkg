@@ -137,6 +137,7 @@ legend("topright",  legend = c("Non-matches", "Matches"),
        col = c("blue", "red"),  lty = 1, lwd = 2)
 
 
+
 ## ----comparision, echo = TRUE-------------------------------------------------
 set.seed(2025)
 true_blocks <- RLdata500[, c("rec_id", "ent_id"), with = FALSE]

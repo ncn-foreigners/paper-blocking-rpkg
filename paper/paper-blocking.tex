@@ -7,7 +7,7 @@
 \maketitle
 
 \abstract{%
-Entity resolution (probabilistic record linkage, deduplication) is essential for estimation based on multiple sources. It aims to link records without common identifiers that refer to the same entity (e.g., person, company). Without identifiers, researchers must specify which records to compare to calculate matching probability and reduce computational complexity. Traditional deterministic blocking uses common variables like names or dates of birth, but assumes error-free, complete data. To address this limitation, we developed the R package blocking, which uses approximate nearest neighbour search and graph algorithms to reduce number of comparisons. This paper presents the package design, functionalities, and two case studies.
+Entity resolution (probabilistic record linkage, deduplication) is essential for estimation based on multiple sources. It aims to link records without common identifiers that refer to the same entity (e.g., person, company). Without identifiers, researchers must specify which records to compare to calculate matching probability and reduce computational complexity. Traditional deterministic blocking uses common variables like names or dates of birth, but assumes error-free, complete data. To address this limitation, we developed the R package \CRANpkg{blocking}, which uses approximate nearest neighbour search and graph algorithms to reduce number of comparisons. This paper presents the package design, functionalities, and two case studies.
 }
 
 \section{Introduction}\label{introduction}
@@ -162,8 +162,8 @@ package which is described in one of the package vignettes.
 \subsection{Outline of article}\label{outline-of-article}
 
 The paper has the following structure. In the Section \ref{sec-blocks}
-we provide description of the main functionalities of the \texttt{blocking}
-package and how we can access results. In the Section \ref{sec-case} we
+we provide description of the main functionalities of the \CRANpkg{blocking}
+package and how we can assess results. In the Section \ref{sec-case} we
 provide two case studies: probabilistic record linkage and
 deduplication. These examples show how our package can improve pipeline
 of entity resolution and work with existing R packages.
@@ -178,23 +178,23 @@ contains the following main arguments:
 \begin{itemize}
 \tightlist
 \item
-  \texttt{x,\ y} -- reference vectors, where \texttt{y\ =\ NULL} which indicate that
+  \texttt{x,\ y} -- reference vectors, where \texttt{y\ =\ NULL} which indicates that
   the deduplication is applied,
 \item
   \texttt{representation} -- whether \texttt{x} and \texttt{y} should be represented as
   shingles or vectors (e.g., provided by the user in the \texttt{model}
   argument),
 \item
-  \texttt{ann} -- what ANN algorithm should be applied, by default we use the
-  \CRANpkg{rnndescent} package as it allows supports sparse matrices,
+  \texttt{ann} -- which ANN algorithm should be applied, by default we use the
+  \CRANpkg{rnndescent} package as it supports sparse matrices,
 \item
-  \texttt{distance} -- what should be applied (default is \texttt{cosine} distance),
+  \texttt{distance} -- which distance should be applied (default is \texttt{cosine} distance),
 \item
   \texttt{graph} -- whether the plot of the graph of connected records should
   be returned (default \texttt{FALSE}),
 \item
   \texttt{true\_blocks} -- if a subset of true blocks is available it can be
-  provided here so we measures of quality, presented in the next
+  provided here so the measures of quality, presented in the next
   section, are returned,
 \item
   \texttt{n\_threads} -- how many threads are applied for computation,
@@ -202,14 +202,14 @@ contains the following main arguments:
   \texttt{control\_txt} -- controls provided in the \texttt{controls\_txt()} on how
   the \texttt{x,\ y} are processed,
 \item
-  \texttt{control\_ann} -- controls provided in the \texttt{controls\_ann()} allows
+  \texttt{control\_ann} -- controls provided in the \texttt{controls\_ann()} allow
   user to fine-tune ANN algorithm (see documentation of the
   \texttt{controls\_ann()} function and \texttt{control\_*} functions with the names
-  referring to a specific algorithm, e.g., \texttt{control\_nnd()} for the NND
+  refering to a specific algorithm, e.g., \texttt{control\_nnd()} for the NND
   algorithm).
 \end{itemize}
 
-This function return an object of the \texttt{blocking} class with the
+This function returns an object of the \texttt{blocking} class with the
 following elements:
 
 \begin{itemize}
@@ -232,15 +232,15 @@ following elements:
 \item
   \texttt{colnames} -- variable names (\texttt{colnames}) used for search,
 \item
-  \texttt{graph} -- igraph class object.
+  \texttt{graph} -- \texttt{igraph} class object.
 \end{itemize}
 
 \subsection{Assessment of results}\label{sec-assess}
 
 In the package we have implemented several measures that can be used to
 assess the results. The first one is the \emph{reduction ratio} (RR) which is
-an indicator on the reduction in comparison pairs if the given blocks.
-It has value from between \([0,1]\) where 1 indicate perfect reduction
+an indicator of the reduction in comparison pairs in the given blocks.
+It has a value between \([0,1]\), where 1 indicates perfect reduction
 while values close to 0 indicate that the reduction is rather poor.
 
 This RR indicator of the deduplication has the following form
@@ -281,13 +281,13 @@ follows
   True Positive (TP): record pairs correctly matched in the same
   block.
 \item
-  False Positive (FP): records pairs identified as matches that are
+  False Positive (FP): record pairs identified as matches that are
   not true matches in the same block.
 \item
   True Negative (TN): record pairs correctly identified as non-matches
-  (different blocks)
+  (different blocks).
 \item
-  False Negative (FN): records identified as non-matches that are true
+  False Negative (FN): record pairs identified as non-matches that are true
   matches in the same block.
 \end{itemize}
 
@@ -353,7 +353,7 @@ entities. Each row represents one record, with the following columns:
 \texttt{date} -- date of birth, \texttt{region} -- region (county), \texttt{country} -- country, and
 \texttt{true\_id} -- a person identifier
 
-Next, we load the data and see the first 6 records
+Next, we load the data and examine the first 6 records.
 
 \begin{verbatim}
 data("foreigners")
@@ -432,7 +432,7 @@ Now we can examine the results by printing the
 \texttt{result\_reclin} object. We have created
 6,470
 blocks based on 1,232
-columns (2 character shingles). Blocks are small as we e have
+columns (2 character shingles). Blocks are small as we have
 3,920 blocks of 2
 elements, 1,599 blocks of
 3 elements,\ldots,
@@ -487,8 +487,8 @@ head(result_reclin$result)
 #> 6:    61     6     4 0.2307692
 \end{verbatim}
 
-Let's examine the block. Obviously, there are typos in the \texttt{fname}
-and \texttt{surname}. Nevertheless, all record refer to the same entity (as denoted by \texttt{true\_id}).
+Let's examine the first block. Obviously, there are typos in the \texttt{fname}
+and \texttt{surname}. Nevertheless, all records refer to the same entity (as denoted by \texttt{true\_id}).
 
 \begin{verbatim}
 rbind(foreigners_1[3, 1:7], foreigners_2[1:2, 1:7])
@@ -610,7 +610,7 @@ result_3_reclin
 That decreases the FNR to
 3.12\%.
 
-Now, to use the result in the record linkage process by adding this information to both both datasets
+Now, to use the result in the record linkage process by adding this information to both datasets
 and specifying it in the appropriate argument of a given function. Below we present an example using the
 \texttt{reclin2} package using a simple score.
 
@@ -709,7 +709,7 @@ result_dedup_hnsw <- blocking(x = RLdata500$txt,
 #> ===== creating graph =====
 \end{verbatim}
 
-The results are as follows. This time the HNSW algorithm provided quite blocks varying from 2 to 17 units.
+The results are as follows. This time the HNSW algorithm provided blocks varying from 2 to 17 units.
 
 \begin{verbatim}
 result_dedup_hnsw
@@ -891,7 +891,7 @@ Department of Statistics, Poznań, Poland\\ Centre for the Methodology of Popula
 \address{%
 Adam Struzik\\
 Adam Mickiewicz UniversityStatisical Office in Poznań\\%
-Department of Mathematics, Poznań, Poland\\ Centre for Urban Statistics\\
+Faculty of Mathematics and Computer Science, Poznań, Poland\\ Centre for Urban Statistics\\
 %
 %
 %

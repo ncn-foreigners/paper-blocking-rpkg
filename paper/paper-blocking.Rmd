@@ -2,33 +2,33 @@
 title: "blocking: An R Package for Blocking of Records for Record Linkage and Deduplication"
 date: "2025-08-22"
 abstract: >
-  Entity resolution (probabilistic record linkage, deduplication) is essential for estimation based on multiple sources. It aims to link records without common identifiers that refer to the same entity (e.g., person, company). Without identifiers, researchers must specify which records to compare to calculate matching probability and reduce computational complexity. Traditional deterministic blocking uses common variables like names or dates of birth, but assumes error-free, complete data. To address this limitation, we developed the R package blocking, which uses approximate nearest neighbour search and graph algorithms to reduce number of  comparisons. This paper presents the package design, functionalities, and two case studies.
+  Entity resolution (probabilistic record linkage, deduplication) is essential for estimation based on multiple sources. It aims to link records without common identifiers that refer to the same entity (e.g., person, company). Without identifiers, researchers must specify which records to compare to calculate matching probability and reduce computational complexity. Traditional deterministic blocking uses common variables like names or dates of birth, but assumes error-free, complete data. To address this limitation, we developed the R package \CRANpkg{blocking}, which uses approximate nearest neighbour search and graph algorithms to reduce number of  comparisons. This paper presents the package design, functionalities, and two case studies.
 draft: false
 author:  
   - name: Maciej Beręsewicz
     affiliation: 
-      - University of Economics and Business
-      - Statisical Office in Poznań
+      - University of Economics and Business 
+      - Statisical Office in Poznań 
     address:
-      - Department of Statistics, Poznań, Poland
-      - Centre for the Methodology of Population Studies
+      - Department of Statistics, Poznań, Poland 
+      - Centre for the Methodology of Population Studies 
     url: https://maciejberesewicz.com
     orcid: 0000-0002-8281-4301
     email: maciej.beresewicz@poznan.pl
   - name: Adam Struzik
     affiliation:
-      - Adam Mickiewicz University
-      - Statisical Office in Poznań
+      - Adam Mickiewicz University 
+      - Statisical Office in Poznań 
     address:
-      - Department of Mathematics, Poznań, Poland
-      - Centre for Urban Statistics
+      - Faculty of Mathematics and Computer Science, Poznań, Poland 
+      - Centre for Urban Statistics 
     email: adastr5@st.amu.edu.pl
 type: package
 output: 
-  rjtools::rjournal_pdf_article:
-    toc: no
   rjtools::rjournal_web_article:
     self_contained: yes
+    toc: no
+  rjtools::rjournal_pdf_article:
     toc: no
 header-includes:
   - \usepackage{float}
@@ -164,8 +164,8 @@ package which is described in one of the package vignettes.
 ## Outline of article
 
 The paper has the following structure. In the Section \@ref(sec-blocks)
-we provide description of the main functionalities of the `blocking`
-package and how we can access results. In the Section \@ref(sec-case) we
+we provide description of the main functionalities of the \CRANpkg{blocking}
+package and how we can assess results. In the Section \@ref(sec-case) we
 provide two case studies: probabilistic record linkage and
 deduplication. These examples show how our package can improve pipeline
 of entity resolution and work with existing R packages.
@@ -177,29 +177,29 @@ of entity resolution and work with existing R packages.
 The main functionality is available via the `blocking()` function which
 contains the following main arguments:
 
--   `x, y` -- reference vectors, where `y = NULL` which indicate that
+-   `x, y` -- reference vectors, where `y = NULL` which indicates that
     the deduplication is applied,
 -   `representation` -- whether `x` and `y` should be represented as
     shingles or vectors (e.g., provided by the user in the `model`
     argument),
--   `ann` -- what ANN algorithm should be applied, by default we use the
-    \CRANpkg{rnndescent} package as it allows supports sparse matrices,
--   `distance` -- what should be applied (default is `cosine` distance),
+-   `ann` -- which ANN algorithm should be applied, by default we use the
+    \CRANpkg{rnndescent} package as it supports sparse matrices,
+-   `distance` -- which distance should be applied (default is `cosine` distance),
 -   `graph` -- whether the plot of the graph of connected records should
     be returned (default `FALSE`),
 -   `true_blocks` -- if a subset of true blocks is available it can be
-    provided here so we measures of quality, presented in the next
+    provided here so the measures of quality, presented in the next
     section, are returned,
 -   `n_threads` -- how many threads are applied for computation,
 -   `control_txt` -- controls provided in the `controls_txt()` on how
     the `x, y` are processed,
--   `control_ann` -- controls provided in the `controls_ann()` allows
+-   `control_ann` -- controls provided in the `controls_ann()` allow
     user to fine-tune ANN algorithm (see documentation of the
     `controls_ann()` function and `control_*` functions with the names
-    referring to a specific algorithm, e.g., `control_nnd()` for the NND
+    refering to a specific algorithm, e.g., `control_nnd()` for the NND
     algorithm).
 
-This function return an object of the `blocking` class with the
+This function returns an object of the `blocking` class with the
 following elements:
 
 -   `result` -- data.table with indices (rows) of x, y, block and
@@ -212,14 +212,14 @@ following elements:
     provided,
 -   `confusion` -- confusion matrix, if `true_blocks` is provided,
 -   `colnames` -- variable names (`colnames`) used for search,
--   `graph` -- igraph class object.
+-   `graph` -- `igraph` class object.
 
 ## Assessment of results {#sec-assess}
 
 In the package we have implemented several measures that can be used to
 assess the results. The first one is the *reduction ratio* (RR) which is
-an indicator on the reduction in comparison pairs if the given blocks.
-It has value from between $[0,1]$ where 1 indicate perfect reduction
+an indicator of the reduction in comparison pairs in the given blocks.
+It has a value between $[0,1]$, where 1 indicates perfect reduction
 while values close to 0 indicate that the reduction is rather poor.
 
 This RR indicator of the deduplication has the following form
@@ -256,11 +256,11 @@ follows
 
 -   True Positive (TP): record pairs correctly matched in the same
     block.
--   False Positive (FP): records pairs identified as matches that are
+-   False Positive (FP): record pairs identified as matches that are
     not true matches in the same block.
 -   True Negative (TN): record pairs correctly identified as non-matches
-    (different blocks)
--   False Negative (FN): records identified as non-matches that are true
+    (different blocks).
+-   False Negative (FN): record pairs identified as non-matches that are true
     matches in the same block.
 
 Metrics calculated based on this confusion matrix are presented in Table 1.
@@ -296,7 +296,7 @@ entities. Each row represents one record, with the following columns:
 `date` -- date of birth, `region` -- region (county), `country` -- country, and 
 `true_id` -- a person identifier
 
-Next, we load the data and see the first 6 records
+Next, we load the data and examine the first 6 records.
 
 ```{r foreigners, echo = TRUE}
 data("foreigners")
@@ -346,7 +346,7 @@ Now we can examine the results by printing the
 `result_reclin` object. We have created
 `r format(NROW(unique(result_reclin$result$block)), big.mark = ",")`
 blocks based on `r format(NROW(result_reclin$colnames), big.mark = ",")`
-columns (2 character shingles). Blocks are small as we e have
+columns (2 character shingles). Blocks are small as we have
 `r format(block_count[1], big.mark = ",")` blocks of `r block_size[1]`
 elements, `r format(block_count[2], big.mark = ",")` blocks of
 `r block_size[2]` elements,...,
@@ -371,8 +371,8 @@ resulting `data.table` has four columns (as presented below):
 head(result_reclin$result)
 ```
 
-Let's examine the block. Obviously, there are typos in the `fname`
-and `surname`. Nevertheless, all record refer to the same entity (as denoted by `true_id`).
+Let's examine the first block. Obviously, there are typos in the `fname`
+and `surname`. Nevertheless, all records refer to the same entity (as denoted by `true_id`).
 
 ```{r reclin_nnd_example, echo = TRUE}
 rbind(foreigners_1[3, 1:7], foreigners_2[1:2, 1:7])
@@ -421,7 +421,7 @@ That decreases the FNR to
 `r sprintf("%.2f", (result_3_reclin$metrics)[4]*100)`%.
 
 
-Now, to use the result in the record linkage process by adding this information to both both datasets
+Now, to use the result in the record linkage process by adding this information to both datasets
 and specifying it in the appropriate argument of a given function. Below we present an example using the
 `reclin2` package using a simple score.
 
@@ -479,7 +479,7 @@ result_dedup_hnsw <- blocking(x = RLdata500$txt,
                               verbose = 1)
 ```
 
-The results are as follows. This time the HNSW algorithm provided quite blocks varying from 2 to 17 units.
+The results are as follows. This time the HNSW algorithm provided blocks varying from 2 to 17 units.
 
 ```{r dedup_hnsw_result, echo = TRUE}
 result_dedup_hnsw
@@ -519,6 +519,7 @@ lines(density(df_for_density[match==TRUE]$dist),
       col = "red", xlim = c(0, 0.8))
 legend("topright",  legend = c("Non-matches", "Matches"), 
        col = c("blue", "red"),  lty = 1, lwd = 2)
+
 ```
 
 Now we compare the evaluation metrics across all ANNs algorithms
