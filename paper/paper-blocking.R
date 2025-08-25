@@ -123,17 +123,8 @@ RLdata500[df_block_melted_rec_block, on = "rec_id", block_id := i.block]
 RLdata500[, .(uniq_blocks = uniqueN(block_id)), .(ent_id)][, .N, uniq_blocks]
 
 
-## ----echo = TRUE--------------------------------------------------------------
-#| label: dedup-density
-#| fig.cap: "Distribution of distances between true matches and unmatches within blocks"
-#| fig.alt: "A density plot of distances between units that are true matches (red) and nonmatches (blue) within blocks created by the \\CRANpkg{blocking}. Distribution of the distance for matches is bimodal. There is a group of units that are true matches and the distance between is small (less than 0.2) while for the second group is similar in terms of distance to true nonmatches (between 0.4 and 0.6). This distance may be used as additional information for the deduplication (and record linkage) studies."
-#| fig.width: 6
-#| fig.height: 5
-#| fig.align: "center"
-#| fig.pos: "ht!"
-#| layout: "l-body"
-#| out.width: "80%"
-
+## ----fig-save, results = 'hide'-----------------------------------------------
+png(file = "./figures/fig-1-density.png")
 df_for_density <- copy(df_block_melted[block %in% RLdata500$block_id])
 df_for_density[, match:= block %in% RLdata500[id_count == 2]$block_id]
 
@@ -143,12 +134,16 @@ lines(density(df_for_density[match==TRUE]$dist),
       col = "red", xlim = c(0, 0.8))
 legend("topright",  legend = c("Non-matches", "Matches"), 
        col = c("blue", "red"),  lty = 1, lwd = 2)
+dev.off()
 
+
+## ----penguins-alison, out.width = "80%", out.height = "30%", fig.cap = "Distribution of distances between true matches and non-matches within blocks", fig.alt="A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the \\CRANpkg{blocking}. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies."----
+knitr::include_graphics("./figures/fig-1-density.png")
 
 
 ## ----echo = TRUE, results='asis'----------------------------------------------
 #| label: comparision
-#| tab.cap: "Comparison of various approximate nearest neighbours algorithms implemented in the \\CRANpkg{blocking} and the \\CRANpkg{klsh} package for creation of blocks for deduplication"
+#| tab.cap: "Comparison of various approximate nearest neighbour algorithms implemented in the \\CRANpkg{blocking} and the \\CRANpkg{klsh} package for creation of blocks for deduplication"
 set.seed(2025)
 true_blocks <- RLdata500[, c("rec_id", "ent_id"), with = FALSE]
 setnames(true_blocks, old = c("rec_id", "ent_id"), c("x", "block"))

@@ -9,7 +9,7 @@ SUCCESS: Possible motivation letter found: motivation-letter
 WARNING: Article title not in title case! Suggest title: Blocking: An R Package for Blocking of Records for Record Linkage and Deduplication.
 SUCCESS: Section titles formatted in sentence case.
 SUCCESS: Abstract formatted in plain text.
-NOTE: A potential list of spelling to check: deduplication, neighbour, embeddings, minsim, blockfld, dedup, reclin, soundex, klsh, num, ann, nnd, igraph, th, fname, sname, lname, bm, bd, ent, mlpack, neighbours, preprint
+NOTE: A potential list of spelling to check: deduplication, neighbour, spelt, embeddings, neighbours, minsim, blockfld, dedup, reclin, soundex, klsh, num, ann, nnd, igraph, th, fname, sname, lname, bm, bd, ent, visualise, fpr, fnr, hnsw, lsh, kd, mlpack, minimise, preprint
 SUCCESS: CRAN activities have been detected for package blocking
 SUCCESS: No error with the use of \pkg markup.
 SUCCESS: All packages marked-up with \CRANpkg or \BIOpkg are available on CRAN or Bioconductor.
@@ -28,7 +28,7 @@ SUCCESS: Possible motivation letter found: motivation-letter
 WARNING: Article title not in title case! Suggest title: Blocking: An R Package for Blocking of Records for Record Linkage and Deduplication.
 SUCCESS: Section titles formatted in sentence case.
 SUCCESS: Abstract formatted in plain text.
-NOTE: A potential list of spelling to check: deduplication, neighbour, embeddings, minsim, blockfld, dedup, reclin, soundex, klsh, num, ann, nnd, igraph, th, fname, sname, lname, bm, bd, ent, mlpack, neighbours, preprint
+NOTE: A potential list of spelling to check: deduplication, neighbour, spelt, embeddings, neighbours, minsim, blockfld, dedup, reclin, soundex, klsh, num, ann, nnd, igraph, th, fname, sname, lname, bm, bd, ent, visualise, fpr, fnr, hnsw, lsh, kd, mlpack, minimise, preprint
 SUCCESS: CRAN activities have been detected for package blocking
 SUCCESS: No error with the use of \pkg markup.
 SUCCESS: All packages marked-up with \CRANpkg or \BIOpkg are available on CRAN or Bioconductor.
@@ -47,7 +47,7 @@ SUCCESS: Possible motivation letter found: motivation-letter
 WARNING: Article title not in title case! Suggest title: Blocking: An R Package for Blocking of Records for Record Linkage and Deduplication.
 SUCCESS: Section titles formatted in sentence case.
 SUCCESS: Abstract formatted in plain text.
-NOTE: A potential list of spelling to check: deduplication, neighbour, embeddings, minsim, blockfld, dedup, reclin, soundex, klsh, num, ann, nnd, igraph, th, fname, sname, lname, bm, bd, ent, mlpack, neighbours, preprint
+NOTE: A potential list of spelling to check: deduplication, neighbour, spelt, embeddings, neighbours, minsim, blockfld, dedup, reclin, soundex, klsh, num, ann, nnd, igraph, th, fname, sname, lname, bm, bd, ent, visualise, fpr, fnr, hnsw, lsh, kd, mlpack, minimise, preprint
 SUCCESS: CRAN activities have been detected for package blocking
 SUCCESS: No error with the use of \pkg markup.
 SUCCESS: All packages marked-up with \CRANpkg or \BIOpkg are available on CRAN or Bioconductor.
