@@ -25,10 +25,10 @@ author:
     email: adastr5@st.amu.edu.pl
 type: package
 output: 
-  rjtools::rjournal_pdf_article:
-    toc: no
   rjtools::rjournal_web_article:
     self_contained: yes
+    toc: no
+  rjtools::rjournal_pdf_article:
     toc: no
 header-includes:
   - \usepackage{float}
@@ -509,8 +509,8 @@ block contains matches or not.
 
 ```{r echo = TRUE}
 #| label: dedup-density
-#| fig.cap: "Distribution of distances between true matches and unmatches within blocks"
-#| fig.alt: "A density plot of distances between units that are true matches (red) and nonmatches (blue) within blocks created by the \\CRANpkg{blocking}. Distribution of the distance for matches is bimodal. There is a group of units that are true matches and the distance between is small (less than 0.2) while for the second group is similar in terms of distance to true nonmatches (between 0.4 and 0.6). This distance may be used as additional information for the deduplication (and record linkage) studies."
+#| fig-cap: "Distribution of distances between true matches and unmatches within blocks"
+#| fig-alt: "A density plot of distances between units that are true matches (red) and nonmatches (blue) within blocks created by the \\pkg{blocking}. Distribution of the distance for matches is bimodal. There is a group of units that are true matches and the distance between is small (less than 0.2) while for the second group is similar in terms of distance to true nonmatches (between 0.4 and 0.6). This distance may be used as additional information for the deduplication (and record linkage) studies."
 #| fig.width: 6
 #| fig.height: 5
 #| fig.align: "center"
@@ -621,7 +621,7 @@ Work on this package is supported by the National Science Centre, OPUS
 We also have developed a python version of the package
 [BlockingPy](https://blockingpy.readthedocs.io/en/latest/) that is
 available through the PyPi It has the similar structure but offers more
-ANN algorithms (e.g. FAISS) or usage of embeddings. For more details
+ANNs algorithms (e.g. FAISS) or usage of embeddings. For more details
 see: Strojny, T., & Beręsewicz, M. (2025). BlockingPy: approximate
 nearest neighbours for blocking of records for entity resolution. arXiv
 preprint arXiv:2504.04266.

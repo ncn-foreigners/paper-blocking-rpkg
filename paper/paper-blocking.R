@@ -147,7 +147,7 @@ legend("topright",  legend = c("Non-matches", "Matches"),
 
 
 ## ----echo = TRUE, results='asis'----------------------------------------------
-#| label: tab-comparision
+#| label: comparision
 #| tab.cap: "Comparison of various approximate nearest neighbours algorithms implemented in the \\CRANpkg{blocking} and the \\CRANpkg{klsh} package for creation of blocks for deduplication"
 set.seed(2025)
 true_blocks <- RLdata500[, c("rec_id", "ent_id"), with = FALSE]

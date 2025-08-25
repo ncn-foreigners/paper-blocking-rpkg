@@ -131,7 +131,7 @@ names and surnames. That is why we decided to develop \CRANpkg{blocking}
 that leverages approximate nearest neighbour (ANNs) algorithms and graphs
 to create a large number of small blocks that can be further used in the
 analysis (this is also somehow similar to micro-clustering, cf.
-\citet{johndrow2018theoretical}). The basic idea behind the \CRANpkg{blocking}
+\citet{johndrow2018theoretical}). The basic idea behind the \pkg{blocking}
 package can be expressed in the following steps:
 
 \begin{enumerate}
@@ -157,13 +157,13 @@ This is the only package in the R ecosystem that allows easily applying
 modern ANNs algorithms to reduce number of comparisons
 and significantly speed up the record
 linkage / deduplication problems. In addition, we have developed the
-\texttt{pair\_ann()} function to seamlessly integrate with the \CRANpkg{reclin2}
+\texttt{pair\_ann()} function to seamlessly integrate with the \pkg{reclin2}
 package which is described in one of the package vignettes.
 
 \subsection{Outline of article}\label{outline-of-article}
 
 The paper has the following structure. In the Section 2
-we provide description of the main functionalities of the \CRANpkg{blocking}
+we provide description of the main functionalities of the \pkg{blocking}
 package and how we can assess results. In the Section 3 we
 provide two case studies: probabilistic record linkage and
 deduplication. These examples show how our package can improve pipeline
@@ -187,7 +187,7 @@ contains the following main arguments:
   argument),
 \item
   \texttt{ann} -- which ANN algorithm should be applied, by default we use the
-  \CRANpkg{rnndescent} package as it supports sparse matrices,
+  \pkg{rnndescent} package as it supports sparse matrices,
 \item
   \texttt{distance} -- which distance should be applied (default is \texttt{cosine} distance),
 \item
@@ -391,9 +391,9 @@ columns (excluding \texttt{true\_id}) in each row. Information stored in the \te
 column will be used for blocking records in the \texttt{blocking()} function.
 
 \begin{verbatim}
-foreigners_1[, txt := paste0(fname, sname, surname, gsub("/", "", date), 
+foreigners_1[, txt := paste0(fname, sname, surname, gsub("/", "", date),
                              region, country)]
-foreigners_2[, txt := paste0(fname, sname, surname, gsub("/", "", date), 
+foreigners_2[, txt := paste0(fname, sname, surname, gsub("/", "", date),
                              region, country)]
 head(foreigners_1[, .(true_id, txt)])
 \end{verbatim}
@@ -410,7 +410,7 @@ head(foreigners_1[, .(true_id, txt)])
 \end{verbatim}
 
 The default algorithm is the Nearest Neighbour Descent Method \citep{Dong2011} implemented in
-the \CRANpkg{rnndescent} package. Additionally, we set \texttt{verbose\ =\ 1} to monitor progress. Note
+the \pkg{rnndescent} package. Additionally, we set \texttt{verbose\ =\ 1} to monitor progress. Note
 that a default parameter of the \texttt{blocking()} function is \texttt{seed\ =\ 2023},
 which sets the random seed (\texttt{t:\ 1232} denotes how many 2 character shingles were created).
 
@@ -449,7 +449,7 @@ result_reclin
 #> Reduction ratio: 0.9999.
 #> ========================================================
 #> Distribution of the size of the blocks:
-#>    2    3    4    5    6    7 
+#>    2    3    4    5    6    7
 #> 3920 1599  928   19    2    2
 \end{verbatim}
 
@@ -552,13 +552,13 @@ res_reclin
 #> Reduction ratio: 0.9999.
 #> ========================================================
 #> Distribution of the size of the blocks:
-#>    2    3    4    5    6    7 
-#> 3920 1599  928   19    2    2 
+#>    2    3    4    5    6    7
+#> 3920 1599  928   19    2    2
 #> ========================================================
 #> Evaluation metrics (standard):
-#>      recall   precision         fpr         fnr    accuracy specificity 
-#>     96.7532     78.6700      0.0038      3.2468     99.9957     99.9962 
-#>    f1_score 
+#>      recall   precision         fpr         fnr    accuracy specificity
+#>     96.7532     78.6700      0.0038      3.2468     99.9957     99.9962
+#>    f1_score
 #>     86.7795
 \end{verbatim}
 
@@ -595,13 +595,13 @@ res_reclin2
 #> Reduction ratio: 0.9999.
 #> ========================================================
 #> Distribution of the size of the blocks:
-#>    2    3    4    5    7 
-#> 3800 1615  954   21    4 
+#>    2    3    4    5    7
+#> 3800 1615  954   21    4
 #> ========================================================
 #> Evaluation metrics (standard):
-#>      recall   precision         fpr         fnr    accuracy specificity 
-#>     96.8776     80.0500      0.0036      3.1224     99.9960     99.9964 
-#>    f1_score 
+#>      recall   precision         fpr         fnr    accuracy specificity
+#>     96.8776     80.0500      0.0036      3.1224     99.9960     99.9964
+#>    f1_score
 #>     87.6636
 \end{verbatim}
 
@@ -615,7 +615,7 @@ Below we present an example using the \texttt{reclin2} package using a simple sc
 foreigners_1[res_reclin2$result, on = "x", block:= i.block]
 foreigners_2[res_reclin2$result, on = "y", block:= i.block]
 
-pair_blocking(x = foreigners_1, 
+pair_blocking(x = foreigners_1,
               y = foreigners_2, on = "block") |>
   compare_pairs(on = c("fname", "surname", "date"),
                 default_comparator = cmp_jarowinkler()) |>
@@ -628,7 +628,7 @@ pair_blocking(x = foreigners_1,
 #>   Second data set: 10 000 records
 #>   Total number of pairs: 4 pairs
 #>   Blocking on: 'block'
-#> 
+#>
 #>       .x    .y     fname   surname      date    score
 #>    <int> <int>     <num>     <num>     <num>    <num>
 #> 1:     3     1 0.8333333 0.8666667 1.0000000 2.700000
@@ -640,7 +640,7 @@ pair_blocking(x = foreigners_1,
 \subsection{An example of blocking for deduplication}\label{an-example-of-blocking-for-deduplication}
 
 In this section we demonstrate deduplication application using the \texttt{blocking()} function on the
-\texttt{RLdata500} dataset from the \CRANpkg{RecordLinkage} package. Note that
+\texttt{RLdata500} dataset from the \pkg{RecordLinkage} package. Note that
 the dataset is included in the \texttt{blocking} package. It contains
 artificial personal data and fifty records have been duplicated with
 randomly generated errors. Each row represents one record, with the
@@ -691,7 +691,7 @@ head(RLdata500[, .(rec_id, id_count, txt)])
 
 As in the previous example, we use the \texttt{txt} column in the \texttt{blocking}
 function. This time, we set \texttt{ann\ =\ "hnsw"} to use the Hierarchical
-Navigable Small World (HNSW; \citet{malkov2018efficient}) algorithm from the \CRANpkg{RcppHNSW}
+Navigable Small World (HNSW; \citet{malkov2018efficient}) algorithm from the \pkg{RcppHNSW}
 package.
 
 \begin{verbatim}
@@ -720,7 +720,7 @@ res_dedup
 #> Reduction ratio: 0.9916.
 #> ========================================================
 #> Distribution of the size of the blocks:
-#>  2  3  4  5  6  7  8  9 10 11 12 17 
+#>  2  3  4  5  6  7  8  9 10 11 12 17
 #> 46 35 23  8  6  6  2  3  1  1  1  1
 \end{verbatim}
 
@@ -753,13 +753,13 @@ plot(density(df_for_density[match==FALSE]$dist),
      col = "blue", xlim = c(0, 0.8), main = "", xlab = "Distance")
 lines(density(df_for_density[match==TRUE]$dist),
       col = "red", xlim = c(0, 0.8))
-legend("topright",  legend = c("Non-matches", "Matches"), 
+legend("topright",  legend = c("Non-matches", "Matches"),
        col = c("blue", "red"),  lty = 1, lwd = 2)
 \end{verbatim}
 
 \begin{figure}[ht!]
 
-{\centering \includegraphics[width=0.8\linewidth,alt={A density plot of distances between units that are true matches (red) and nonmatches (blue) within blocks created by the \CRANpkg{blocking}. Distribution of the distance for matches is bimodal. There is a group of units that are true matches and the distance between is small (less than 0.2) while for the second group is similar in terms of distance to true nonmatches (between 0.4 and 0.6). This distance may be used as additional information for the deduplication (and record linkage) studies.}]{paper-blocking_files/figure-latex/dedup-density-1} 
+{\centering \includegraphics[width=0.8\linewidth,alt={A density plot of distances between units that are true matches (red) and nonmatches (blue) within blocks created by the \CRANpkg{blocking}. Distribution of the distance for matches is bimodal. There is a group of units that are true matches and the distance between is small (less than 0.2) while for the second group is similar in terms of distance to true nonmatches (between 0.4 and 0.6). This distance may be used as additional information for the deduplication (and record linkage) studies.}]{paper-blocking_files/figure-latex/dedup-density-1}
 
 }
 
@@ -767,17 +767,17 @@ legend("topright",  legend = c("Non-matches", "Matches"),
 \end{figure}
 
 Finally, we compare the evaluation metrics across all ANNs algorithms
-supported by the \texttt{blocking} function, i.e.~NND, HNSW, Annoy (from the \CRANpkg{RcppAnnoy} package),
-Locality-Sensitive Hashing (LSH, from the \CRANpkg{mlpack} package), and
-k-Nearest Neighbours (kNN -- denoted as \texttt{"kd"}, from the \CRANpkg{mlpack}
+supported by the \texttt{blocking} function, i.e.~NND, HNSW, Annoy (from the \pkg{RcppAnnoy} package),
+Locality-Sensitive Hashing (LSH, from the \pkg{mlpack} package), and
+k-Nearest Neighbours (kNN -- denoted as \texttt{"kd"}, from the \pkg{mlpack}
 package). We use the \texttt{rec\_id} and \texttt{ent\_id} columns from the \texttt{RLdata500}
 dataset to specify the true blocks and then calculate evaluation metrics
 for all algorithms.
 
 We compare our package with the \texttt{klsh()}
-function from the \CRANpkg{klsh} package, configured to create 10 blocks (denoted as \texttt{klsh\_10})
+function from the \pkg{klsh} package, configured to create 10 blocks (denoted as \texttt{klsh\_10})
 and 100 blocks (denoted as \texttt{klsh\_100}), respectively. In both settings, we use 20 random
-projections and 2-character shingles. The results are presented in Table \ref{tab-comparision}.
+projections and 2-character shingles. The results are presented in Table 2.
 
 \begin{verbatim}
 set.seed(2025)
@@ -800,10 +800,10 @@ blocks_klsh_10 <- klsh::klsh(
   k = 2)
 
 klsh_10_metrics <- klsh::confusion.from.blocking(
-  blocking = blocks_klsh_10, 
+  blocking = blocks_klsh_10,
   true_ids = RLdata500$ent_id)[-1]
 
-klsh_10_metrics$f1_score <- with(klsh_10_metrics, 
+klsh_10_metrics$f1_score <- with(klsh_10_metrics,
                                  2*precision*recall/(precision + recall))
 
 eval_metrics$klsh_10 <- unlist(klsh_10_metrics)
@@ -816,21 +816,21 @@ blocks_klsh_100 <- klsh::klsh(
   k = 2)
 
 klsh_100_metrics <- klsh::confusion.from.blocking(
-  blocking = blocks_klsh_100, 
+  blocking = blocks_klsh_100,
   true_ids = RLdata500$ent_id)[-1]
 
-klsh_100_metrics$f1_score <- with(klsh_100_metrics, 
+klsh_100_metrics$f1_score <- with(klsh_100_metrics,
                                  2*precision*recall/(precision + recall))
 
 eval_metrics$klsh_100 <- unlist(klsh_100_metrics)
 
 round(do.call(rbind, eval_metrics) * 100, 2) |>
-  kable(digits=2) 
+  kable(digits=2)
 \end{verbatim}
 
 \begin{table}
 
-\caption{\label{tab:tab-comparision}Comparison of various approximate nearest neighbours algorithms implemented in the \CRANpkg{blocking} and the \CRANpkg{klsh} package for creation of blocks for deduplication}
+\caption{\label{tab:comparision}Comparison of various approximate nearest neighbours algorithms implemented in the \CRANpkg{blocking} and the \CRANpkg{klsh} package for creation of blocks for deduplication}
 \centering
 \begin{tabular}[t]{l|r|r|r|r|r|r|r}
 \hline
@@ -862,14 +862,14 @@ These findings suggest that modern ANNs algorithms like NND, HNSW, and Annoy pro
 \section{Summary}\label{summary}
 
 In this paper we have demonstrated the basic use cases of the
-\CRANpkg{blocking} package. We believe that the software will be useful
+\pkg{blocking} package. We believe that the software will be useful
 for researchers working in various fields where integration of multiple
 sources is an important aspect. This is certainly of interest in the field of official statistics where register-based statistics relies on high-quality linkage of administrative datasets or medical studies where assessment of health statistics relies on correct linkage of medical history and the treatment outcomes or mortality records.
 
-Furthermore, users interested in integration with the \CRANpkg{reclin2} package we
+Furthermore, users interested in integration with the \pkg{reclin2} package we
 refer to the documentation of the \texttt{pair\_ann()} function and the vignette
 entitled
-\href{https://cran.r-project.org/web/packages/blocking/vignettes/v3-integration.html}{\texttt{"Integration\ with\ existing\ packages"}} which provides cases studies how the \CRANpkg{blocking} package can be included in the existing record linkage / deduplication pipelines.
+\href{https://cran.r-project.org/web/packages/blocking/vignettes/v3-integration.html}{\texttt{"Integration\ with\ existing\ packages"}} which provides cases studies how the \pkg{blocking} package can be included in the existing record linkage / deduplication pipelines.
 
 \section{Acknowledgements}\label{acknowledgements}
 
@@ -878,7 +878,7 @@ Work on this package is supported by the National Science Centre, OPUS
 2024 conference for valuable comments and discussion.
 
 We also have developed a python version of the package
-\href{https://blockingpy.readthedocs.io/en/latest/}{\{BlockingPy\}} that is
+\href{https://blockingpy.readthedocs.io/en/latest/}{BlockingPy} that is
 available through the PyPi It has the similar structure but offers more
 ANN algorithms (e.g.~FAISS) or usage of embeddings. For more details
 see: Strojny, T., \& Beręsewicz, M. (2025). BlockingPy: approximate
@@ -890,7 +890,7 @@ preprint arXiv:2504.04266.
 \address{%
 Maciej Beręsewicz\\
 University of Economics and BusinessStatisical Office in Poznań\\%
-Department of Statistics, Poznań, Poland\\ Centre for the Methodology of Population Studies\\
+Department of Statistics\\ Centre for the Methodology of Population Studies\\
 %
 \url{https://maciejberesewicz.com}\\%
 \textit{ORCiD: \href{https://orcid.org/0000-0002-8281-4301}{0000-0002-8281-4301}}\\%
@@ -900,7 +900,7 @@ Department of Statistics, Poznań, Poland\\ Centre for the Methodology of Popula
 \address{%
 Adam Struzik\\
 Adam Mickiewicz UniversityStatisical Office in Poznań\\%
-Faculty of Mathematics and Computer Science, Poznań, Poland\\ Centre for Urban Statistics\\
+Faculty of Mathematics and Computer Science\\ Centre for Urban Statistics\\
 %
 %
 %
