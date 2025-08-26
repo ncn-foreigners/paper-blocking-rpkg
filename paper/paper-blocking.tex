@@ -44,7 +44,7 @@ match above a specified threshold. For instance, a standard approach
 assumes that sex or birth year must match exactly, whilst other record
 characteristics may vary. Another method employs phonetic algorithms
 such as Soundex (cf.~\citet{Wright1960}) or its adaptations for non-English
-languages (cf.~\citet{Phonetic2020}) to block records that sound similar but
+languages (cf.~1) to block records that sound similar but
 are spelt differently (e.g., Smith and Smyth, or Anna and Ania).
 Furthermore, with the growing popularity of large language models (both
 closed and open-source), one may consider using embeddings
@@ -75,19 +75,18 @@ classification:
   \begin{itemize}
   \tightlist
   \item
-    \CRANpkg{reclin2} \citep[\citet{reclin2-rjournal}]{reclin2} allows pairing
+    \CRANpkg{reclin2} (\citet{reclin2}, \citet{reclin2-rjournal}) allows pairing
     records using \texttt{pair\_blocking()} with a prespecified list of
     columns in a \texttt{data.frame}, and the \texttt{pair\_minsim()} function,
     which allows specifying the minimal similarity score (e.g., 1
     out of 3 variable values must match exactly).
   \item
-    \CRANpkg{RecordLinkage} \citep[
-    \citet{RecordLinkage-rjournal}]{RecordLinkage} allows specifying blocking variables in
-    the \texttt{blockfld} parameter of either \texttt{compare.dedup()} or
-    \texttt{compare.linkage()} functions as a vector (either character or
-    numeric).
+    \CRANpkg{RecordLinkage} (\citet{RecordLinkage}, \citet{RecordLinkage-rjournal})
+    allows specifying blocking variables in the \texttt{blockfld} parameter
+    of either \texttt{compare.dedup()} or \texttt{compare.linkage()} functions as
+    a vector (either character or numeric).
   \item
-    \CRANpkg{fastLink} \citep[\citet{enamorado2019using}]{fastLink} implements
+    \CRANpkg{fastLink} (\citet{fastLink}, \citet{enamorado2019using}) implements
     various blocking methods via the \texttt{blockData()} function,
     including exact matching, window matching (e.g., no more than
     2-year difference between birth years), and k-means clustering.
@@ -108,10 +107,16 @@ classification:
     blocking.
   \item
     Additionally, \CRANpkg{stringdist} \citep{stringdist} implements the
-    Soundex algorithm, whilst \CRANpkg{phonics} \citep[
-    \citet{Phonetic2020}]{phonics} implements various phonetic algorithms that can
-    be applied prior to the blocking procedure (e.g., to create a
-    new column).
+    Soundex algorithm, whilst \CRANpkg{phonics} (\citet{phonics},
+
+    \begin{enumerate}
+    \def\labelenumi{\arabic{enumi})}
+    \tightlist
+    \item
+      implements various phonetic algorithms that can
+      be applied prior to the blocking procedure (e.g., to create a
+      new column).
+    \end{enumerate}
   \end{itemize}
 \item
   \textbf{Probabilistic blocking}:
@@ -119,7 +124,7 @@ classification:
   \begin{itemize}
   \tightlist
   \item
-    \CRANpkg{klsh} (\citet{klsh}) is the only R package that implements
+    \CRANpkg{klsh} \citep{klsh} is the only R package that implements
     probabilistic blocking using the k-means variant of locality
     sensitive hashing. The main \texttt{klsh()} function implements this
     approach, and the resulting object is a list containing row
@@ -144,16 +149,15 @@ cf.~\citet{johndrow2018theoretical}). The basic workflow of the
   Create shingles of the input character vectors using
   \CRANpkg{tokenizers} \citep{tokenizers} and \CRANpkg{text2vec}
   \citep{text2vec} packages, or provide a matrix of vectors (e.g.,
-  embeddings via \CRANpkg{ragnar} \citep{ragnar}) representing the input
+  embeddings via \CRANpkg{ragnar}, \citet{ragnar}) representing the input
   character vectors.
 \item
   Search for nearest neighbours using ANNs algorithms implemented in
   \CRANpkg{rnndescent} \citep{rnndescent}, \CRANpkg{RcppHNSW} \citep{RcppHNSW},
-  \CRANpkg{mlpack} \citep[\citet{mlpack2025}]{mlpack2023}, and \CRANpkg{RcppAnnoy}
+  \CRANpkg{mlpack} (\citet{mlpack2023}, \citet{mlpack2025}), and \CRANpkg{RcppAnnoy}
   \citep{RcppAnnoy}.
 \item
-  Create final blocks using \CRANpkg{igraph} \citep[
-  \citet{igraph2006}]{igraph2025}.
+  Create final blocks using \CRANpkg{igraph} (\citet{igraph2025},\citet{igraph2006}).
 \end{enumerate}
 
 This is the only package in the R ecosystem that readily applies modern
@@ -413,22 +417,13 @@ head(foreigners_1[, .(true_id, txt)])
 \end{verbatim}
 
 The default algorithm is the Nearest Neighbour Descent Method
-\citep{Dong2011} implemented in the \CRANpkg{rnndescent} package.
-Additionally, we set verbose = 1 to monitor progress. Note that a
+\citep{Dong2011} implemented in the \CRANpkg{rnndescent} package. Note that a
 default parameter of the blocking() function is seed = 2023, which sets
-the random seed (\texttt{t:\ 1232} denotes how many 2-character shingles were
-created).
+the random seed.
 
 \begin{verbatim}
 result_reclin <- blocking(x = foreigners_1$txt,
-                          y = foreigners_2$txt,
-                          verbose = 1)
-\end{verbatim}
-
-\begin{verbatim}
-#> ===== creating tokens =====
-#> ===== starting search (nnd, x, y: 100000, 10000, t: 1232) =====
-#> ===== creating graph =====
+                          y = foreigners_2$txt)
 \end{verbatim}
 
 Now, we can examine the results by printing the \texttt{result\_reclin} object.
@@ -536,14 +531,7 @@ linkage.
 \begin{verbatim}
 res_reclin <- blocking(x = foreigners_1$txt,
                        y = foreigners_2$txt,
-                       verbose = 1,
                        true_blocks = matches[, .(x, y, block)])
-\end{verbatim}
-
-\begin{verbatim}
-#> ===== creating tokens =====
-#> ===== starting search (nnd, x, y: 100000, 10000, t: 1232) =====
-#> ===== creating graph =====
 \end{verbatim}
 
 \begin{verbatim}
@@ -568,8 +556,7 @@ res_reclin
 #>     86.7795
 \end{verbatim}
 
-For example, our approach results in a
-3.25\% FNR. To improve this,
+For example, our approach results in a~3.25\% FNR. To improve this,
 we can increase the epsilon parameter of the NND method from 0.1 to 0.5.
 To do so, we configure the \texttt{control\_ann} parameter in the \texttt{blocking()}
 function using the \texttt{controls\_ann()} and \texttt{control\_nnd()} functions.
@@ -577,15 +564,8 @@ function using the \texttt{controls\_ann()} and \texttt{control\_nnd()} function
 \begin{verbatim}
 res_reclin2 <- blocking(x = foreigners_1$txt,
                         y = foreigners_2$txt,
-                        verbose = 1,
                         true_blocks = matches[, .(x, y, block)],
                         control_ann = controls_ann(nnd = control_nnd(epsilon = 0.5)))
-\end{verbatim}
-
-\begin{verbatim}
-#> ===== creating tokens =====
-#> ===== starting search (nnd, x, y: 100000, 10000, t: 1232) =====
-#> ===== creating graph =====
 \end{verbatim}
 
 \begin{verbatim}
@@ -595,23 +575,23 @@ res_reclin2
 \begin{verbatim}
 #> ========================================================
 #> Blocking based on the nnd method.
-#> Number of blocks: 6394.
+#> Number of blocks: 6470.
 #> Number of columns used for blocking: 1232.
 #> Reduction ratio: 0.9999.
 #> ========================================================
 #> Distribution of the size of the blocks:
-#>    2    3    4    5    7 
-#> 3800 1615  954   21    4 
+#>    2    3    4    5    6    7 
+#> 3920 1599  928   19    2    2 
 #> ========================================================
 #> Evaluation metrics (standard):
 #>      recall   precision         fpr         fnr    accuracy specificity 
-#>     96.8776     80.0500      0.0036      3.1224     99.9960     99.9964 
+#>     96.7532     78.6700      0.0038      3.2468     99.9957     99.9962 
 #>    f1_score 
-#>     87.6636
+#>     86.7795
 \end{verbatim}
 
 That decreases the FNR to
-3.12\%.
+3.25\%.
 
 Now, to use the result in the record linkage process, we add this
 information to both datasets and specify it in the appropriate argument
@@ -646,15 +626,15 @@ pair_blocking(x = foreigners_1,
 
 \subsection{An example of blocking for deduplication}\label{an-example-of-blocking-for-deduplication}
 
-In this section, we demonstrate a deduplication application using the
+In this section, we demonstrate a~deduplication application using the
 \texttt{blocking()} function on the \texttt{RLdata500} dataset from the
 \CRANpkg{RecordLinkage} package. Note that the dataset is included in
 the \texttt{blocking} package. It contains artificial personal data, and fifty
 records have been duplicated with randomly generated errors. Each row
 represents one record, with the following columns: \texttt{fname\_c1} -- first
 name, \texttt{fname\_c2} -- second name, \texttt{lname\_c1} -- last name, \texttt{lname\_c2} --
-last name (second component), \texttt{by}, \texttt{bm}, \texttt{bd} -- year, month, and day of
-birth, \texttt{rec\_id} -- record ID, and \texttt{ent\_id} -- entity ID.
+last name (second component), \texttt{by}, \texttt{bm}, \texttt{bd} -- year, month, and day
+of birth, \texttt{rec\_id} -- record ID, and \texttt{ent\_id} -- entity ID.
 
 \begin{verbatim}
 data("RLdata500")
@@ -672,11 +652,11 @@ head(RLdata500)
 #> 6:  JUERGEN            FRANKE           1929     7     4      6    142
 \end{verbatim}
 
-For the purpose of this example, we create a new column (\texttt{id\_count}) that
-indicates how many times a given unit occurs, and then add leading zeros
-to the \texttt{bm} and \texttt{bd} columns. Finally, we create a new string column
-that concatenates information from all columns (excluding \texttt{rec\_id},
-\texttt{ent\_id}, and \texttt{id\_count}), as presented below.
+For the purpose of this example, we create a new column (\texttt{id\_count})
+that indicates how many times a given unit occurs, and then add leading
+zeros to the \texttt{bm} and \texttt{bd} columns. Finally, we create a new string
+column that concatenates information from all columns (excluding
+\texttt{rec\_id}, \texttt{ent\_id}, and \texttt{id\_count}), as presented below.
 
 \begin{verbatim}
 RLdata500[, id_count :=.N, ent_id]
@@ -713,8 +693,8 @@ res_dedup <- blocking(x = RLdata500$txt,
 #> ===== creating graph =====
 \end{verbatim}
 
-The results are as follows. This time, the HNSW algorithm provided blocks
-varying from 2 to 17 units.
+The results are as follows. This time, the HNSW algorithm provided
+blocks varying from 2 to 17 units.
 
 \begin{verbatim}
 res_dedup
@@ -751,16 +731,11 @@ RLdata500[, .(uniq_blocks = uniqueN(block_id)), .(ent_id)][, .N, uniq_blocks]
 #> 1:           1   450
 \end{verbatim}
 
-Additionally, we visualise the result based on whether a
-block contains matches or not.
-
-\begin{verbatim}
-#> pdf 
-#>   2
-\end{verbatim}
+Additionally, we visualise the result based on whether a block contains
+matches or not.
 
 \begin{figure}
-\includegraphics[width=0.8\linewidth,height=0.3\textheight,alt={A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the \CRANpkg{blocking}. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies.}]{./figures/fig-1-density} \caption{Distribution of distances between true matches and non-matches within blocks}\label{fig:penguins-alison}
+\includegraphics[width=0.8\linewidth,alt={A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the \CRANpkg{blocking}. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies.}]{./figures/fig-1-density} \caption{Distribution of distances between true matches and non-matches within blocks}\label{fig:penguins-alison}
 \end{figure}
 
 Finally, we compare the evaluation metrics across all ANN algorithms
@@ -854,20 +829,20 @@ klsh\_100 & 90 & 3.72 & 0.94 & 10 & 99.06 & 99.06 & 7.14\\
 The results demonstrate a clear performance hierarchy among the ANN
 algorithms implemented in the \texttt{blocking} package, with traditional
 tree-based methods (NND, HNSW, Annoy, and kNN) achieving perfect recall
-(100\%) whilst maintaining excellent precision and F1 scores around 5-10\%.
-Notably, these methods exhibit minimal FPR (0.73-0.80\%) and maintain
-high specificity (99.20-99.27\%), indicating their effectiveness in
-creating tight, accurate blocks.
+(100\%) whilst maintaining excellent precision and F1 scores around
+5-10\%. Notably, these methods exhibit minimal FPR (0.73-0.80\%) and
+maintain high specificity (99.20-99.27\%), indicating their effectiveness
+in creating tight, accurate blocks.
 
 In contrast, the LSH-based methods show more variable performance: the
 \texttt{mlpack} LSH implementation achieves 98\% recall but suffers from higher
-FPR (3.74\%) and, importantly, FNR (2\%), whilst the \texttt{klsh} package results
-reveal a trade-off between block granularity and performance --
-\texttt{klsh\_10} with only 10 blocks shows poor recall (84\%), high FPR (10.13\%),
-and FNR (16\%), whereas \texttt{klsh\_100} with 100 blocks recovers much of the
-performance (90\% recall, 0.94\% FPR, but high FNR of 10\%). This indicates that
-the \texttt{klsh}, particularly these implementations of the LSH approach,
-misses a large number of true matches.
+FPR (3.74\%) and, importantly, FNR (2\%), whilst the \texttt{klsh} package
+results reveal a trade-off between block granularity and performance --
+\texttt{klsh\_10} with only 10 blocks shows poor recall (84\%), high FPR
+(10.13\%), and FNR (16\%), whereas \texttt{klsh\_100} with 100 blocks recovers
+much of the performance (90\% recall, 0.94\% FPR, but high FNR of 10\%).
+This indicates that the \texttt{klsh}, particularly these implementations of
+the LSH approach, misses a large number of true matches.
 
 These findings suggest that modern ANN algorithms like NND, HNSW, and
 Annoy provide superior blocking performance for entity resolution tasks,
@@ -881,16 +856,17 @@ In this paper, we have demonstrated the basic use cases of the
 for researchers working in various fields where integration of multiple
 sources is an important aspect. This is certainly of interest in the
 field of official statistics, where register-based statistics rely on
-high-quality linkage of administrative datasets, or medical studies, where
-assessment of health statistics relies on correct linkage of medical
-history with treatment outcomes or mortality records.
+high-quality linkage of administrative datasets, or medical studies,
+where assessment of health statistics relies on correct linkage of
+medical history with treatment outcomes or mortality records.
 
-Furthermore, for users interested in integration with the \CRANpkg{reclin2}
-package, we refer to the documentation of the \texttt{pair\_ann()} function and
-the vignette entitled
+Furthermore, for users interested in integration with the
+\CRANpkg{reclin2} package, we refer to the documentation of the
+\texttt{pair\_ann()} function and the vignette entitled
 \href{https://cran.r-project.org/web/packages/blocking/vignettes/v3-integration.html}{\texttt{"Integration\ with\ existing\ packages"}},
-which provides case studies demonstrating how the \CRANpkg{blocking} package can be
-included in existing record linkage/deduplication pipelines.
+which provides case studies demonstrating how the \CRANpkg{blocking}
+package can be included in existing record linkage/deduplication
+pipelines.
 
 \section{Acknowledgements}\label{acknowledgements}
 
@@ -899,11 +875,12 @@ Work on this package is supported by the National Science Centre, OPUS
 2024 conference for valuable comments and discussion.
 
 We have also developed a Python version of the package,
-\href{https://blockingpy.readthedocs.io/en/latest/}{\texttt{BlockingPy}}, which is available through PyPI. It has a similar structure but offers more
-ANN algorithms (e.g., FAISS) and enables the use of embeddings. For more details,
-see: Strojny, T., \& Beręsewicz, M. (2025). BlockingPy: Approximate
-nearest neighbours for blocking of records for entity resolution. arXiv
-preprint arXiv:2504.04266.
+\href{https://blockingpy.readthedocs.io/en/latest/}{\texttt{BlockingPy}}, which is
+available through PyPI. It has a similar structure but offers more ANN
+algorithms (e.g., FAISS) and enables the use of embeddings. For more
+details, see: Strojny, T., \& Beręsewicz, M. (2025). BlockingPy:
+Approximate nearest neighbours for blocking of records for entity
+resolution. arXiv preprint arXiv:2504.04266.
 
 \bibliography{RJreferences.bib}
 

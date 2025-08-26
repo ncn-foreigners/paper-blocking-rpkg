@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.8.20)  25 AUG 2025 16:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2025.8.20)  26 AUG 2025 17:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -745,12 +745,12 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 
-Overfull \hbox (6.19945pt too wide) in paragraph at lines 104--110
+Overfull \hbox (6.19945pt too wide) in paragraph at lines 103--109
 [][][]\T1/ppl/b/n/10 (-20) RecordLinkage[][] \T1/ppl/m/n/10 (-20) al-lows di-rect spec-i-fi-ca-tion of pho-netic com-par-i-son via the \T1/zi4/m/n/10 phonetic
  []
 
 
-Overfull \hbox (10.05826pt too wide) in paragraph at lines 104--110
+Overfull \hbox (10.05826pt too wide) in paragraph at lines 103--109
 \T1/ppl/m/n/10 (-20) ar-gu-ment in \T1/zi4/m/n/10 compare.dedup() \T1/ppl/m/n/10 (-20) or \T1/zi4/m/n/10 compare.linkage() \T1/ppl/m/n/10 (-20) func-tions us-ing the \T1/zi4/m/n/10 soundex()
  []
 
@@ -758,24 +758,24 @@ Overfull \hbox (10.05826pt too wide) in paragraph at lines 104--110
 
 [2{/Users/berenz/Library/TinyTeX/texmf-dist/fonts/enc/dvips/inconsolata/i4-t1-0.enc}]
 LaTeX Font Info:    Font shape `T1/zi4/b/n' will be
-(Font)              scaled to size 12.24005pt on input line 174.
-LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 248.
+(Font)              scaled to size 12.24005pt on input line 178.
+LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 252.
 (/Users/berenz/Library/TinyTeX/texmf-dist/tex/latex/psnfss/ot1ppl.fd
 File: ot1ppl.fd 2001/06/04 font definitions for OT1/ppl.
 )
-LaTeX Font Info:    Trying to load font information for OML+zplm on input line 248.
+LaTeX Font Info:    Trying to load font information for OML+zplm on input line 252.
 (/Users/berenz/Library/TinyTeX/texmf-dist/tex/latex/psnfss/omlzplm.fd
 File: omlzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OML/zplm.
 )
-LaTeX Font Info:    Trying to load font information for OMS+zplm on input line 248.
+LaTeX Font Info:    Trying to load font information for OMS+zplm on input line 252.
 (/Users/berenz/Library/TinyTeX/texmf-dist/tex/latex/psnfss/omszplm.fd
 File: omszplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMS/zplm.
 )
-LaTeX Font Info:    Trying to load font information for OMX+zplm on input line 248.
+LaTeX Font Info:    Trying to load font information for OMX+zplm on input line 252.
 (/Users/berenz/Library/TinyTeX/texmf-dist/tex/latex/psnfss/omxzplm.fd
 File: omxzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMX/zplm.
 )
-LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 248.
+LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 252.
 (/Users/berenz/Library/TinyTeX/texmf-dist/tex/latex/psnfss/ot1zplm.fd
 File: ot1zplm.fd 2002/09/08 Fontinst v1.914 font definitions for OT1/zplm.
 )
@@ -784,23 +784,23 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 10.42007pt on input line 248.
+(Font)              scaled to size 10.42007pt on input line 252.
 (/Users/berenz/Library/TinyTeX/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 7.91925pt on input line 248.
+(Font)              scaled to size 7.91925pt on input line 252.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 248.
+(Font)              scaled to size 6.25204pt on input line 252.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 10.42007pt on input line 248.
+(Font)              scaled to size 10.42007pt on input line 252.
 (/Users/berenz/Library/TinyTeX/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 7.91925pt on input line 248.
+(Font)              scaled to size 7.91925pt on input line 252.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 248.
+(Font)              scaled to size 6.25204pt on input line 252.
 
 
 [3]
@@ -808,26 +808,26 @@ LaTeX Font Info:    Font shape `U/msb/m/n' will be
 [4]
 
 [5]
-Overfull \hbox (5.79631pt too wide) in paragraph at lines 467--470
+Overfull \hbox (5.79631pt too wide) in paragraph at lines 462--465
 []\T1/zi4/m/n/10 x \T1/ppl/m/n/10 (-20) -- ref-er-ence dataset (i.e., \T1/zi4/m/n/10 foreigners_1\T1/ppl/m/n/10 (-20) ) -- this may not con-tain all units of \T1/zi4/m/n/10 foreigners_1\T1/ppl/m/n/10 (-20) ; 
  []
 
 
 
 [6]
-Overfull \hbox (21.83835pt too wide) in paragraph at lines 571--576
+Overfull \hbox (21.83835pt too wide) in paragraph at lines 559--563
 \T1/zi4/m/n/10 control_ann \T1/ppl/m/n/10 (-20) pa-ram-e-ter in the \T1/zi4/m/n/10 blocking() \T1/ppl/m/n/10 (-20) func-tion us-ing the \T1/zi4/m/n/10 controls_ann() \T1/ppl/m/n/10 (-20) and \T1/zi4/m/n/10 control_nnd()
  []
 
 
 
 [7]
-LaTeX Font Info:    Trying to load font information for TS1+zi4 on input line 645.
+LaTeX Font Info:    Trying to load font information for TS1+zi4 on input line 625.
 (/Users/berenz/Library/TinyTeX/texmf-dist/tex/latex/inconsolata/ts1zi4.fd
 File: ts1zi4.fd 2018/01/14 TS1/zi4 (Inconsolata)
 )
 LaTeX Font Info:    Font shape `TS1/zi4/m/n' will be
-(Font)              scaled to size 10.20004pt on input line 645.
+(Font)              scaled to size 10.20004pt on input line 625.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `zi4' (encoding: TS1).
 (microtype)             For optimal results, create family-specific settings.
@@ -835,23 +835,23 @@ Package microtype Info: Loading generic protrusion settings for font family
 
 
 [8{/Users/berenz/Library/TinyTeX/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}]
-
-[9]
-<./figures/fig-1-density.png, id=240, 481.8pt x 481.8pt>
+<./figures/fig-1-density.png, id=230, 2409.0pt x 1606.0pt>
 File: ./figures/fig-1-density.png Graphic file (type png)
 <use ./figures/fig-1-density.png>
-Package pdftex.def Info: ./figures/fig-1-density.png  used on input line 763.
-(pdftex.def)             Requested size: 318.68002pt x 212.53667pt.
+Package pdftex.def Info: ./figures/fig-1-density.png  used on input line 738.
+(pdftex.def)             Requested size: 318.67207pt x 212.43866pt.
 
+
+[9]
 
 [10 <./figures/fig-1-density.png>]
-
-[11]
-Overfull \hbox (68.75006pt too wide) in paragraph at lines 897--900
+Overfull \hbox (68.75006pt too wide) in paragraph at lines 873--876
 \T1/ppl/m/n/10 (-20) Work on this pack-age is sup-ported by the Na-tional Sci-ence Cen-tre, OPUS 20 grant no. 2020/39/B/HS4/00941.
  []
 
-(./RJwrapper.bbl (./RJwrapper.brf)
+
+
+[11] (./RJwrapper.bbl (./RJwrapper.brf)
 \tf@brf=\write6
 \openout6 = `RJwrapper.brf'.
 
@@ -862,10 +862,10 @@ Overfull \hbox (68.75006pt too wide) in paragraph at lines 897--900
 [13])
 
 LaTeX Font Warning: Font shape `T1/zi4/m/it' undefined
-(Font)              using `T1/zi4/m/n' instead on input line 918.
+(Font)              using `T1/zi4/m/n' instead on input line 895.
 
 LaTeX Font Info:    Font shape `T1/zi4/m/it' will be
-(Font)              scaled to size 10.20004pt on input line 918.
+(Font)              scaled to size 10.20004pt on input line 895.
 )
 
 [14] (./RJwrapper.aux)
@@ -879,21 +879,21 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 Package rerunfilecheck Info: File `RJwrapper.out' has not changed.
 (rerunfilecheck)             Checksum: 7CB05242BDE493423CF83E0BB612CDE8;2767.
 Package rerunfilecheck Info: File `RJwrapper.brf' has not changed.
-(rerunfilecheck)             Checksum: EF207354DD0FFFC592D11FD84C2CC853;1697.
+(rerunfilecheck)             Checksum: 9F7E64A1CEEA9727924B39C2E2A0FD25;1567.
  ) 
 Here is how much of TeX's memory you used:
- 27285 strings out of 469720
- 496112 string characters out of 5479434
- 916328 words of memory out of 5000000
- 54838 multiletter control sequences out of 15000+600000
- 671686 words of font info for 285 fonts, out of 8000000 for 9000
+ 27288 strings out of 469720
+ 496068 string characters out of 5479434
+ 916298 words of memory out of 5000000
+ 54832 multiletter control sequences out of 15000+600000
+ 672007 words of font info for 291 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 117i,11n,131p,1006b,920s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 117i,11n,131p,1006b,925s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </Users/berenz/Library/TinyTeX/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4b.pfb></Users/berenz/Library/TinyTeX/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb></Users/berenz/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/berenz/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></Users/berenz/Library/TinyTeX/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></Users/berenz/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></Users/berenz/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></Users/berenz/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on RJwrapper.pdf (14 pages, 198224 bytes).
+Output written on RJwrapper.pdf (14 pages, 285175 bytes).
 PDF statistics:
- 403 PDF objects out of 1000 (max. 8388607)
- 362 compressed objects within 4 object streams
+ 401 PDF objects out of 1000 (max. 8388607)
+ 360 compressed objects within 4 object streams
  68 named destinations out of 1000 (max. 500000)
  56442 words of extra memory for PDF output out of 61914 (max. 10000000)
 

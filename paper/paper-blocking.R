@@ -32,10 +32,13 @@ foreigners_2[, txt := paste0(fname, sname, surname, gsub("/", "", date),
 head(foreigners_1[, .(true_id, txt)])
 
 
-## ----reclin_nnd, echo = TRUE--------------------------------------------------
-result_reclin <- blocking(x = foreigners_1$txt,
-                          y = foreigners_2$txt,
-                          verbose = 1)
+## ----reclin_nnd, echo = TRUE, eval = FALSE------------------------------------
+# result_reclin <- blocking(x = foreigners_1$txt,
+#                           y = foreigners_2$txt)
+
+
+## ----reclin_nnd_load, echo = FALSE--------------------------------------------
+result_reclin <- readRDS("data/result_reclin.rds")
 
 
 ## ----reclin_nnd_calcs---------------------------------------------------------
@@ -65,20 +68,32 @@ matches[, block := rleid(x)]
 head(matches)
 
 
-## ----reclin_nnd_true_blocks, echo = TRUE--------------------------------------
-res_reclin <- blocking(x = foreigners_1$txt,
-                       y = foreigners_2$txt,
-                       verbose = 1,
-                       true_blocks = matches[, .(x, y, block)])
+## ----reclin_nnd_true_blocks, echo = TRUE, eval = FALSE------------------------
+# res_reclin <- blocking(x = foreigners_1$txt,
+#                        y = foreigners_2$txt,
+#                        true_blocks = matches[, .(x, y, block)])
+
+
+## ----reclin_nnd_true_blocks_load, echo = FALSE--------------------------------
+res_reclin <- readRDS("data/result_reclin_matches.rds")
+
+
+## ----reclin_nnd_true_blocks_print, echo = TRUE--------------------------------
 res_reclin
 
 
-## ----reclin_nnd_improved, echo = TRUE-----------------------------------------
-res_reclin2 <- blocking(x = foreigners_1$txt,
-                        y = foreigners_2$txt,
-                        verbose = 1,
-                        true_blocks = matches[, .(x, y, block)],
-                        control_ann = controls_ann(nnd = control_nnd(epsilon = 0.5)))
+## ----reclin_nnd_improved, echo = TRUE, eval = FALSE---------------------------
+# res_reclin2 <- blocking(x = foreigners_1$txt,
+#                         y = foreigners_2$txt,
+#                         true_blocks = matches[, .(x, y, block)],
+#                         control_ann = controls_ann(nnd = control_nnd(epsilon = 0.5)))
+
+
+## ----reclin_nnd_improved_load, echo = FALSE-----------------------------------
+res_reclin2 <- readRDS("data/result_reclin_matches.rds")
+
+
+## ----reclin_nnd_improved_print, echo = TRUE-----------------------------------
 res_reclin2
 
 
@@ -124,7 +139,15 @@ RLdata500[, .(uniq_blocks = uniqueN(block_id)), .(ent_id)][, .N, uniq_blocks]
 
 
 ## ----fig-save, results = 'hide'-----------------------------------------------
-png(file = "./figures/fig-1-density.png")
+png(file = "./figures/fig-1-density.png", 
+    width = 2400,
+    height = 1600,
+    res = 300,  
+    pointsize = 12)
+
+par(mar = c(5, 5, 2, 2))  # Adjust margins
+
+
 df_for_density <- copy(df_block_melted[block %in% RLdata500$block_id])
 df_for_density[, match:= block %in% RLdata500[id_count == 2]$block_id]
 
@@ -137,7 +160,7 @@ legend("topright",  legend = c("Non-matches", "Matches"),
 dev.off()
 
 
-## ----penguins-alison, out.width = "80%", out.height = "30%", fig.cap = "Distribution of distances between true matches and non-matches within blocks", fig.alt="A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the \\CRANpkg{blocking}. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies."----
+## ----penguins-alison, out.width = "80%", fig.cap = "Distribution of distances between true matches and non-matches within blocks", fig.alt="A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the \\CRANpkg{blocking}. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies."----
 knitr::include_graphics("./figures/fig-1-density.png")
 
 

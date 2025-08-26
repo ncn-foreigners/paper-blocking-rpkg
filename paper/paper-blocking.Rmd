@@ -325,16 +325,18 @@ head(foreigners_1[, .(true_id, txt)])
 ```
 
 The default algorithm is the Nearest Neighbour Descent Method
-[@Dong2011] implemented in the \CRANpkg{rnndescent} package.
-Additionally, we set verbose = 1 to monitor progress. Note that a
+[@Dong2011] implemented in the \CRANpkg{rnndescent} package. Note that a
 default parameter of the blocking() function is seed = 2023, which sets
-the random seed (`t: 1232` denotes how many 2-character shingles were
-created).
+the random seed.
 
-```{r reclin_nnd, echo = TRUE}
+
+```{r reclin_nnd, echo = TRUE, eval = FALSE}
 result_reclin <- blocking(x = foreigners_1$txt,
-                          y = foreigners_2$txt,
-                          verbose = 1)
+                          y = foreigners_2$txt)
+```
+
+```{r reclin_nnd_load, echo = FALSE}
+result_reclin <- readRDS("data/result_reclin.rds")
 ```
 
 ```{r reclin_nnd_calcs}
@@ -396,11 +398,17 @@ argument of the `blocking()` function to specify the true block
 assignments. We obtain quality metrics for the assessment of record
 linkage.
 
-```{r reclin_nnd_true_blocks, echo = TRUE}
+```{r reclin_nnd_true_blocks, echo = TRUE, eval = FALSE}
 res_reclin <- blocking(x = foreigners_1$txt,
                        y = foreigners_2$txt,
-                       verbose = 1,
                        true_blocks = matches[, .(x, y, block)])
+```
+
+```{r reclin_nnd_true_blocks_load, echo = FALSE}
+res_reclin <- readRDS("data/result_reclin_matches.rds")
+```
+
+```{r reclin_nnd_true_blocks_print, echo = TRUE}
 res_reclin
 ```
 
@@ -409,12 +417,18 @@ we can increase the epsilon parameter of the NND method from 0.1 to 0.5.
 To do so, we configure the `control_ann` parameter in the `blocking()`
 function using the `controls_ann()` and `control_nnd()` functions.
 
-```{r reclin_nnd_improved, echo = TRUE}
+```{r reclin_nnd_improved, echo = TRUE, eval = FALSE}
 res_reclin2 <- blocking(x = foreigners_1$txt,
                         y = foreigners_2$txt,
-                        verbose = 1,
                         true_blocks = matches[, .(x, y, block)],
                         control_ann = controls_ann(nnd = control_nnd(epsilon = 0.5)))
+```
+
+```{r reclin_nnd_improved_load, echo = FALSE}
+res_reclin2 <- readRDS("data/result_reclin_matches.rds")
+```
+
+```{r reclin_nnd_improved_print, echo = TRUE}
 res_reclin2
 ```
 
@@ -524,7 +538,7 @@ legend("topright",  legend = c("Non-matches", "Matches"),
 dev.off()
 ```
 
-```{r penguins-alison, out.width = "80%", out.height = "30%", fig.cap = "Distribution of distances between true matches and non-matches within blocks", fig.alt="A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the \\CRANpkg{blocking}. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies."}
+```{r penguins-alison, out.width = "80%", fig.cap = "Distribution of distances between true matches and non-matches within blocks", fig.alt="A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the \\CRANpkg{blocking}. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies."}
 knitr::include_graphics("./figures/fig-1-density.png")
 ```
 
@@ -638,7 +652,7 @@ pipelines.
 # Acknowledgements
 
 Work on this package is supported by the National Science Centre, OPUS
-20 grant no. 2020/39/B/HS4/00941. We also thank participants of the uRos
+20 grant no. 2020/39/B/HS4/00941. We also thank participants of the uRos
 2024 conference for valuable comments and discussion.
 
 We have also developed a Python version of the package,
