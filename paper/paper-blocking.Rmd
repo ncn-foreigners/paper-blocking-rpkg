@@ -1,9 +1,9 @@
 ---
 title: "blocking: An R Package for Blocking of Records for Record Linkage and Deduplication"
-date: "2025-08-26"
+date: "2025-08-27"
 abstract: >
-  Entity resolution (probabilistic record linkage, deduplication) is essential for estimation based on multiple sources. It aims to link records without common identifiers that refer to the same entity (e.g., person, company). Without identifiers, researchers must specify which records to compare to calculate matching probability and reduce computational complexity. Traditional deterministic blocking uses common variables like names or dates of birth, but assumes error-free, complete data. To address this limitation, we developed the R package **blocking**, which uses approximate nearest neighbour search and graph algorithms to reduce number of  comparisons. This paper presents the package design, functionalities, and two case studies.
-draft: true
+  Entity resolution (probabilistic record linkage, deduplication) is essential for estimation based on multiple sources. It aims to link records without common identifiers that refer to the same entity (e.g., person, company). Without identifiers, researchers must specify which records to compare to calculate matching probability and reduce computational complexity. Traditional deterministic blocking uses common variables like first letters of names, sex, or dates of birth, but assumes error-free, complete data. To address this limitation, we developed the R package **blocking**, which uses approximate nearest neighbor search and graph algorithms to reduce the number of comparisons. This paper presents the package design, functionalities, and two case studies.
+draft: false
 author:  
   - name: Maciej Beręsewicz
     affiliation: 
@@ -70,7 +70,7 @@ match above a specified threshold. For instance, a standard approach
 assumes that sex or birth year must match exactly, whilst other record
 characteristics may vary. Another method employs phonetic algorithms
 such as Soundex (cf. @Wright1960) or its adaptations for non-English
-languages (cf. @Phonetic2020) to block records that sound similar but
+languages (cf. @Howard2020) to block records that sound similar but
 are spelt differently (e.g., Smith and Smyth, or Anna and Ania).
 Furthermore, with the growing popularity of large language models (both
 closed and open-source), one may consider using embeddings
@@ -106,7 +106,7 @@ classification:
     -   \CRANpkg{fastLink} (@fastLink, @enamorado2019using) implements
         various blocking methods via the `blockData()` function,
         including exact matching, window matching (e.g., no more than
-        2-year difference between birth years), and k-means clustering.
+        2-year difference between birth years), and $k$-means clustering.
         Notably, `fastLink` returns datasets split into separate lists,
         whilst `reclin2` and `RecordLinkage` packages create a single
         dataset.
@@ -117,13 +117,11 @@ classification:
         However, this is used for string comparison rather than
         blocking.
     -   Additionally, \CRANpkg{stringdist} [@stringdist] implements the
-        Soundex algorithm, whilst \CRANpkg{phonics} (@phonics,
-        @Phonetic2020) implements various phonetic algorithms that can
-        be applied prior to the blocking procedure (e.g., to create a
+        Soundex algorithm, whilst \CRANpkg{phonics} [@phonics] implements various phonetic algorithms that can be applied prior to the blocking procedure (e.g., to create a
         new column).
 -   **Probabilistic blocking**:
     -   \CRANpkg{klsh} [@klsh] is the only R package that implements
-        probabilistic blocking using the k-means variant of locality
+        probabilistic blocking using the $k$-means variant of locality
         sensitive hashing. The main `klsh()` function implements this
         approach, and the resulting object is a list containing row
         identifiers for the prespecified number of blocks (via the
@@ -134,8 +132,9 @@ present in blocking/matching variables (such as birth dates) or typos
 may occur in names and surnames. Therefore, we developed
 \CRANpkg{blocking}, which leverages approximate nearest neighbour (ANN)
 algorithms and graphs to create numerous small blocks that can be used
-in subsequent analysis (this approach is similar to micro-clustering;
-cf. @johndrow2018theoretical). The basic workflow of the
+in subsequent analysis. This approach is similar to micro-clustering
+(cf. @johndrow2018theoretical), but we do not aim at providing the final 
+linkage of units between or within sources. The basic workflow of the
 \CRANpkg{blocking} package consists of the following steps:
 
 1.  Create shingles of the input character vectors using
@@ -143,14 +142,14 @@ cf. @johndrow2018theoretical). The basic workflow of the
     [@text2vec] packages, or provide a matrix of vectors (e.g.,
     embeddings via \CRANpkg{ragnar}, @ragnar) representing the input
     character vectors.
-2.  Search for nearest neighbours using ANNs algorithms implemented in
+2.  Search for nearest neighbours using ANN algorithms implemented in
     \CRANpkg{rnndescent} [@rnndescent], \CRANpkg{RcppHNSW} [@RcppHNSW],
     \CRANpkg{mlpack} (@mlpack2023, @mlpack2025), and \CRANpkg{RcppAnnoy}
     [@RcppAnnoy].
 3.  Create final blocks using \CRANpkg{igraph} (@igraph2025,@igraph2006).
 
 This is the only package in the R ecosystem that readily applies modern
-ANNs algorithms to reduce the number of comparisons and significantly
+ANN algorithms to reduce the number of comparisons and significantly
 accelerate record linkage and deduplication tasks. Additionally, we have
 developed the `pair_ann()` function for seamless integration with the
 \CRANpkg{reclin2} package, as described in one of the package vignettes.
@@ -176,7 +175,7 @@ contains the following key arguments:
 -   `representation` -- whether `x` and `y` should be represented as
     shingles or vectors (e.g., provided by the user via the `model`
     argument);
--   `ann` -- which ANNs algorithm should be applied (by default, we use
+-   `ann` -- which ANN algorithm should be applied (by default, we use
     the \CRANpkg{rnndescent} package as it supports sparse matrices);
 -   `distance` -- which distance metric should be applied (default is
     `cosine` distance);
@@ -189,7 +188,7 @@ contains the following key arguments:
 -   `control_txt` -- controls provided via `controls_txt()` specifying
     how `x, y` are processed;
 -   `control_ann` -- controls provided via `controls_ann()` allowing
-    users to fine-tune the ANNs algorithm (see documentation for the
+    users to fine-tune the ANN algorithm (see documentation for the
     `controls_ann()` function and `control_*` functions with names
     referring to specific algorithms, e.g., `control_nnd()` for the NND
     algorithm).
@@ -199,7 +198,7 @@ following elements:
 
 -   `result` -- a `data.table` with indices (rows) of x, y, block, and
     distance between points;
--   `method` -- name of the ANNs algorithm used;
+-   `method` -- name of the ANN algorithm used;
 -   `deduplication` -- information about whether deduplication was
     applied;
 -   `representation` -- information about whether shingles or vectors
@@ -269,6 +268,7 @@ Table 1.
 
 : Evaluation Metrics
 
+
 # Case studies {#sec-case}
 
 ## An example of blocking for record linkage
@@ -326,7 +326,7 @@ head(foreigners_1[, .(true_id, txt)])
 
 The default algorithm is the Nearest Neighbour Descent Method
 [@Dong2011] implemented in the \CRANpkg{rnndescent} package. Note that a
-default parameter of the blocking() function is seed = 2023, which sets
+default parameter of the `blocking()` function is `seed = 2023`, which sets
 the random seed.
 
 
@@ -545,7 +545,7 @@ knitr::include_graphics("./figures/fig-1-density.png")
 Finally, we compare the evaluation metrics across all ANN algorithms
 supported by the `blocking()` function, i.e., NND, HNSW, Annoy (from the
 \CRANpkg{RcppAnnoy} package), Locality-Sensitive Hashing (LSH, from the
-\CRANpkg{mlpack} package), and k-Nearest Neighbours (kNN -- denoted as
+\CRANpkg{mlpack} package), and $k$-Nearest Neighbours (kNN -- denoted as
 `"kd"`, from the \CRANpkg{mlpack} package). We use the `rec_id` and
 `ent_id` columns from the `RLdata500` dataset to specify the true blocks
 and then calculate evaluation metrics for all algorithms.
@@ -574,9 +574,7 @@ for (algorithm in ann) {
 blocks_klsh_10 <- klsh::klsh(
   r.set = RLdata500[, c("fname_c1", "fname_c2", "lname_c1",
                         "lname_c2", "by", "bm", "bd")],
-  p = 20,
-  num.blocks = 10,
-  k = 2)
+  p = 20, num.blocks = 10, k = 2)
 
 klsh_10_metrics <- klsh::confusion.from.blocking(
   blocking = blocks_klsh_10, 
@@ -590,9 +588,7 @@ eval_metrics$klsh_10 <- unlist(klsh_10_metrics)
 blocks_klsh_100 <- klsh::klsh(
   r.set = RLdata500[, c("fname_c1", "fname_c2", "lname_c1",
                         "lname_c2", "by", "bm", "bd")],
-  p = 20,
-  num.blocks = 100,
-  k = 2)
+  p = 20, num.blocks = 100, k = 2)
 
 klsh_100_metrics <- klsh::confusion.from.blocking(
   blocking = blocks_klsh_100, 
@@ -603,8 +599,7 @@ klsh_100_metrics$f1_score <- with(klsh_100_metrics,
 
 eval_metrics$klsh_100 <- unlist(klsh_100_metrics)
 
-round(do.call(rbind, eval_metrics) * 100, 2) |>
-  kable(digits=2) 
+round(do.call(rbind, eval_metrics) * 100, 2) |> kable(digits=2) 
 ```
 
 The results demonstrate a clear performance hierarchy among the ANN

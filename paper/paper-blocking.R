@@ -182,9 +182,7 @@ for (algorithm in ann) {
 blocks_klsh_10 <- klsh::klsh(
   r.set = RLdata500[, c("fname_c1", "fname_c2", "lname_c1",
                         "lname_c2", "by", "bm", "bd")],
-  p = 20,
-  num.blocks = 10,
-  k = 2)
+  p = 20, num.blocks = 10, k = 2)
 
 klsh_10_metrics <- klsh::confusion.from.blocking(
   blocking = blocks_klsh_10, 
@@ -198,9 +196,7 @@ eval_metrics$klsh_10 <- unlist(klsh_10_metrics)
 blocks_klsh_100 <- klsh::klsh(
   r.set = RLdata500[, c("fname_c1", "fname_c2", "lname_c1",
                         "lname_c2", "by", "bm", "bd")],
-  p = 20,
-  num.blocks = 100,
-  k = 2)
+  p = 20, num.blocks = 100, k = 2)
 
 klsh_100_metrics <- klsh::confusion.from.blocking(
   blocking = blocks_klsh_100, 
@@ -211,6 +207,5 @@ klsh_100_metrics$f1_score <- with(klsh_100_metrics,
 
 eval_metrics$klsh_100 <- unlist(klsh_100_metrics)
 
-round(do.call(rbind, eval_metrics) * 100, 2) |>
-  kable(digits=2) 
+round(do.call(rbind, eval_metrics) * 100, 2) |> kable(digits=2) 
 

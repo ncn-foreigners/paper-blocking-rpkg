@@ -1,4 +1,4 @@
-\begin{thebibliography}{31}
+\begin{thebibliography}{32}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -81,8 +81,15 @@ I.~P. Fellegi and A.~B. Sunter.
 \newblock \emph{Journal of the American statistical association}, 64\penalty0 (328):\penalty0 1183--1210, 1969.
 \newblock \doi{https://doi.org/10.1080/01621459.1969.10501049}.
 
-\bibitem[{Howard, II}(2021)]{phonics}
-J.~P. {Howard, II}.
+\bibitem[Howard~II(2020)]{Howard2020}
+J.~P. Howard~II.
+\newblock Phonetic spelling algorithm implementations for r.
+\newblock \emph{Journal of Statistical Software}, 95\penalty0 (8):\penalty0 1–21, 2020.
+\newblock \doi{https://doi.org/10.18637/jss.v095.i08}.
+\newblock URL \url{https://www.jstatsoft.org/index.php/jss/article/view/v095i08}.
+
+\bibitem[Howard~II(2021)]{phonics}
+J.~P. Howard~II.
 \newblock \emph{{phonics}: Phonetic Spelling Algorithms in R}, 2021.
 \newblock URL \url{https://jameshoward.us/phonics-in-r/}.
 \newblock R package version 1.3.10.
@@ -176,8 +183,8 @@ R.~C. Steorts, S.~L. Ventura, M.~Sadinle, and S.~E. Fienberg.
 \newblock ISBN 978-3-319-11257-2.
 \newblock \doi{https://doi.org/10.1007/978-3-319-11257-2_20}.
 
-\bibitem[van~der Laan(2022)]{reclin2-rjournal}
-D.~J. van~der Laan.
+\bibitem[{van der Laan}(2022)]{reclin2-rjournal}
+J.~{van der Laan}.
 \newblock reclin2: a toolkit for record linkage and deduplication.
 \newblock \emph{R Journal}, 14\penalty0 (2), 2022.
 \newblock URL \url{https://journal.r-project.org/articles/RJ-2022-038/}.
