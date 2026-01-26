@@ -7,7 +7,7 @@
 \maketitle
 
 \abstract{%
-Entity resolution (probabilistic record linkage, deduplication) is essential for estimation based on multiple sources. It aims to link records without common identifiers that refer to the same entity (e.g., person, company). Without identifiers, researchers must specify which records to compare to calculate matching probability and reduce computational complexity. Traditional deterministic blocking uses common variables like first letters of names, sex, or dates of birth, but assumes error-free, complete data. To address this limitation, we developed the R package \textbf{blocking}, which uses approximate nearest neighbor search and graph algorithms to reduce the number of comparisons. This paper presents the package design, functionalities, and two case studies.
+Entity resolution (probabilistic record linkage, deduplication) is essential for bringing together data needed for estimation or other analyses based on multiple sources. It aims to link records that refer to the same entity (e.g., person, company) in absence of unique identifiers. Without identifiers, researchers must specify which records to compare to calculate matching probability and reduce computational complexity. Traditional deterministic blocking uses common variables like first letters of names, sex, or dates of birth, but assumes error-free, complete data. To address this limitation, we developed the R package \textbf{blocking}, which uses approximate nearest neighbor search and graph algorithms to reduce the number of comparisons. This paper presents the package design, functionalities, and two case studies.
 }
 
 \section{Introduction}\label{introduction}
@@ -15,11 +15,11 @@ Entity resolution (probabilistic record linkage, deduplication) is essential for
 \subsection{Blocking for record linkage}\label{blocking-for-record-linkage}
 
 Entity resolution (probabilistic record linkage, deduplication) is
-essential for estimation based on multiple sources
-(cf.~\citet{fellegi1969theory}, \citet{Binette2022}). The goal is to link records
-without common identifiers that refer to the same entity (e.g., person,
-company, job position). This situation is frequently observed in
-administrative records, particularly for foreign-born populations. For
+essential for bringing together data needed for estimation or other
+analyses based on multiple sources
+(cf.~\citet{fellegi1969theory}, \citet{Binette2022}). The goal is to link records that refer to the same entity (e.g., person,
+company, job position) in absence of unique identifiers. This situation is frequently observed in
+administrative records, e.g., for foreign-national populations. For
 instance, the Social Insurance Institution register in Poland at the end
 of 2023 included 1.206 million records referring to approximately 1.105
 million individuals, of which about 10\% had missing information in the
@@ -28,11 +28,11 @@ Note that the exact number of individuals is certainly lower than 1.105
 million, as the 10\% with missing identifiers may include duplicates
 (cf.~\citet{beresewicz2025estimation}).
 
-This drives the need to link records without identifiers, which often
+This drives the need to link records without unique identifiers, which often
 requires certain assumptions about how to reduce the large number of
 possible comparisons, as it is not feasible to compare all pairs of
 records in large datasets (e.g., the aforementioned example would
-require over 6 billion comparisons). Consequently, researchers aim to
+require over 700 billion comparisons). Consequently, researchers aim to
 reduce the number of comparisons in various ways prior to the record
 linkage/deduplication stage. The rationale is twofold: computational
 resource constraints and clerical review workload.
@@ -55,7 +55,7 @@ existing R packages that implement blocking methods.
 
 Reducing the number of pairs has inherent costs: missed comparisons lead
 to increased false positive rates (FPR) and false negative rates (FNR)
-in linkage studies. To assess these errors, a subset of true pairs
+in linkage studies. To validate the blocking strategy, a subset of true pairs
 should be provided, or simulation studies of proposed methods should be
 conducted. Alternatively, one may consider approaches proposed by
 \citet{dasylva2021estimating} and \citet{dasylva2022consistent}, who demonstrated how
@@ -103,8 +103,6 @@ classification:
     \CRANpkg{RecordLinkage} allows direct specification of phonetic
     comparison via the \texttt{phonetic} argument in \texttt{compare.dedup()} or
     \texttt{compare.linkage()} functions using the \texttt{soundex()} function.
-    However, this is used for string comparison rather than
-    blocking.
   \item
     Additionally, \CRANpkg{stringdist} \citep{stringdist} implements the
     Soundex algorithm, whilst \CRANpkg{phonics} \citep{phonics} implements various phonetic algorithms that can be applied prior to the blocking procedure (e.g., to create a
@@ -262,9 +260,8 @@ reduction ratio is defined as follows:
 \]
 
 \noindent where \(m\) and \(n\) are the sizes of datasets \(X\) and \(Y\), and
-\(k\) is the total number of blocks. The term \(|B_{i,x}|\) is the number of
-unique records from dataset \(X\) in the \(i\)-th block, whilst \(|B_{i,y}|\)
-is the number of unique records from dataset \(Y\) in the \(i\)-th block.
+\(k\) is the total number of blocks. The term \(|B_{i,x}|\) is the number of records from dataset \(X\) in the \(i\)-th block, whilst \(|B_{i,y}|\)
+is the number of records from dataset \(Y\) in the \(i\)-th block.
 The expression \(\sum\limits_{i=1}^{k} |B_{i,x}| \cdot |B_{i,y}|\)
 represents the number of comparisons after blocking.
 
@@ -358,6 +355,7 @@ Next, we load the data and examine the first six records.
 
 \begin{verbatim}
 data("foreigners")
+setDT(foreigners)
 head(foreigners)
 \end{verbatim}
 
@@ -422,8 +420,8 @@ result_reclin <- blocking(x = foreigners_1$txt,
 Now, we can examine the results by printing the \texttt{result\_reclin} object.
 In this example, we have created
 6,470
-blocks based on 1,232
-columns (2-character shingles). Blocks are small, as we have
+blocks utilizing 1,232
+2-character shingles. Blocks are small, as we have
 3,920 blocks of 2
 elements, 1,599 blocks of
 3 elements, \ldots,
@@ -438,7 +436,7 @@ result_reclin
 #> ========================================================
 #> Blocking based on the nnd method.
 #> Number of blocks: 6470.
-#> Number of columns used for blocking: 1232.
+#> Number of shingles created for blocking: 1232.
 #> Reduction ratio: 0.9999.
 #> ========================================================
 #> Distribution of the size of the blocks:
@@ -516,9 +514,12 @@ head(matches)
 #> 6:      60    61     6     4
 \end{verbatim}
 
-We have 10,000 matched pairs, which can be used in the true\_blocks
+We have 10,000 matched pairs, which can be used in the \texttt{true\_blocks}
 argument of the \texttt{blocking()} function to specify the true block
-assignments. We obtain quality metrics for the assessment of record
+assignments. This \texttt{data.frame} must contain three columns:
+\texttt{x}, \texttt{y}, and \texttt{block}.
+
+We obtain quality metrics for the assessment of record
 linkage.
 
 \begin{verbatim}
@@ -535,7 +536,7 @@ res_reclin
 #> ========================================================
 #> Blocking based on the nnd method.
 #> Number of blocks: 6470.
-#> Number of columns used for blocking: 1232.
+#> Number of shingles created for blocking: 1232.
 #> Reduction ratio: 0.9999.
 #> ========================================================
 #> Distribution of the size of the blocks:
@@ -568,23 +569,23 @@ res_reclin2
 \begin{verbatim}
 #> ========================================================
 #> Blocking based on the nnd method.
-#> Number of blocks: 6470.
-#> Number of columns used for blocking: 1232.
+#> Number of blocks: 6394.
+#> Number of shingles created for blocking: 1232.
 #> Reduction ratio: 0.9999.
 #> ========================================================
 #> Distribution of the size of the blocks:
-#>    2    3    4    5    6    7 
-#> 3920 1599  928   19    2    2 
+#>    2    3    4    5    7 
+#> 3800 1615  954   21    4 
 #> ========================================================
 #> Evaluation metrics (standard):
 #>      recall   precision         fpr         fnr    accuracy specificity 
-#>     96.7532     78.6700      0.0038      3.2468     99.9957     99.9962 
+#>     96.8776     80.0500      0.0036      3.1224     99.9960     99.9964 
 #>    f1_score 
-#>     86.7795
+#>     87.6636
 \end{verbatim}
 
 That decreases the FNR to
-3.25\%.
+3.12\%.
 
 Now, to use the result in the record linkage process, we add this
 information to both datasets and specify it in the appropriate argument
@@ -631,6 +632,7 @@ of birth, \texttt{rec\_id} -- record ID, and \texttt{ent\_id} -- entity ID.
 
 \begin{verbatim}
 data("RLdata500")
+setDT(RLdata500)
 head(RLdata500)
 \end{verbatim}
 
@@ -697,7 +699,7 @@ res_dedup
 #> ========================================================
 #> Blocking based on the hnsw method.
 #> Number of blocks: 133.
-#> Number of columns used for blocking: 429.
+#> Number of shingles created for blocking: 429.
 #> Reduction ratio: 0.9916.
 #> ========================================================
 #> Distribution of the size of the blocks:
@@ -728,7 +730,7 @@ Additionally, we visualise the result based on whether a block contains
 matches or not.
 
 \begin{figure}
-\includegraphics[width=0.8\linewidth,alt={A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the \CRANpkg{blocking}. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies.}]{./figures/fig-1-density} \caption{Distribution of distances between true matches and non-matches within blocks}\label{fig:penguins-alison}
+\includegraphics[width=0.8\linewidth,alt={A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the \CRANpkg{blocking}. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies.}]{./figures/fig-1-density} \caption{Distribution of distances between true matches and non-matches within blocks}\label{fig:density-plot}
 \end{figure}
 
 Finally, we compare the evaluation metrics across all ANN algorithms

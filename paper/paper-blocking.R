@@ -14,6 +14,7 @@ library("reclin2")
 
 ## ----foreigners, echo = TRUE--------------------------------------------------
 data("foreigners")
+setDT(foreigners)
 head(foreigners)
 
 
@@ -37,7 +38,7 @@ head(foreigners_1[, .(true_id, txt)])
 #                           y = foreigners_2$txt)
 
 
-## ----reclin_nnd_load, echo = FALSE--------------------------------------------
+## ----reclin_nnd_load, echo = FALSE, eval = TRUE-------------------------------
 result_reclin <- readRDS("data/result_reclin.rds")
 
 
@@ -90,7 +91,7 @@ res_reclin
 
 
 ## ----reclin_nnd_improved_load, echo = FALSE-----------------------------------
-res_reclin2 <- readRDS("data/result_reclin_matches.rds")
+res_reclin2 <- readRDS("data/res_reclin2.rds")
 
 
 ## ----reclin_nnd_improved_print, echo = TRUE-----------------------------------
@@ -111,6 +112,7 @@ pair_blocking(x = foreigners_1,
 
 ## ----RLdata500, echo = TRUE---------------------------------------------------
 data("RLdata500")
+setDT(RLdata500)
 head(RLdata500)
 
 
@@ -160,7 +162,8 @@ legend("topright",  legend = c("Non-matches", "Matches"),
 dev.off()
 
 
-## ----penguins-alison, out.width = "80%", fig.cap = "Distribution of distances between true matches and non-matches within blocks", fig.alt="A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the \\CRANpkg{blocking}. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies."----
+## ----plot, out.width = "80%", fig.cap = "Distribution of distances between true matches and non-matches within blocks", fig.alt="A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the \\CRANpkg{blocking}. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies."----
+#| label: density-plot
 knitr::include_graphics("./figures/fig-1-density.png")
 
 

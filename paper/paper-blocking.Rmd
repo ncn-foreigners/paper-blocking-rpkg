@@ -2,7 +2,7 @@
 title: "blocking: An R Package for Blocking of Records for Record Linkage and Deduplication"
 date: "2025-08-27"
 abstract: >
-  Entity resolution (probabilistic record linkage, deduplication) is essential for estimation based on multiple sources. It aims to link records without common identifiers that refer to the same entity (e.g., person, company). Without identifiers, researchers must specify which records to compare to calculate matching probability and reduce computational complexity. Traditional deterministic blocking uses common variables like first letters of names, sex, or dates of birth, but assumes error-free, complete data. To address this limitation, we developed the R package **blocking**, which uses approximate nearest neighbor search and graph algorithms to reduce the number of comparisons. This paper presents the package design, functionalities, and two case studies.
+  Entity resolution (probabilistic record linkage, deduplication) is essential for bringing together data needed for estimation or other analyses based on multiple sources. It aims to link records that refer to the same entity (e.g., person, company) in absence of unique identifiers. Without identifiers, researchers must specify which records to compare to calculate matching probability and reduce computational complexity. Traditional deterministic blocking uses common variables like first letters of names, sex, or dates of birth, but assumes error-free, complete data. To address this limitation, we developed the R package **blocking**, which uses approximate nearest neighbor search and graph algorithms to reduce the number of comparisons. This paper presents the package design, functionalities, and two case studies.
 draft: false
 author:  
   - name: Maciej Beręsewicz
@@ -41,11 +41,11 @@ library("kableExtra")
 ## Blocking for record linkage
 
 Entity resolution (probabilistic record linkage, deduplication) is
-essential for estimation based on multiple sources
-(cf. @fellegi1969theory, @Binette2022). The goal is to link records
-without common identifiers that refer to the same entity (e.g., person,
-company, job position). This situation is frequently observed in
-administrative records, particularly for foreign-born populations. For
+essential for bringing together data needed for estimation or other
+analyses based on multiple sources
+(cf. @fellegi1969theory, @Binette2022). The goal is to link records that refer to the same entity (e.g., person,
+company, job position) in absence of unique identifiers. This situation is frequently observed in
+administrative records, e.g., for foreign-national populations. For
 instance, the Social Insurance Institution register in Poland at the end
 of 2023 included 1.206 million records referring to approximately 1.105
 million individuals, of which about 10% had missing information in the
@@ -54,11 +54,11 @@ Note that the exact number of individuals is certainly lower than 1.105
 million, as the 10% with missing identifiers may include duplicates
 (cf. @beresewicz2025estimation).
 
-This drives the need to link records without identifiers, which often
+This drives the need to link records without unique identifiers, which often
 requires certain assumptions about how to reduce the large number of
 possible comparisons, as it is not feasible to compare all pairs of
 records in large datasets (e.g., the aforementioned example would
-require over 6 billion comparisons). Consequently, researchers aim to
+require over 700 billion comparisons). Consequently, researchers aim to
 reduce the number of comparisons in various ways prior to the record
 linkage/deduplication stage. The rationale is twofold: computational
 resource constraints and clerical review workload.
@@ -81,7 +81,7 @@ existing R packages that implement blocking methods.
 
 Reducing the number of pairs has inherent costs: missed comparisons lead
 to increased false positive rates (FPR) and false negative rates (FNR)
-in linkage studies. To assess these errors, a subset of true pairs
+in linkage studies. To validate the blocking strategy, a subset of true pairs
 should be provided, or simulation studies of proposed methods should be
 conducted. Alternatively, one may consider approaches proposed by
 @dasylva2021estimating and @dasylva2022consistent, who demonstrated how
@@ -114,8 +114,6 @@ classification:
     -   \CRANpkg{RecordLinkage} allows direct specification of phonetic
         comparison via the `phonetic` argument in `compare.dedup()` or
         `compare.linkage()` functions using the `soundex()` function.
-        However, this is used for string comparison rather than
-        blocking.
     -   Additionally, \CRANpkg{stringdist} [@stringdist] implements the
         Soundex algorithm, whilst \CRANpkg{phonics} [@phonics] implements various phonetic algorithms that can be applied prior to the blocking procedure (e.g., to create a
         new column).
@@ -152,7 +150,7 @@ This is the only package in the R ecosystem that readily applies modern
 ANN algorithms to reduce the number of comparisons and significantly
 accelerate record linkage and deduplication tasks. Additionally, we have
 developed the `pair_ann()` function for seamless integration with the
-\CRANpkg{reclin2} package, as described in one of the package vignettes.
+\CRANpkg{reclin2} package, as described in one of the package vignettes. However, the \CRANpkg{blocking} package is not limited to the \CRANpkg{reclin2} and can be applied in various record linkage or deduplication contexts.
 
 ## Outline of article
 
@@ -234,9 +232,8 @@ $$
 $$
 
 \noindent where $m$ and $n$ are the sizes of datasets $X$ and $Y$, and
-$k$ is the total number of blocks. The term $|B_{i,x}|$ is the number of
-unique records from dataset $X$ in the $i$-th block, whilst $|B_{i,y}|$
-is the number of unique records from dataset $Y$ in the $i$-th block.
+$k$ is the total number of blocks. The term $|B_{i,x}|$ is the number of records from dataset $X$ in the $i$-th block, whilst $|B_{i,y}|$
+is the number of records from dataset $Y$ in the $i$-th block.
 The expression $\sum\limits_{i=1}^{k} |B_{i,x}| \cdot |B_{i,y}|$
 represents the number of comparisons after blocking.
 
@@ -295,6 +292,7 @@ Next, we load the data and examine the first six records.
 
 ```{r foreigners, echo = TRUE}
 data("foreigners")
+setDT(foreigners)
 head(foreigners)
 ```
 
@@ -330,12 +328,13 @@ default parameter of the `blocking()` function is `seed = 2023`, which sets
 the random seed.
 
 
+<!-- # ```{r reclin_nnd, echo = TRUE, eval = FALSE} -->
 ```{r reclin_nnd, echo = TRUE, eval = FALSE}
 result_reclin <- blocking(x = foreigners_1$txt,
                           y = foreigners_2$txt)
 ```
 
-```{r reclin_nnd_load, echo = FALSE}
+```{r reclin_nnd_load, echo = FALSE, eval = TRUE}
 result_reclin <- readRDS("data/result_reclin.rds")
 ```
 
@@ -349,8 +348,8 @@ block_count <- as.vector(table(table(block_ids)))
 Now, we can examine the results by printing the `result_reclin` object.
 In this example, we have created
 `r format(NROW(unique(result_reclin$result$block)), big.mark = ",")`
-blocks based on `r format(NROW(result_reclin$colnames), big.mark = ",")`
-columns (2-character shingles). Blocks are small, as we have
+blocks utilizing `r format(NROW(result_reclin$colnames), big.mark = ",")`
+2-character shingles. Blocks are small, as we have
 `r format(block_count[1], big.mark = ",")` blocks of `r block_size[1]`
 elements, `r format(block_count[2], big.mark = ",")` blocks of
 `r block_size[2]` elements, ...,
@@ -393,11 +392,15 @@ matches[, block := rleid(x)]
 head(matches)
 ```
 
-We have 10,000 matched pairs, which can be used in the true_blocks
+We have 10,000 matched pairs, which can be used in the `true_blocks`
 argument of the `blocking()` function to specify the true block
-assignments. We obtain quality metrics for the assessment of record
+assignments. This `data.frame` must contain three columns:
+`x`, `y`, and `block`.
+
+We obtain quality metrics for the assessment of record
 linkage.
 
+<!-- # ```{r reclin_nnd_true_blocks, echo = TRUE, eval = FALSE} -->
 ```{r reclin_nnd_true_blocks, echo = TRUE, eval = FALSE}
 res_reclin <- blocking(x = foreigners_1$txt,
                        y = foreigners_2$txt,
@@ -417,6 +420,7 @@ we can increase the epsilon parameter of the NND method from 0.1 to 0.5.
 To do so, we configure the `control_ann` parameter in the `blocking()`
 function using the `controls_ann()` and `control_nnd()` functions.
 
+<!-- # ```{r reclin_nnd_improved, echo = TRUE, eval = FALSE} -->
 ```{r reclin_nnd_improved, echo = TRUE, eval = FALSE}
 res_reclin2 <- blocking(x = foreigners_1$txt,
                         y = foreigners_2$txt,
@@ -425,7 +429,7 @@ res_reclin2 <- blocking(x = foreigners_1$txt,
 ```
 
 ```{r reclin_nnd_improved_load, echo = FALSE}
-res_reclin2 <- readRDS("data/result_reclin_matches.rds")
+res_reclin2 <- readRDS("data/res_reclin2.rds")
 ```
 
 ```{r reclin_nnd_improved_print, echo = TRUE}
@@ -466,6 +470,7 @@ of birth, `rec_id` -- record ID, and `ent_id` -- entity ID.
 
 ```{r RLdata500, echo = TRUE}
 data("RLdata500")
+setDT(RLdata500)
 head(RLdata500)
 ```
 
@@ -515,7 +520,6 @@ RLdata500[, .(uniq_blocks = uniqueN(block_id)), .(ent_id)][, .N, uniq_blocks]
 
 Additionally, we visualise the result based on whether a block contains
 matches or not.
-
 ```{r fig-save, results = 'hide'}
 png(file = "./figures/fig-1-density.png", 
     width = 2400,
@@ -538,7 +542,7 @@ legend("topright",  legend = c("Non-matches", "Matches"),
 dev.off()
 ```
 
-```{r penguins-alison, out.width = "80%", fig.cap = "Distribution of distances between true matches and non-matches within blocks", fig.alt="A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the \\CRANpkg{blocking}. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies."}
+```{r density-plot, out.width = "80%", fig.cap = "Distribution of distances between true matches and non-matches within blocks", fig.alt="A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the \\CRANpkg{blocking}. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies."}
 knitr::include_graphics("./figures/fig-1-density.png")
 ```
 
