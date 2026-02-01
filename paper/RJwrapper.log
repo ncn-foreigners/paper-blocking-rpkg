@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.1.26)  26 JAN 2026 12:55
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.2.1)  1 FEB 2026 12:40
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -338,7 +338,7 @@ File: t1ppl.fd 2001/06/04 font definitions for T1/ppl.
 \Urlmuskip=\muskip17
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 ) (/Users/adamstruzik/Library/TinyTeX/texmf-dist/tex/latex/hyperref/hyperref.sty
-Package: hyperref 2025-07-12 v7.01o Hypertext links for LaTeX
+Package: hyperref 2026-01-29 v7.01p Hypertext links for LaTeX
 (/Users/adamstruzik/Library/TinyTeX/texmf-dist/tex/latex/kvsetkeys/kvsetkeys.sty
 Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
 ) (/Users/adamstruzik/Library/TinyTeX/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
@@ -358,7 +358,7 @@ Package pdftexcmds Info: \pdfdraftmode found.
 )) (/Users/adamstruzik/Library/TinyTeX/texmf-dist/tex/latex/hycolor/hycolor.sty
 Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
 ) (/Users/adamstruzik/Library/TinyTeX/texmf-dist/tex/latex/hyperref/nameref.sty
-Package: nameref 2025-06-21 v2.57 Cross-referencing by name of section
+Package: nameref 2026-01-29 v2.58 Cross-referencing by name of section
 (/Users/adamstruzik/Library/TinyTeX/texmf-dist/tex/latex/refcount/refcount.sty
 Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 ) (/Users/adamstruzik/Library/TinyTeX/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
@@ -374,7 +374,7 @@ Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO)
 \Hy@linkcounter=\count314
 \Hy@pagecounter=\count315
 (/Users/adamstruzik/Library/TinyTeX/texmf-dist/tex/latex/hyperref/pd1enc.def
-File: pd1enc.def 2025-07-12 v7.01o Hyperref: PDFDocEncoding definition (HO)
+File: pd1enc.def 2026-01-29 v7.01p Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
 ... no UTF-8 mapping file for font encoding PD1
 ) (/Users/adamstruzik/Library/TinyTeX/texmf-dist/tex/generic/intcalc/intcalc.sty
@@ -382,17 +382,17 @@ Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 )
 \Hy@SavedSpaceFactor=\count316
 (/Users/adamstruzik/Library/TinyTeX/texmf-dist/tex/latex/hyperref/puenc.def
-File: puenc.def 2025-07-12 v7.01o Hyperref: PDF Unicode definition (HO)
+File: puenc.def 2026-01-29 v7.01p Hyperref: PDF Unicode definition (HO)
 Now handling font encoding PU ...
 ... no UTF-8 mapping file for font encoding PU
 )
-Package hyperref Info: Hyper figures OFF on input line 4195.
-Package hyperref Info: Link nesting OFF on input line 4200.
-Package hyperref Info: Hyper index ON on input line 4203.
-Package hyperref Info: Plain pages OFF on input line 4210.
-Package hyperref Info: Backreferencing ON on input line 4213.
+Package hyperref Info: Hyper figures OFF on input line 4201.
+Package hyperref Info: Link nesting OFF on input line 4206.
+Package hyperref Info: Hyper index ON on input line 4209.
+Package hyperref Info: Plain pages OFF on input line 4216.
+Package hyperref Info: Backreferencing ON on input line 4219.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
-Package hyperref Info: Bookmarks ON on input line 4462.
+Package hyperref Info: Bookmarks ON on input line 4468.
 (/Users/adamstruzik/Library/TinyTeX/texmf-dist/tex/latex/hyperref/backref.sty
 Package: backref 2025-06-21 v1.45 Bibliographical back referencing
 (/Users/adamstruzik/Library/TinyTeX/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
@@ -405,7 +405,7 @@ Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 284.
 ))
 \c@Hy@tempcnt=\count317
-LaTeX Info: Redefining \url on input line 4801.
+LaTeX Info: Redefining \url on input line 4807.
 \XeTeXLinkMargin=\dimen267
 (/Users/adamstruzik/Library/TinyTeX/texmf-dist/tex/generic/bitset/bitset.sty
 Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
@@ -413,20 +413,20 @@ Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
 \Fld@menulength=\count318
 \Field@Width=\dimen268
 \Fld@charsize=\dimen269
-Package hyperref Info: Hyper figures OFF on input line 6078.
-Package hyperref Info: Link nesting OFF on input line 6083.
-Package hyperref Info: Hyper index ON on input line 6086.
-Package hyperref Info: backreferencing ON on input line 6091.
-Package hyperref Info: Link coloring OFF on input line 6098.
-Package hyperref Info: Link coloring with OCG OFF on input line 6103.
-Package hyperref Info: PDF/A mode OFF on input line 6108.
+Package hyperref Info: Hyper figures OFF on input line 6084.
+Package hyperref Info: Link nesting OFF on input line 6089.
+Package hyperref Info: Hyper index ON on input line 6092.
+Package hyperref Info: backreferencing ON on input line 6097.
+Package hyperref Info: Link coloring OFF on input line 6104.
+Package hyperref Info: Link coloring with OCG OFF on input line 6109.
+Package hyperref Info: PDF/A mode OFF on input line 6114.
 \Hy@abspage=\count319
 \c@Item=\count320
 \c@Hfootnote=\count321
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
 (/Users/adamstruzik/Library/TinyTeX/texmf-dist/tex/latex/hyperref/hpdftex.def
-File: hpdftex.def 2025-07-12 v7.01o Hyperref driver for pdfTeX
+File: hpdftex.def 2026-01-29 v7.01p Hyperref driver for pdfTeX
 \Fld@listcount=\count322
 \c@bookmark@seq@number=\count323
 \Hy@SectionHShift=\skip66
@@ -799,12 +799,12 @@ Overfull \hbox (10.05826pt too wide) in paragraph at lines 103--107
 LaTeX Font Info:    Font shape `T1/zi4/b/n' will be
 (Font)              scaled to size 12.24005pt on input line 169.
 [3] [4] [5]
-Overfull \hbox (5.79631pt too wide) in paragraph at lines 453--456
+Overfull \hbox (5.79631pt too wide) in paragraph at lines 452--455
 []\T1/zi4/m/n/10 x \T1/ppl/m/n/10 (-20) -- ref-er-ence dataset (i.e., \T1/zi4/m/n/10 foreigners_1\T1/ppl/m/n/10 (-20) ) -- this may not con-tain all units of \T1/zi4/m/n/10 foreigners_1\T1/ppl/m/n/10 (-20) ; 
  []
 
 [6]
-Overfull \hbox (21.83835pt too wide) in paragraph at lines 553--557
+Overfull \hbox (21.83835pt too wide) in paragraph at lines 552--556
 \T1/zi4/m/n/10 control_ann \T1/ppl/m/n/10 (-20) pa-ram-e-ter in the \T1/zi4/m/n/10 blocking() \T1/ppl/m/n/10 (-20) func-tion us-ing the \T1/zi4/m/n/10 controls_ann() \T1/ppl/m/n/10 (-20) and \T1/zi4/m/n/10 control_nnd()
  []
 
@@ -819,23 +819,23 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `zi4' (encoding: TS1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-[8{/Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}]
-<./figures/fig-1-density.png, id=229, 2409.0pt x 1606.0pt>
+[8{/Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}] [9]
+<./figures/fig-1-density.png, id=241, 2409.0pt x 1606.0pt>
 File: ./figures/fig-1-density.png Graphic file (type png)
 <use ./figures/fig-1-density.png>
-Package pdftex.def Info: ./figures/fig-1-density.png  used on input line 733.
+Package pdftex.def Info: ./figures/fig-1-density.png  used on input line 737.
 (pdftex.def)             Requested size: 318.67207pt x 212.43866pt.
-[9] [10 <./figures/fig-1-density.png>] [11] (./RJwrapper.bbl (./RJwrapper.brf)
+[10 <./figures/fig-1-density.png>] [11] (./RJwrapper.bbl (./RJwrapper.brf)
 \tf@brf=\write6
 \openout6 = `RJwrapper.brf'.
 
 [12] [13])
 
 LaTeX Font Warning: Font shape `T1/zi4/m/it' undefined
-(Font)              using `T1/zi4/m/n' instead on input line 885.
+(Font)              using `T1/zi4/m/n' instead on input line 889.
 
 LaTeX Font Info:    Font shape `T1/zi4/m/it' will be
-(Font)              scaled to size 10.20004pt on input line 885.
+(Font)              scaled to size 10.20004pt on input line 889.
 ) [14] (./RJwrapper.aux)
  ***********
 LaTeX2e <2025-11-01>
@@ -845,23 +845,23 @@ L3 programming layer <2026-01-19>
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 Package rerunfilecheck Info: File `RJwrapper.out' has not changed.
-(rerunfilecheck)             Checksum: 7CB05242BDE493423CF83E0BB612CDE8;2767.
+(rerunfilecheck)             Checksum: 262DA796EFAC7D48498477DD27BA9285;2790.
 Package rerunfilecheck Info: File `RJwrapper.brf' has not changed.
-(rerunfilecheck)             Checksum: E03F9C2EC508DFF3CCAD68516CD4D98E;1640.
+(rerunfilecheck)             Checksum: AD9A0AC2485AA83D5E317D4D2773483B;1694.
  ) 
 Here is how much of TeX's memory you used:
- 27302 strings out of 469514
- 498258 string characters out of 5468562
- 921156 words of memory out of 5000000
- 55103 multiletter control sequences out of 15000+600000
+ 27309 strings out of 469514
+ 498380 string characters out of 5468563
+ 921211 words of memory out of 5000000
+ 55109 multiletter control sequences out of 15000+600000
  672663 words of font info for 287 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 117i,12n,131p,1006b,935s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 117i,12n,131p,1006b,927s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4b.pfb></Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb></Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on RJwrapper.pdf (14 pages, 285866 bytes).
+Output written on RJwrapper.pdf (14 pages, 286730 bytes).
 PDF statistics:
- 403 PDF objects out of 1000 (max. 8388607)
- 362 compressed objects within 4 object streams
- 68 named destinations out of 1000 (max. 500000)
+ 410 PDF objects out of 1000 (max. 8388607)
+ 369 compressed objects within 4 object streams
+ 69 named destinations out of 1000 (max. 500000)
  56442 words of extra memory for PDF output out of 61914 (max. 10000000)
 

@@ -180,6 +180,7 @@ margin-left: 2em;
   <meta name="citation_reference" content="citation_title=Theoretical limits of microclustering for record linkage;citation_publisher=Oxford University Press;citation_volume=105;citation_doi=https://doi.org/10.1093/biomet/asy003;citation_author=JE Johndrow;citation_author=Kristian Lum;citation_author=DB Dunson" />
   <meta name="citation_reference" content="citation_title=Efficient k-nearest neighbor graph construction for generic similarity measures;citation_publisher=Association for Computing Machinery;citation_doi=https://doi.org/10.1145/1963405.1963487;citation_author=Wei Dong;citation_author=Charikar Moses;citation_author=Kai Li" />
   <meta name="citation_reference" content="citation_title=Efficient and robust approximate nearest neighbor search using hierarchical navigable small world graphs;citation_publisher=IEEE;citation_volume=42;citation_doi=https://doi.org/10.1109/tpami.2018.2889473;citation_author=Yu A Malkov;citation_author=Dmitry A Yashunin" />
+  <meta name="citation_reference" content="citation_title=String comparator metrics and enhanced decision rules in the Fellegi-Sunter model of record linkage;citation_publisher=American Statistical Association;citation_author=W. E. Winkler" />
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
@@ -2630,7 +2631,7 @@ font-size: 20px;
 essential for bringing together data needed for estimation or other
 analyses based on multiple sources
 (cf. <span class="citation" data-cites="fellegi1969theory">Fellegi and Sunter (<a href="#ref-fellegi1969theory" role="doc-biblioref">1969</a>)</span>, <span class="citation" data-cites="Binette2022">Binette and Steorts (<a href="#ref-Binette2022" role="doc-biblioref">2022</a>)</span>). The goal is to link records that refer to the same entity (e.g., person,
-company, job position) in absence of unique identifiers. This situation is frequently observed in
+company, job position) in the absence of unique identifiers. This situation is frequently observed in
 administrative records, e.g., for foreign-national populations. For
 instance, the Social Insurance Institution register in Poland at the end
 of 2023 included 1.206 million records referring to approximately 1.105
@@ -2734,14 +2735,14 @@ character vectors.</li>
 <li>Create final blocks using <a href="https://cran.r-project.org/package=igraph">igraph</a> (<span class="citation" data-cites="igraph2025">Csárdi et al. (<a href="#ref-igraph2025" role="doc-biblioref">2025</a>)</span>,<span class="citation" data-cites="igraph2006">Csardi and Nepusz (<a href="#ref-igraph2006" role="doc-biblioref">2006</a>)</span>).</li>
 </ol>
 <p>This is the only package in the R ecosystem that readily applies modern
-ANN algorithms to reduce the number of comparisons and significantly
+ANN algorithms to reduce the number of comparisons and substantially
 accelerate record linkage and deduplication tasks. Additionally, we have
 developed the <code>pair_ann()</code> function for seamless integration with the
-<a href="https://cran.r-project.org/package=reclin2">reclin2</a> package, as described in one of the package vignettes.</p>
-<h3 data-number="1.3" id="outline-of-article"><span class="header-section-number">1.3</span> Outline of article</h3>
+<a href="https://cran.r-project.org/package=reclin2">reclin2</a> package, as described in the package vignette entitled <a href="https://cran.r-project.org/web/packages/blocking/vignettes/v3-integration.html"><code>&quot;Integration with existing packages&quot;</code></a>. However, the <a href="https://cran.r-project.org/package=blocking">blocking</a> package is not limited to the <a href="https://cran.r-project.org/package=reclin2">reclin2</a> and can be applied in various record linkage or deduplication contexts.</p>
+<h3 data-number="1.3" id="outline-of-the-article"><span class="header-section-number">1.3</span> Outline of the article</h3>
 <p>This paper is structured as follows. Section 2 provides a description of
 the main functionalities of the <a href="https://cran.r-project.org/package=blocking">blocking</a> package and how
-results can be assessed. Section 3 presents two case studies:
+results can be evaluated. Section 3 presents two case studies:
 probabilistic record linkage and deduplication. These examples
 demonstrate how our package can improve the entity resolution pipeline
 and integrate with existing R packages.</p>
@@ -2750,8 +2751,7 @@ and integrate with existing R packages.</p>
 <p>The main functionality is available via the <code>blocking()</code> function, which
 contains the following key arguments:</p>
 <ul>
-<li><code>x, y</code> – reference vectors, where <code>y = NULL</code> indicates that
-deduplication is applied;</li>
+<li><code>x, y</code> – vectors of keys used for linkage, where <code>y = NULL</code> indicates a deduplication task;</li>
 <li><code>representation</code> – whether <code>x</code> and <code>y</code> should be represented as
 shingles or vectors (e.g., provided by the user via the <code>model</code>
 argument);</li>
@@ -3117,7 +3117,8 @@ specificity    f1_score
 <p>Now, to use the result in the record linkage process, we add this
 information to both datasets and specify it in the appropriate argument
 of a given function. Below, we present an example using the <code>reclin2</code>
-package with a simple score.</p>
+package, where a simple score is calculated as the sum of Jaro-Winkler similarity measures
+(cf. <span class="citation" data-cites="Winkler1990">Winkler (<a href="#ref-Winkler1990" role="doc-biblioref">1990</a>)</span>) for the variables <code>fname</code>, <code>surname</code>, and <code>date</code>.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">foreigners_1</span><span class="op">[</span><span class="va">res_reclin2</span><span class="op">$</span><span class="va">result</span>, on <span class="op">=</span> <span class="st">&quot;x&quot;</span>, <span class="va">block</span><span class="op">:=</span> <span class="va">i.block</span><span class="op">]</span></span>
@@ -3233,9 +3234,13 @@ are observed. In our example, all identical entities are in the same
 blocks.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">df_block_melted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/melt.data.table.html">melt</a></span><span class="op">(</span><span class="va">res_dedup</span><span class="op">$</span><span class="va">result</span>, id.vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;block&quot;</span>, <span class="st">&quot;dist&quot;</span><span class="op">)</span><span class="op">)</span></span>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class="co"># Reshape to long format</span></span>
+<span><span class="va">df_block_melted</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/melt.data.table.html">melt</a></span><span class="op">(</span><span class="va">res_dedup</span><span class="op">$</span><span class="va">result</span>, id.vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;block&quot;</span>, <span class="st">&quot;dist&quot;</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># Unique record-block pairs</span></span>
 <span><span class="va">df_block_melted_rec_block</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">df_block_melted</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>rec_id<span class="op">=</span><span class="va">value</span>, <span class="va">block</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co"># Join block IDs</span></span>
 <span><span class="va">RLdata500</span><span class="op">[</span><span class="va">df_block_melted_rec_block</span>, on <span class="op">=</span> <span class="st">&quot;rec_id&quot;</span>, <span class="va">block_id</span> <span class="op">:=</span> <span class="va">i.block</span><span class="op">]</span></span>
+<span><span class="co"># Check block consistency per entity</span></span>
 <span><span class="va">RLdata500</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span>uniq_blocks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/duplicated.html">uniqueN</a></span><span class="op">(</span><span class="va">block_id</span><span class="op">)</span><span class="op">)</span>, <span class="fu">.</span><span class="op">(</span><span class="va">ent_id</span><span class="op">)</span><span class="op">]</span><span class="op">[</span>, <span class="va">.N</span>, <span class="va">uniq_blocks</span><span class="op">]</span></span></code></pre>
 </div>
 <pre><code>   uniq_blocks     N
@@ -3312,7 +3317,7 @@ results are presented in Table 2.</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">eval_metrics</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits<span class="op">=</span><span class="fl">2</span><span class="op">)</span> </span></code></pre>
 </div>
 <table style="width:100%;">
-<caption><span id="tab:comparision">Table 1: </span>Comparison of various approximate nearest neighbour algorithms implemented in the <a href="https://cran.r-project.org/package=blocking">blocking</a> and the <a href="https://cran.r-project.org/package=klsh">klsh</a> package for creation of blocks for deduplication</caption>
+<caption><span id="tab:comparision">Table 1: </span>Comparison of various approximate nearest neighbour algorithms implemented in the <a href="https://cran.r-project.org/package=blocking">blocking</a> and the <a href="https://cran.r-project.org/package=klsh">klsh</a> package for creation of blocks for deduplication (values in percentages)</caption>
 <colgroup>
 <col style="width: 13%" />
 <col style="width: 10%" />
@@ -3554,6 +3559,9 @@ J. van der Laan. <em>reclin2: Record linkage toolkit.</em> 2024. URL <a href="ht
 </div>
 <div id="ref-stringdist" class="csl-entry" role="listitem">
 M. P. J. van der Loo. The stringdist package for approximate string matching. <em>The <span>R</span> <span>J</span>ournal</em>, 6: 111–122, 2014. URL <a href="https://CRAN.R-project.org/package=stringdist">https://CRAN.R-project.org/package=stringdist</a>.
+</div>
+<div id="ref-Winkler1990" class="csl-entry" role="listitem">
+W. E. Winkler. String comparator metrics and enhanced decision rules in the <span>F</span>ellegi-<span>S</span>unter model of record linkage. In <em>Proceedings of the section on survey research methods</em>, pages. 354–359 1990. American Statistical Association.
 </div>
 <div id="ref-Wright1960" class="csl-entry" role="listitem">
 M. A. Wright. Mechanizing a large index. <em>The Computer Journal</em>, 3(2): 76, 1960. DOI <a href="https://doi.org/10.1093/comjnl/3.2.76">https://doi.org/10.1093/comjnl/3.2.76</a>.

@@ -134,9 +134,13 @@ res_dedup
 
 
 ## ----dedup_melted, echo = TRUE------------------------------------------------
+# Reshape to long format
 df_block_melted <- melt(res_dedup$result, id.vars = c("block", "dist"))
+# Unique record-block pairs
 df_block_melted_rec_block <- unique(df_block_melted[, .(rec_id=value, block)])
+# Join block IDs
 RLdata500[df_block_melted_rec_block, on = "rec_id", block_id := i.block]
+# Check block consistency per entity
 RLdata500[, .(uniq_blocks = uniqueN(block_id)), .(ent_id)][, .N, uniq_blocks]
 
 
@@ -162,14 +166,14 @@ legend("topright",  legend = c("Non-matches", "Matches"),
 dev.off()
 
 
-## ----plot, out.width = "80%", fig.cap = "Distribution of distances between true matches and non-matches within blocks", fig.alt="A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the \\CRANpkg{blocking}. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies."----
-#| label: density-plot
+## ----density-plot, out.width = "80%", fig.cap = "Distribution of distances between true matches and non-matches within blocks", fig.alt="A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the \\CRANpkg{blocking}. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies."----
 knitr::include_graphics("./figures/fig-1-density.png")
 
 
 ## ----echo = TRUE, results='asis'----------------------------------------------
 #| label: comparision
-#| tab.cap: "Comparison of various approximate nearest neighbour algorithms implemented in the \\CRANpkg{blocking} and the \\CRANpkg{klsh} package for creation of blocks for deduplication"
+#| tab.cap: "Comparison of various approximate nearest neighbour algorithms implemented in the \\CRANpkg{blocking} and the \\CRANpkg{klsh} package for creation of blocks for deduplication
+#| (values in percentages)"
 set.seed(2025)
 true_blocks <- RLdata500[, c("rec_id", "ent_id"), with = FALSE]
 setnames(true_blocks, old = c("rec_id", "ent_id"), c("x", "block"))

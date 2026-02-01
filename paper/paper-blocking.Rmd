@@ -44,7 +44,7 @@ Entity resolution (probabilistic record linkage, deduplication) is
 essential for bringing together data needed for estimation or other
 analyses based on multiple sources
 (cf. @fellegi1969theory, @Binette2022). The goal is to link records that refer to the same entity (e.g., person,
-company, job position) in absence of unique identifiers. This situation is frequently observed in
+company, job position) in the absence of unique identifiers. This situation is frequently observed in
 administrative records, e.g., for foreign-national populations. For
 instance, the Social Insurance Institution register in Poland at the end
 of 2023 included 1.206 million records referring to approximately 1.105
@@ -147,16 +147,16 @@ linkage of units between or within sources. The basic workflow of the
 3.  Create final blocks using \CRANpkg{igraph} (@igraph2025,@igraph2006).
 
 This is the only package in the R ecosystem that readily applies modern
-ANN algorithms to reduce the number of comparisons and significantly
+ANN algorithms to reduce the number of comparisons and substantially
 accelerate record linkage and deduplication tasks. Additionally, we have
 developed the `pair_ann()` function for seamless integration with the
-\CRANpkg{reclin2} package, as described in one of the package vignettes. However, the \CRANpkg{blocking} package is not limited to the \CRANpkg{reclin2} and can be applied in various record linkage or deduplication contexts.
+\CRANpkg{reclin2} package, as described in the package vignette entitled [`"Integration with existing packages"`](https://cran.r-project.org/web/packages/blocking/vignettes/v3-integration.html). However, the \CRANpkg{blocking} package is not limited to the \CRANpkg{reclin2} and can be applied in various record linkage or deduplication contexts.
 
-## Outline of article
+## Outline of the article
 
 This paper is structured as follows. Section 2 provides a description of
 the main functionalities of the \CRANpkg{blocking} package and how
-results can be assessed. Section 3 presents two case studies:
+results can be evaluated. Section 3 presents two case studies:
 probabilistic record linkage and deduplication. These examples
 demonstrate how our package can improve the entity resolution pipeline
 and integrate with existing R packages.
@@ -168,8 +168,7 @@ and integrate with existing R packages.
 The main functionality is available via the `blocking()` function, which
 contains the following key arguments:
 
--   `x, y` -- reference vectors, where `y = NULL` indicates that
-    deduplication is applied;
+-   `x, y` -- vectors of keys used for linkage, where `y = NULL` indicates a deduplication task;
 -   `representation` -- whether `x` and `y` should be represented as
     shingles or vectors (e.g., provided by the user via the `model`
     argument);
@@ -442,7 +441,8 @@ That decreases the FNR to
 Now, to use the result in the record linkage process, we add this
 information to both datasets and specify it in the appropriate argument
 of a given function. Below, we present an example using the `reclin2`
-package with a simple score.
+package, where a simple score is calculated as the sum of Jaro-Winkler similarity measures
+(cf. @Winkler1990) for the variables `fname`, `surname`, and `date`.
 
 ```{r reclin2-example, echo = TRUE}
 foreigners_1[res_reclin2$result, on = "x", block:= i.block]
@@ -512,9 +512,13 @@ are observed. In our example, all identical entities are in the same
 blocks.
 
 ```{r dedup_melted, echo = TRUE}
+# Reshape to long format
 df_block_melted <- melt(res_dedup$result, id.vars = c("block", "dist"))
+# Unique record-block pairs
 df_block_melted_rec_block <- unique(df_block_melted[, .(rec_id=value, block)])
+# Join block IDs
 RLdata500[df_block_melted_rec_block, on = "rec_id", block_id := i.block]
+# Check block consistency per entity
 RLdata500[, .(uniq_blocks = uniqueN(block_id)), .(ent_id)][, .N, uniq_blocks]
 ```
 
@@ -562,7 +566,8 @@ results are presented in Table 2.
 
 ```{r echo = TRUE, results='asis'}
 #| label: comparision
-#| tab.cap: "Comparison of various approximate nearest neighbour algorithms implemented in the \\CRANpkg{blocking} and the \\CRANpkg{klsh} package for creation of blocks for deduplication"
+#| tab.cap: "Comparison of various approximate nearest neighbour algorithms implemented in the \\CRANpkg{blocking} and the \\CRANpkg{klsh} package for creation of blocks for deduplication
+#| (values in percentages)"
 set.seed(2025)
 true_blocks <- RLdata500[, c("rec_id", "ent_id"), with = FALSE]
 setnames(true_blocks, old = c("rec_id", "ent_id"), c("x", "block"))
