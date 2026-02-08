@@ -170,7 +170,7 @@ contains the following key arguments:
 
 -   `x, y` -- vectors of keys used for linkage, where `y = NULL` indicates a deduplication task;
 -   `representation` -- whether `x` and `y` should be represented as
-    shingles or vectors (e.g., provided by the user via the `model`
+    shingles, a custom matrix, or vectors (e.g., provided by the user via the `model`
     argument);
 -   `ann` -- which ANN algorithm should be applied (by default, we use
     the \CRANpkg{rnndescent} package as it supports sparse matrices);
@@ -198,7 +198,7 @@ following elements:
 -   `method` -- name of the ANN algorithm used;
 -   `deduplication` -- information about whether deduplication was
     applied;
--   `representation` -- information about whether shingles or vectors
+-   `representation` -- information about whether shingles, a custom matrix, or vectors
     were used;
 -   `metrics` -- quality assessment metrics, if `true_blocks` is
     provided;
@@ -440,20 +440,19 @@ That decreases the FNR to
 
 Now, to use the result in the record linkage process, we add this
 information to both datasets and specify it in the appropriate argument
-of a given function. Below, we present an example using the `reclin2`
-package, where a simple score is calculated as the sum of Jaro-Winkler similarity measures
-(cf. @Winkler1990) for the variables `fname`, `surname`, and `date`.
+of a given function. Below, we present an example using the \CRANpkg{reclin2}
+package, employing the Expectation-Maximization algorithm by @fellegi1969theory.
 
 ```{r reclin2-example, echo = TRUE}
 foreigners_1[res_reclin2$result, on = "x", block:= i.block]
 foreigners_2[res_reclin2$result, on = "y", block:= i.block]
 
-pair_blocking(x = foreigners_1, 
+pairs <- pair_blocking(x = foreigners_1, 
               y = foreigners_2, on = "block") |>
-  compare_pairs(on = c("fname", "surname", "date"),
-                default_comparator = cmp_jarowinkler()) |>
-  score_simple("score", on = c("fname", "surname", "date")) |>
-  head(n= 4)
+          compare_pairs(c("fname", "surname", "date")) 
+model <- problink_em(~ fname + surname + date, data = pairs)
+predict(model, pairs = pairs, add = TRUE, type = "all") |>
+  head(n = 4)
 ```
 
 ## An example of blocking for deduplication

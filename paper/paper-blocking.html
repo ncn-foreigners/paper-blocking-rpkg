@@ -180,7 +180,6 @@ margin-left: 2em;
   <meta name="citation_reference" content="citation_title=Theoretical limits of microclustering for record linkage;citation_publisher=Oxford University Press;citation_volume=105;citation_doi=https://doi.org/10.1093/biomet/asy003;citation_author=JE Johndrow;citation_author=Kristian Lum;citation_author=DB Dunson" />
   <meta name="citation_reference" content="citation_title=Efficient k-nearest neighbor graph construction for generic similarity measures;citation_publisher=Association for Computing Machinery;citation_doi=https://doi.org/10.1145/1963405.1963487;citation_author=Wei Dong;citation_author=Charikar Moses;citation_author=Kai Li" />
   <meta name="citation_reference" content="citation_title=Efficient and robust approximate nearest neighbor search using hierarchical navigable small world graphs;citation_publisher=IEEE;citation_volume=42;citation_doi=https://doi.org/10.1109/tpami.2018.2889473;citation_author=Yu A Malkov;citation_author=Dmitry A Yashunin" />
-  <meta name="citation_reference" content="citation_title=String comparator metrics and enhanced decision rules in the Fellegi-Sunter model of record linkage;citation_publisher=American Statistical Association;citation_author=W. E. Winkler" />
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
@@ -2753,7 +2752,7 @@ contains the following key arguments:</p>
 <ul>
 <li><code>x, y</code> – vectors of keys used for linkage, where <code>y = NULL</code> indicates a deduplication task;</li>
 <li><code>representation</code> – whether <code>x</code> and <code>y</code> should be represented as
-shingles or vectors (e.g., provided by the user via the <code>model</code>
+shingles, a custom matrix, or vectors (e.g., provided by the user via the <code>model</code>
 argument);</li>
 <li><code>ann</code> – which ANN algorithm should be applied (by default, we use
 the <a href="https://cran.r-project.org/package=rnndescent">rnndescent</a> package as it supports sparse matrices);</li>
@@ -2781,7 +2780,7 @@ distance between points;</li>
 <li><code>method</code> – name of the ANN algorithm used;</li>
 <li><code>deduplication</code> – information about whether deduplication was
 applied;</li>
-<li><code>representation</code> – information about whether shingles or vectors
+<li><code>representation</code> – information about whether shingles, a custom matrix, or vectors
 were used;</li>
 <li><code>metrics</code> – quality assessment metrics, if <code>true_blocks</code> is
 provided;</li>
@@ -2977,7 +2976,7 @@ elements, 1,599 blocks of
 <pre><code>========================================================
 Blocking based on the nnd method.
 Number of blocks: 6470.
-Number of shingles created for blocking: 1232.
+Number of columns used for blocking: 1232.
 Reduction ratio: 0.9999.
 ========================================================
 Distribution of the size of the blocks:
@@ -3063,14 +3062,14 @@ linkage.</p>
 <pre><code>========================================================
 Blocking based on the nnd method.
 Number of blocks: 6470.
-Number of shingles created for blocking: 1232.
+Number of columns used for blocking: 1232.
 Reduction ratio: 0.9999.
 ========================================================
 Distribution of the size of the blocks:
    2    3    4    5    6    7 
 3920 1599  928   19    2    2 
 ========================================================
-Evaluation metrics (standard):
+Evaluation metrics (standard, in %):
      recall   precision         fpr         fnr    accuracy 
     96.7532     78.6700      0.0038      3.2468     99.9957 
 specificity    f1_score 
@@ -3099,14 +3098,14 @@ function using the <code>controls_ann()</code> and <code>control_nnd()</code> fu
 <pre><code>========================================================
 Blocking based on the nnd method.
 Number of blocks: 6394.
-Number of shingles created for blocking: 1232.
+Number of columns used for blocking: 1232.
 Reduction ratio: 0.9999.
 ========================================================
 Distribution of the size of the blocks:
    2    3    4    5    7 
 3800 1615  954   21    4 
 ========================================================
-Evaluation metrics (standard):
+Evaluation metrics (standard, in %):
      recall   precision         fpr         fnr    accuracy 
     96.8776     80.0500      0.0036      3.1224     99.9960 
 specificity    f1_score 
@@ -3116,32 +3115,37 @@ specificity    f1_score
 3.12%.</p>
 <p>Now, to use the result in the record linkage process, we add this
 information to both datasets and specify it in the appropriate argument
-of a given function. Below, we present an example using the <code>reclin2</code>
-package, where a simple score is calculated as the sum of Jaro-Winkler similarity measures
-(cf. <span class="citation" data-cites="Winkler1990">Winkler (<a href="#ref-Winkler1990" role="doc-biblioref">1990</a>)</span>) for the variables <code>fname</code>, <code>surname</code>, and <code>date</code>.</p>
+of a given function. Below, we present an example using the <a href="https://cran.r-project.org/package=reclin2">reclin2</a>
+package, employing the Expectation-Maximization algorithm by <span class="citation" data-cites="fellegi1969theory">Fellegi and Sunter (<a href="#ref-fellegi1969theory" role="doc-biblioref">1969</a>)</span>.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class="va">foreigners_1</span><span class="op">[</span><span class="va">res_reclin2</span><span class="op">$</span><span class="va">result</span>, on <span class="op">=</span> <span class="st">&quot;x&quot;</span>, <span class="va">block</span><span class="op">:=</span> <span class="va">i.block</span><span class="op">]</span></span>
 <span><span class="va">foreigners_2</span><span class="op">[</span><span class="va">res_reclin2</span><span class="op">$</span><span class="va">result</span>, on <span class="op">=</span> <span class="st">&quot;y&quot;</span>, <span class="va">block</span><span class="op">:=</span> <span class="va">i.block</span><span class="op">]</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/reclin2/man/pair_blocking.html">pair_blocking</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">foreigners_1</span>, </span>
+<span><span class="va">pairs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/reclin2/man/pair_blocking.html">pair_blocking</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">foreigners_1</span>, </span>
 <span>              y <span class="op">=</span> <span class="va">foreigners_2</span>, on <span class="op">=</span> <span class="st">&quot;block&quot;</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/reclin2/man/compare_pairs.html">compare_pairs</a></span><span class="op">(</span>on <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;fname&quot;</span>, <span class="st">&quot;surname&quot;</span>, <span class="st">&quot;date&quot;</span><span class="op">)</span>,</span>
-<span>                default_comparator <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/reclin2/man/comparators.html">cmp_jarowinkler</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/pkg/reclin2/man/score_simple.html">score_simple</a></span><span class="op">(</span><span class="st">&quot;score&quot;</span>, on <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;fname&quot;</span>, <span class="st">&quot;surname&quot;</span>, <span class="st">&quot;date&quot;</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span>n<span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre>
+<span>          <span class="fu"><a href="https://rdrr.io/pkg/reclin2/man/compare_pairs.html">compare_pairs</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;fname&quot;</span>, <span class="st">&quot;surname&quot;</span>, <span class="st">&quot;date&quot;</span><span class="op">)</span><span class="op">)</span> </span>
+<span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/reclin2/man/problink_em.html">problink_em</a></span><span class="op">(</span><span class="op">~</span> <span class="va">fname</span> <span class="op">+</span> <span class="va">surname</span> <span class="op">+</span> <span class="va">date</span>, data <span class="op">=</span> <span class="va">pairs</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">model</span>, pairs <span class="op">=</span> <span class="va">pairs</span>, add <span class="op">=</span> <span class="cn">TRUE</span>, type <span class="op">=</span> <span class="st">&quot;all&quot;</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre>
 </div>
 <pre><code>  First data set:  100 000 records
   Second data set: 10 000 records
   Total number of pairs: 4 pairs
   Blocking on: &#39;block&#39;
 
-      .x    .y     fname   surname      date    score
-   &lt;int&gt; &lt;int&gt;     &lt;num&gt;     &lt;num&gt;     &lt;num&gt;    &lt;num&gt;
-1:     3     1 0.8333333 0.8666667 1.0000000 2.700000
-2:     3     2 0.8333333 0.9333333 0.9666667 2.733333
-3:    21     3 0.8333333 0.9166667 1.0000000 2.750000
-4:    57     4 0.9259259 0.9259259 0.9666667 2.818519</code></pre>
+      .x    .y  fname surname   date      mprob    uprob      mpost
+   &lt;int&gt; &lt;int&gt; &lt;lgcl&gt;  &lt;lgcl&gt; &lt;lgcl&gt;      &lt;num&gt;    &lt;num&gt;      &lt;num&gt;
+1:     3     1  FALSE   FALSE   TRUE 0.24865523 0.217235 0.12223165
+2:     3     2  FALSE   FALSE  FALSE 0.09215071 0.563555 0.01950491
+3:    21     3  FALSE   FALSE   TRUE 0.24865523 0.217235 0.12223165
+4:    57     4  FALSE   FALSE  FALSE 0.09215071 0.563555 0.01950491
+       upost     weight
+       &lt;num&gt;      &lt;num&gt;
+1: 0.8777683  0.1350875
+2: 0.9804951 -1.8108395
+3: 0.8777683  0.1350875
+4: 0.9804951 -1.8108395</code></pre>
 </div>
 <h3 data-number="3.2" id="an-example-of-blocking-for-deduplication"><span class="header-section-number">3.2</span> An example of blocking for deduplication</h3>
 <p>In this section, we demonstrate a deduplication application using the
@@ -3220,7 +3224,7 @@ blocks varying from 2 to 17 units.</p>
 <pre><code>========================================================
 Blocking based on the hnsw method.
 Number of blocks: 133.
-Number of shingles created for blocking: 429.
+Number of columns used for blocking: 429.
 Reduction ratio: 0.9916.
 ========================================================
 Distribution of the size of the blocks:
@@ -3559,9 +3563,6 @@ J. van der Laan. <em>reclin2: Record linkage toolkit.</em> 2024. URL <a href="ht
 </div>
 <div id="ref-stringdist" class="csl-entry" role="listitem">
 M. P. J. van der Loo. The stringdist package for approximate string matching. <em>The <span>R</span> <span>J</span>ournal</em>, 6: 111–122, 2014. URL <a href="https://CRAN.R-project.org/package=stringdist">https://CRAN.R-project.org/package=stringdist</a>.
-</div>
-<div id="ref-Winkler1990" class="csl-entry" role="listitem">
-W. E. Winkler. String comparator metrics and enhanced decision rules in the <span>F</span>ellegi-<span>S</span>unter model of record linkage. In <em>Proceedings of the section on survey research methods</em>, pages. 354–359 1990. American Statistical Association.
 </div>
 <div id="ref-Wright1960" class="csl-entry" role="listitem">
 M. A. Wright. Mechanizing a large index. <em>The Computer Journal</em>, 3(2): 76, 1960. DOI <a href="https://doi.org/10.1093/comjnl/3.2.76">https://doi.org/10.1093/comjnl/3.2.76</a>.

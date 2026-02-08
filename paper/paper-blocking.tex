@@ -179,7 +179,7 @@ contains the following key arguments:
   \texttt{x,\ y} -- vectors of keys used for linkage, where \texttt{y\ =\ NULL} indicates a deduplication task;
 \item
   \texttt{representation} -- whether \texttt{x} and \texttt{y} should be represented as
-  shingles or vectors (e.g., provided by the user via the \texttt{model}
+  shingles, a custom matrix, or vectors (e.g., provided by the user via the \texttt{model}
   argument);
 \item
   \texttt{ann} -- which ANN algorithm should be applied (by default, we use
@@ -221,7 +221,7 @@ following elements:
   \texttt{deduplication} -- information about whether deduplication was
   applied;
 \item
-  \texttt{representation} -- information about whether shingles or vectors
+  \texttt{representation} -- information about whether shingles, a custom matrix, or vectors
   were used;
 \item
   \texttt{metrics} -- quality assessment metrics, if \texttt{true\_blocks} is
@@ -435,7 +435,7 @@ result_reclin
 #> ========================================================
 #> Blocking based on the nnd method.
 #> Number of blocks: 6470.
-#> Number of shingles created for blocking: 1232.
+#> Number of columns used for blocking: 1232.
 #> Reduction ratio: 0.9999.
 #> ========================================================
 #> Distribution of the size of the blocks:
@@ -535,14 +535,14 @@ res_reclin
 #> ========================================================
 #> Blocking based on the nnd method.
 #> Number of blocks: 6470.
-#> Number of shingles created for blocking: 1232.
+#> Number of columns used for blocking: 1232.
 #> Reduction ratio: 0.9999.
 #> ========================================================
 #> Distribution of the size of the blocks:
 #>    2    3    4    5    6    7 
 #> 3920 1599  928   19    2    2 
 #> ========================================================
-#> Evaluation metrics (standard):
+#> Evaluation metrics (standard, in %):
 #>      recall   precision         fpr         fnr    accuracy specificity 
 #>     96.7532     78.6700      0.0038      3.2468     99.9957     99.9962 
 #>    f1_score 
@@ -569,14 +569,14 @@ res_reclin2
 #> ========================================================
 #> Blocking based on the nnd method.
 #> Number of blocks: 6394.
-#> Number of shingles created for blocking: 1232.
+#> Number of columns used for blocking: 1232.
 #> Reduction ratio: 0.9999.
 #> ========================================================
 #> Distribution of the size of the blocks:
 #>    2    3    4    5    7 
 #> 3800 1615  954   21    4 
 #> ========================================================
-#> Evaluation metrics (standard):
+#> Evaluation metrics (standard, in %):
 #>      recall   precision         fpr         fnr    accuracy specificity 
 #>     96.8776     80.0500      0.0036      3.1224     99.9960     99.9964 
 #>    f1_score 
@@ -588,20 +588,19 @@ That decreases the FNR to
 
 Now, to use the result in the record linkage process, we add this
 information to both datasets and specify it in the appropriate argument
-of a given function. Below, we present an example using the \texttt{reclin2}
-package, where a simple score is calculated as the sum of Jaro-Winkler similarity measures
-(cf. \citet{Winkler1990}) for the variables \texttt{fname}, \texttt{surname}, and \texttt{date}.
+of a given function. Below, we present an example using the \CRANpkg{reclin2}
+package, employing the Expectation-Maximization algorithm by \citet{fellegi1969theory}.
 
 \begin{verbatim}
 foreigners_1[res_reclin2$result, on = "x", block:= i.block]
 foreigners_2[res_reclin2$result, on = "y", block:= i.block]
 
-pair_blocking(x = foreigners_1, 
+pairs <- pair_blocking(x = foreigners_1, 
               y = foreigners_2, on = "block") |>
-  compare_pairs(on = c("fname", "surname", "date"),
-                default_comparator = cmp_jarowinkler()) |>
-  score_simple("score", on = c("fname", "surname", "date")) |>
-  head(n= 4)
+          compare_pairs(c("fname", "surname", "date")) 
+model <- problink_em(~ fname + surname + date, data = pairs)
+predict(model, pairs = pairs, add = TRUE, type = "all") |>
+  head(n = 4)
 \end{verbatim}
 
 \begin{verbatim}
@@ -610,12 +609,18 @@ pair_blocking(x = foreigners_1,
 #>   Total number of pairs: 4 pairs
 #>   Blocking on: 'block'
 #> 
-#>       .x    .y     fname   surname      date    score
-#>    <int> <int>     <num>     <num>     <num>    <num>
-#> 1:     3     1 0.8333333 0.8666667 1.0000000 2.700000
-#> 2:     3     2 0.8333333 0.9333333 0.9666667 2.733333
-#> 3:    21     3 0.8333333 0.9166667 1.0000000 2.750000
-#> 4:    57     4 0.9259259 0.9259259 0.9666667 2.818519
+#>       .x    .y  fname surname   date      mprob    uprob      mpost     upost
+#>    <int> <int> <lgcl>  <lgcl> <lgcl>      <num>    <num>      <num>     <num>
+#> 1:     3     1  FALSE   FALSE   TRUE 0.24865523 0.217235 0.12223165 0.8777683
+#> 2:     3     2  FALSE   FALSE  FALSE 0.09215071 0.563555 0.01950491 0.9804951
+#> 3:    21     3  FALSE   FALSE   TRUE 0.24865523 0.217235 0.12223165 0.8777683
+#> 4:    57     4  FALSE   FALSE  FALSE 0.09215071 0.563555 0.01950491 0.9804951
+#>        weight
+#>         <num>
+#> 1:  0.1350875
+#> 2: -1.8108395
+#> 3:  0.1350875
+#> 4: -1.8108395
 \end{verbatim}
 
 \subsection{An example of blocking for deduplication}\label{an-example-of-blocking-for-deduplication}
@@ -699,7 +704,7 @@ res_dedup
 #> ========================================================
 #> Blocking based on the hnsw method.
 #> Number of blocks: 133.
-#> Number of shingles created for blocking: 429.
+#> Number of columns used for blocking: 429.
 #> Reduction ratio: 0.9916.
 #> ========================================================
 #> Distribution of the size of the blocks:

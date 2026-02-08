@@ -1,4 +1,4 @@
-\begin{thebibliography}{33}
+\begin{thebibliography}{32}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -200,11 +200,6 @@ M.~{van der Loo}.
 \newblock The stringdist package for approximate string matching.
 \newblock \emph{The {R} {J}ournal}, 6:\penalty0 111--122, 2014.
 \newblock URL \url{https://CRAN.R-project.org/package=stringdist}.
-
-\bibitem[Winkler(1990)]{Winkler1990}
-W.~E. Winkler.
-\newblock String comparator metrics and enhanced decision rules in the {F}ellegi-{S}unter model of record linkage.
-\newblock In \emph{Proceedings of the Section on Survey Research Methods}, pages 354--359. American Statistical Association, 1990.
 
 \bibitem[Wright(1960)]{Wright1960}
 M.~A. Wright.

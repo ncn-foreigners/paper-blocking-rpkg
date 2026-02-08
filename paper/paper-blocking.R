@@ -102,12 +102,12 @@ res_reclin2
 foreigners_1[res_reclin2$result, on = "x", block:= i.block]
 foreigners_2[res_reclin2$result, on = "y", block:= i.block]
 
-pair_blocking(x = foreigners_1, 
+pairs <- pair_blocking(x = foreigners_1, 
               y = foreigners_2, on = "block") |>
-  compare_pairs(on = c("fname", "surname", "date"),
-                default_comparator = cmp_jarowinkler()) |>
-  score_simple("score", on = c("fname", "surname", "date")) |>
-  head(n= 4)
+          compare_pairs(c("fname", "surname", "date")) 
+model <- problink_em(~ fname + surname + date, data = pairs)
+predict(model, pairs = pairs, add = TRUE, type = "all") |>
+  head(n = 4)
 
 
 ## ----RLdata500, echo = TRUE---------------------------------------------------
