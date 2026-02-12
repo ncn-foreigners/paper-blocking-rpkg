@@ -3151,7 +3151,7 @@ package, employing the Expectation-Maximization algorithm by <span class="citati
 <p>In this section, we demonstrate a deduplication application using the
 <code>blocking()</code> function on the <code>RLdata500</code> dataset from the
 <a href="https://cran.r-project.org/package=RecordLinkage">RecordLinkage</a> package. Note that the dataset is included in
-the <code>blocking</code> package. It contains artificial personal data, and fifty
+the <a href="https://cran.r-project.org/package=blocking">blocking</a> package. It contains artificial personal data, and fifty
 records have been duplicated with randomly generated errors. Each row
 represents one record, with the following columns: <code>fname_c1</code> – first
 name, <code>fname_c2</code> – second name, <code>lname_c1</code> – last name, <code>lname_c2</code> –
@@ -3251,8 +3251,8 @@ blocks.</p>
          &lt;int&gt; &lt;int&gt;
 1:           1   450</code></pre>
 </div>
-Additionally, we visualise the result based on whether a block contains
-matches or not.
+<p>Additionally, Figure <a href="#fig:density-plot">1</a> visualises the results based on whether a block contains
+matches or not.</p>
 <div class="layout-chunk" data-layout="l-body">
 
 </div>
@@ -3275,151 +3275,234 @@ and then calculate evaluation metrics for all algorithms.</p>
 <a href="https://cran.r-project.org/package=klsh">klsh</a> package, configured to create 10 blocks (denoted as
 <code>klsh_10</code>) and 100 blocks (denoted as <code>klsh_100</code>), respectively. In both
 settings, we use 20 random projections and 2-character shingles. The
-results are presented in Table 2.</p>
+results are presented in Table 2, and the code generating it
+is included in the Supplementary materials.</p>
 <div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2025</span><span class="op">)</span></span>
-<span><span class="va">true_blocks</span> <span class="op">&lt;-</span> <span class="va">RLdata500</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;rec_id&quot;</span>, <span class="st">&quot;ent_id&quot;</span><span class="op">)</span>, with <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span></span>
-<span><span class="fu"><a href="https://rdrr.io/pkg/data.table/man/setattr.html">setnames</a></span><span class="op">(</span><span class="va">true_blocks</span>, old <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;rec_id&quot;</span>, <span class="st">&quot;ent_id&quot;</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;x&quot;</span>, <span class="st">&quot;block&quot;</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">eval_metrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">ann</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;nnd&quot;</span>, <span class="st">&quot;hnsw&quot;</span>, <span class="st">&quot;annoy&quot;</span>, <span class="st">&quot;lsh&quot;</span>, <span class="st">&quot;kd&quot;</span><span class="op">)</span></span>
-<span><span class="kw">for</span> <span class="op">(</span><span class="va">algorithm</span> <span class="kw">in</span> <span class="va">ann</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="va">eval_metrics</span><span class="op">[[</span><span class="va">algorithm</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ncn-foreigners.ue.poznan.pl/blocking/reference/blocking.html">blocking</a></span><span class="op">(</span></span>
-<span>    x <span class="op">=</span> <span class="va">RLdata500</span><span class="op">$</span><span class="va">txt</span>,</span>
-<span>    ann <span class="op">=</span> <span class="va">algorithm</span>,</span>
-<span>    true_blocks <span class="op">=</span> <span class="va">true_blocks</span><span class="op">)</span><span class="op">$</span><span class="va">metrics</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="va">blocks_klsh_10</span> <span class="op">&lt;-</span> <span class="fu">klsh</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/klsh/man/klsh.html">klsh</a></span><span class="op">(</span></span>
-<span>  r.set <span class="op">=</span> <span class="va">RLdata500</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;fname_c1&quot;</span>, <span class="st">&quot;fname_c2&quot;</span>, <span class="st">&quot;lname_c1&quot;</span>,</span>
-<span>                        <span class="st">&quot;lname_c2&quot;</span>, <span class="st">&quot;by&quot;</span>, <span class="st">&quot;bm&quot;</span>, <span class="st">&quot;bd&quot;</span><span class="op">)</span><span class="op">]</span>,</span>
-<span>  p <span class="op">=</span> <span class="fl">20</span>, num.blocks <span class="op">=</span> <span class="fl">10</span>, k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">klsh_10_metrics</span> <span class="op">&lt;-</span> <span class="fu">klsh</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/klsh/man/confusion.from.blocking.html">confusion.from.blocking</a></span><span class="op">(</span></span>
-<span>  blocking <span class="op">=</span> <span class="va">blocks_klsh_10</span>, </span>
-<span>  true_ids <span class="op">=</span> <span class="va">RLdata500</span><span class="op">$</span><span class="va">ent_id</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
-<span></span>
-<span><span class="va">klsh_10_metrics</span><span class="op">$</span><span class="va">f1_score</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">klsh_10_metrics</span>, </span>
-<span>                                 <span class="fl">2</span><span class="op">*</span><span class="va">precision</span><span class="op">*</span><span class="va">recall</span><span class="op">/</span><span class="op">(</span><span class="va">precision</span> <span class="op">+</span> <span class="va">recall</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">eval_metrics</span><span class="op">$</span><span class="va">klsh_10</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="va">klsh_10_metrics</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">blocks_klsh_100</span> <span class="op">&lt;-</span> <span class="fu">klsh</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/klsh/man/klsh.html">klsh</a></span><span class="op">(</span></span>
-<span>  r.set <span class="op">=</span> <span class="va">RLdata500</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">&quot;fname_c1&quot;</span>, <span class="st">&quot;fname_c2&quot;</span>, <span class="st">&quot;lname_c1&quot;</span>,</span>
-<span>                        <span class="st">&quot;lname_c2&quot;</span>, <span class="st">&quot;by&quot;</span>, <span class="st">&quot;bm&quot;</span>, <span class="st">&quot;bd&quot;</span><span class="op">)</span><span class="op">]</span>,</span>
-<span>  p <span class="op">=</span> <span class="fl">20</span>, num.blocks <span class="op">=</span> <span class="fl">100</span>, k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">klsh_100_metrics</span> <span class="op">&lt;-</span> <span class="fu">klsh</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/klsh/man/confusion.from.blocking.html">confusion.from.blocking</a></span><span class="op">(</span></span>
-<span>  blocking <span class="op">=</span> <span class="va">blocks_klsh_100</span>, </span>
-<span>  true_ids <span class="op">=</span> <span class="va">RLdata500</span><span class="op">$</span><span class="va">ent_id</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span><span class="op">]</span></span>
-<span></span>
-<span><span class="va">klsh_100_metrics</span><span class="op">$</span><span class="va">f1_score</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">klsh_100_metrics</span>, </span>
-<span>                                 <span class="fl">2</span><span class="op">*</span><span class="va">precision</span><span class="op">*</span><span class="va">recall</span><span class="op">/</span><span class="op">(</span><span class="va">precision</span> <span class="op">+</span> <span class="va">recall</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">eval_metrics</span><span class="op">$</span><span class="va">klsh_100</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="va">klsh_100_metrics</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">eval_metrics</span><span class="op">)</span> <span class="op">*</span> <span class="fl">100</span>, <span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits<span class="op">=</span><span class="fl">2</span><span class="op">)</span> </span></code></pre>
+
 </div>
-<table style="width:100%;">
-<caption><span id="tab:comparision">Table 1: </span>Comparison of various approximate nearest neighbour algorithms implemented in the <a href="https://cran.r-project.org/package=blocking">blocking</a> and the <a href="https://cran.r-project.org/package=klsh">klsh</a> package for creation of blocks for deduplication (values in percentages)</caption>
-<colgroup>
-<col style="width: 13%" />
-<col style="width: 10%" />
-<col style="width: 15%" />
-<col style="width: 9%" />
-<col style="width: 6%" />
-<col style="width: 13%" />
-<col style="width: 18%" />
-<col style="width: 13%" />
-</colgroup>
+<div class="layout-chunk" data-layout="l-body">
+<table>
+<caption>
+<span id="tab:table-html">Table 1: </span>Comparison of various approximate nearest neighbour algorithms implemented in the <a href="https://cran.r-project.org/package=blocking">blocking</a> and the <a href="https://cran.r-project.org/package=klsh">klsh</a> package for creation of blocks for deduplication (values in percentages)
+</caption>
 <thead>
-<tr class="header">
-<th style="text-align: left;"></th>
-<th style="text-align: right;">recall</th>
-<th style="text-align: right;">precision</th>
-<th style="text-align: right;">fpr</th>
-<th style="text-align: right;">fnr</th>
-<th style="text-align: right;">accuracy</th>
-<th style="text-align: right;">specificity</th>
-<th style="text-align: right;">f1_score</th>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:right;">
+recall
+</th>
+<th style="text-align:right;">
+precision
+</th>
+<th style="text-align:right;">
+fpr
+</th>
+<th style="text-align:right;">
+fnr
+</th>
+<th style="text-align:right;">
+accuracy
+</th>
+<th style="text-align:right;">
+specificity
+</th>
+<th style="text-align:right;">
+f1_score
+</th>
 </tr>
 </thead>
 <tbody>
-<tr class="odd">
-<td style="text-align: left;">nnd</td>
-<td style="text-align: right;">100</td>
-<td style="text-align: right;">5.17</td>
-<td style="text-align: right;">0.74</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">99.26</td>
-<td style="text-align: right;">99.26</td>
-<td style="text-align: right;">9.83</td>
+<tr>
+<td style="text-align:left;">
+nnd
+</td>
+<td style="text-align:right;">
+100
+</td>
+<td style="text-align:right;">
+5.17
+</td>
+<td style="text-align:right;">
+0.74
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+99.26
+</td>
+<td style="text-align:right;">
+99.26
+</td>
+<td style="text-align:right;">
+9.83
+</td>
 </tr>
-<tr class="even">
-<td style="text-align: left;">hnsw</td>
-<td style="text-align: right;">100</td>
-<td style="text-align: right;">4.76</td>
-<td style="text-align: right;">0.80</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">99.20</td>
-<td style="text-align: right;">99.20</td>
-<td style="text-align: right;">9.08</td>
+<tr>
+<td style="text-align:left;">
+hnsw
+</td>
+<td style="text-align:right;">
+100
+</td>
+<td style="text-align:right;">
+4.76
+</td>
+<td style="text-align:right;">
+0.80
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+99.20
+</td>
+<td style="text-align:right;">
+99.20
+</td>
+<td style="text-align:right;">
+9.08
+</td>
 </tr>
-<tr class="odd">
-<td style="text-align: left;">annoy</td>
-<td style="text-align: right;">100</td>
-<td style="text-align: right;">4.80</td>
-<td style="text-align: right;">0.79</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">99.21</td>
-<td style="text-align: right;">99.21</td>
-<td style="text-align: right;">9.17</td>
+<tr>
+<td style="text-align:left;">
+annoy
+</td>
+<td style="text-align:right;">
+100
+</td>
+<td style="text-align:right;">
+4.80
+</td>
+<td style="text-align:right;">
+0.79
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+99.21
+</td>
+<td style="text-align:right;">
+99.21
+</td>
+<td style="text-align:right;">
+9.17
+</td>
 </tr>
-<tr class="even">
-<td style="text-align: left;">lsh</td>
-<td style="text-align: right;">98</td>
-<td style="text-align: right;">1.04</td>
-<td style="text-align: right;">3.74</td>
-<td style="text-align: right;">2</td>
-<td style="text-align: right;">96.26</td>
-<td style="text-align: right;">96.26</td>
-<td style="text-align: right;">2.06</td>
+<tr>
+<td style="text-align:left;">
+lsh
+</td>
+<td style="text-align:right;">
+98
+</td>
+<td style="text-align:right;">
+1.04
+</td>
+<td style="text-align:right;">
+3.74
+</td>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+96.26
+</td>
+<td style="text-align:right;">
+96.26
+</td>
+<td style="text-align:right;">
+2.06
+</td>
 </tr>
-<tr class="odd">
-<td style="text-align: left;">kd</td>
-<td style="text-align: right;">100</td>
-<td style="text-align: right;">5.19</td>
-<td style="text-align: right;">0.73</td>
-<td style="text-align: right;">0</td>
-<td style="text-align: right;">99.27</td>
-<td style="text-align: right;">99.27</td>
-<td style="text-align: right;">9.87</td>
+<tr>
+<td style="text-align:left;">
+kd
+</td>
+<td style="text-align:right;">
+100
+</td>
+<td style="text-align:right;">
+5.19
+</td>
+<td style="text-align:right;">
+0.73
+</td>
+<td style="text-align:right;">
+0
+</td>
+<td style="text-align:right;">
+99.27
+</td>
+<td style="text-align:right;">
+99.27
+</td>
+<td style="text-align:right;">
+9.87
+</td>
 </tr>
-<tr class="even">
-<td style="text-align: left;">klsh_10</td>
-<td style="text-align: right;">84</td>
-<td style="text-align: right;">0.33</td>
-<td style="text-align: right;">10.13</td>
-<td style="text-align: right;">16</td>
-<td style="text-align: right;">89.87</td>
-<td style="text-align: right;">89.87</td>
-<td style="text-align: right;">0.66</td>
+<tr>
+<td style="text-align:left;">
+klsh_10
+</td>
+<td style="text-align:right;">
+84
+</td>
+<td style="text-align:right;">
+0.33
+</td>
+<td style="text-align:right;">
+10.13
+</td>
+<td style="text-align:right;">
+16
+</td>
+<td style="text-align:right;">
+89.87
+</td>
+<td style="text-align:right;">
+89.87
+</td>
+<td style="text-align:right;">
+0.66
+</td>
 </tr>
-<tr class="odd">
-<td style="text-align: left;">klsh_100</td>
-<td style="text-align: right;">90</td>
-<td style="text-align: right;">3.72</td>
-<td style="text-align: right;">0.94</td>
-<td style="text-align: right;">10</td>
-<td style="text-align: right;">99.06</td>
-<td style="text-align: right;">99.06</td>
-<td style="text-align: right;">7.14</td>
+<tr>
+<td style="text-align:left;">
+klsh_100
+</td>
+<td style="text-align:right;">
+90
+</td>
+<td style="text-align:right;">
+3.72
+</td>
+<td style="text-align:right;">
+0.94
+</td>
+<td style="text-align:right;">
+10
+</td>
+<td style="text-align:right;">
+99.06
+</td>
+<td style="text-align:right;">
+99.06
+</td>
+<td style="text-align:right;">
+7.14
+</td>
 </tr>
 </tbody>
 </table>
 </div>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
 <p>The results demonstrate a clear performance hierarchy among the ANN
-algorithms implemented in the <code>blocking</code> package, with traditional
+algorithms implemented in the <a href="https://cran.r-project.org/package=blocking">blocking</a> package, with traditional
 tree-based methods (NND, HNSW, Annoy, and kNN) achieving perfect recall
 (100%) whilst maintaining excellent precision and F1 scores around
 5-10%. Notably, these methods exhibit minimal FPR (0.73-0.80%) and

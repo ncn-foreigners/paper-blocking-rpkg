@@ -153,7 +153,6 @@ png(file = "./figures/fig-1-density.png",
 
 par(mar = c(5, 5, 2, 2))  # Adjust margins
 
-
 df_for_density <- copy(df_block_melted[block %in% RLdata500$block_id])
 df_for_density[, match:= block %in% RLdata500[id_count == 2]$block_id]
 
@@ -166,14 +165,11 @@ legend("topright",  legend = c("Non-matches", "Matches"),
 dev.off()
 
 
-## ----density-plot, out.width = "80%", fig.cap = "Distribution of distances between true matches and non-matches within blocks", fig.alt="A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the \\CRANpkg{blocking}. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies."----
+## ----density-plot, out.width = "80%", fig.cap = "Distribution of distances between true matches and non-matches within blocks", fig.alt="A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the \\CRANpkg{blocking}. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies.", fig.pos = "!ht"----
 knitr::include_graphics("./figures/fig-1-density.png")
 
 
-## ----echo = TRUE, results='asis'----------------------------------------------
-#| label: comparision
-#| tab.cap: "Comparison of various approximate nearest neighbour algorithms implemented in the \\CRANpkg{blocking} and the \\CRANpkg{klsh} package for creation of blocks for deduplication
-#| (values in percentages)"
+## ----table-comparison, echo = FALSE-------------------------------------------
 set.seed(2025)
 true_blocks <- RLdata500[, c("rec_id", "ent_id"), with = FALSE]
 setnames(true_blocks, old = c("rec_id", "ent_id"), c("x", "block"))
@@ -214,5 +210,13 @@ klsh_100_metrics$f1_score <- with(klsh_100_metrics,
 
 eval_metrics$klsh_100 <- unlist(klsh_100_metrics)
 
-round(do.call(rbind, eval_metrics) * 100, 2) |> kable(digits=2) 
+
+## ----table-html, echo = FALSE, eval = knitr::is_html_output()-----------------
+# round(do.call(rbind, eval_metrics) * 100, 2) |>
+#   kable(digits=2, format = "html", caption = "Comparison of various approximate nearest neighbour algorithms implemented in the   \\CRANpkg{blocking} and the \\CRANpkg{klsh} package for creation of blocks for deduplication (values in percentages)")
+
+
+## ----table-latex, echo = FALSE, eval = knitr::is_latex_output()---------------
+round(do.call(rbind, eval_metrics) * 100, 2) |>
+  kable(digits=2, format = "latex", caption = "Comparison of various approximate nearest neighbour algorithms implemented in the   \\CRANpkg{blocking} and the \\CRANpkg{klsh} package for creation of blocks for deduplication (values in percentages)")
 

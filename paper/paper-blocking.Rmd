@@ -460,7 +460,7 @@ predict(model, pairs = pairs, add = TRUE, type = "all") |>
 In this section, we demonstrate a\ deduplication application using the
 `blocking()` function on the `RLdata500` dataset from the
 \CRANpkg{RecordLinkage} package. Note that the dataset is included in
-the `blocking` package. It contains artificial personal data, and fifty
+the \CRANpkg{blocking} package. It contains artificial personal data, and fifty
 records have been duplicated with randomly generated errors. Each row
 represents one record, with the following columns: `fname_c1` -- first
 name, `fname_c2` -- second name, `lname_c1` -- last name, `lname_c2` --
@@ -521,8 +521,9 @@ RLdata500[df_block_melted_rec_block, on = "rec_id", block_id := i.block]
 RLdata500[, .(uniq_blocks = uniqueN(block_id)), .(ent_id)][, .N, uniq_blocks]
 ```
 
-Additionally, we visualise the result based on whether a block contains
+Additionally, Figure \@ref(fig:density-plot) visualises the results based on whether a block contains
 matches or not.
+
 ```{r fig-save, results = 'hide'}
 png(file = "./figures/fig-1-density.png", 
     width = 2400,
@@ -531,7 +532,6 @@ png(file = "./figures/fig-1-density.png",
     pointsize = 12)
 
 par(mar = c(5, 5, 2, 2))  # Adjust margins
-
 
 df_for_density <- copy(df_block_melted[block %in% RLdata500$block_id])
 df_for_density[, match:= block %in% RLdata500[id_count == 2]$block_id]
@@ -545,7 +545,7 @@ legend("topright",  legend = c("Non-matches", "Matches"),
 dev.off()
 ```
 
-```{r density-plot, out.width = "80%", fig.cap = "Distribution of distances between true matches and non-matches within blocks", fig.alt="A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the \\CRANpkg{blocking}. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies."}
+```{r density-plot, out.width = "80%", fig.cap = "Distribution of distances between true matches and non-matches within blocks", fig.alt="A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the \\CRANpkg{blocking}. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies.", fig.pos = "!ht"}
 knitr::include_graphics("./figures/fig-1-density.png")
 ```
 
@@ -561,12 +561,10 @@ We compare our package with the `klsh()` function from the
 \CRANpkg{klsh} package, configured to create 10 blocks (denoted as
 `klsh_10`) and 100 blocks (denoted as `klsh_100`), respectively. In both
 settings, we use 20 random projections and 2-character shingles. The
-results are presented in Table 2.
+results are presented in Table 2, and the code generating it
+is included in the Supplementary materials.
 
-```{r echo = TRUE, results='asis'}
-#| label: comparision
-#| tab.cap: "Comparison of various approximate nearest neighbour algorithms implemented in the \\CRANpkg{blocking} and the \\CRANpkg{klsh} package for creation of blocks for deduplication
-#| (values in percentages)"
+```{r table-comparison, echo = FALSE}
 set.seed(2025)
 true_blocks <- RLdata500[, c("rec_id", "ent_id"), with = FALSE]
 setnames(true_blocks, old = c("rec_id", "ent_id"), c("x", "block"))
@@ -606,12 +604,20 @@ klsh_100_metrics$f1_score <- with(klsh_100_metrics,
                                  2*precision*recall/(precision + recall))
 
 eval_metrics$klsh_100 <- unlist(klsh_100_metrics)
+```
 
-round(do.call(rbind, eval_metrics) * 100, 2) |> kable(digits=2) 
+```{r table-html, echo = FALSE, eval = knitr::is_html_output()}
+round(do.call(rbind, eval_metrics) * 100, 2) |>
+  kable(digits=2, format = "html", caption = "Comparison of various approximate nearest neighbour algorithms implemented in the   \\CRANpkg{blocking} and the \\CRANpkg{klsh} package for creation of blocks for deduplication (values in percentages)")
+```
+
+```{r table-latex, echo = FALSE, eval = knitr::is_latex_output()}
+round(do.call(rbind, eval_metrics) * 100, 2) |>
+  kable(digits=2, format = "latex", caption = "Comparison of various approximate nearest neighbour algorithms implemented in the   \\CRANpkg{blocking} and the \\CRANpkg{klsh} package for creation of blocks for deduplication (values in percentages)")
 ```
 
 The results demonstrate a clear performance hierarchy among the ANN
-algorithms implemented in the `blocking` package, with traditional
+algorithms implemented in the \CRANpkg{blocking} package, with traditional
 tree-based methods (NND, HNSW, Annoy, and kNN) achieving perfect recall
 (100%) whilst maintaining excellent precision and F1 scores around
 5-10%. Notably, these methods exhibit minimal FPR (0.73-0.80%) and
