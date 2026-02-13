@@ -288,14 +288,14 @@ both records from the comparison pair belong to the same predicted
 \end{itemize}
 
 Metrics calculated based on this confusion matrix are presented in
-Table~1.
+Table \ref{tab:eval-metrics}.
 
 \begin{longtable}[]{@{}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}
   >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2500}}@{}}
-\caption{Evaluation Metrics}\tabularnewline
+\caption{\label{tab:eval-metrics} Evaluation Metrics}\tabularnewline
 \toprule\noalign{}
 \begin{minipage}[b]{\linewidth}\raggedright
 \textbf{Metric}
@@ -736,10 +736,10 @@ RLdata500[, .(uniq_blocks = uniqueN(block_id)), .(ent_id)][, .N, uniq_blocks]
 \end{verbatim}
 
 Additionally, Figure \ref{fig:density-plot} visualises the results based on whether a block contains
-matches or not.
+matches or not. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies.
 
-\begin{figure}[!ht]
-\includegraphics[width=0.8\linewidth,alt={A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the \CRANpkg{blocking}. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies.}]{./figures/fig-1-density} \caption{Distribution of distances between true matches and non-matches within blocks}\label{fig:density-plot}
+\begin{figure}
+\includegraphics[width=1\linewidth,alt={A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the `blocking`. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies.}]{paper-blocking_files/figure-latex/density-plot-1} \caption{Distribution of distances between true matches and non-matches within blocks}\label{fig:density-plot}
 \end{figure}
 
 Finally, we compare the evaluation metrics across all ANN algorithms
@@ -754,7 +754,7 @@ We compare our package with the \texttt{klsh()} function from the
 \CRANpkg{klsh} package, configured to create 10 blocks (denoted as
 \texttt{klsh\_10}) and 100 blocks (denoted as \texttt{klsh\_100}), respectively. In both
 settings, we use 20 random projections and 2-character shingles. The
-results are presented in Table 2, and the code generating it
+results are presented in Table \ref{tab:table-latex}, and the code generating it
 is included in the Supplementary materials.
 
 \begin{table}

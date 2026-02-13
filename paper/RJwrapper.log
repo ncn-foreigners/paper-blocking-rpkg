@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.2.1)  12 FEB 2026 15:41
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.2.1)  13 FEB 2026 17:29
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -820,12 +820,12 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 [8{/Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}] [9]
-<./figures/fig-1-density.png, id=243, 2409.0pt x 1606.0pt>
-File: ./figures/fig-1-density.png Graphic file (type png)
-<use ./figures/fig-1-density.png>
-Package pdftex.def Info: ./figures/fig-1-density.png  used on input line 742.
-(pdftex.def)             Requested size: 318.67207pt x 212.43866pt.
-[10 <./figures/fig-1-density.png>] (./RJwrapper.bbl (./RJwrapper.brf)
+<paper-blocking_files/figure-latex/density-plot-1.pdf, id=244, 505.89pt x 361.35pt>
+File: paper-blocking_files/figure-latex/density-plot-1.pdf Graphic file (type pdf)
+<use paper-blocking_files/figure-latex/density-plot-1.pdf>
+Package pdftex.def Info: paper-blocking_files/figure-latex/density-plot-1.pdf  used on input line 742.
+(pdftex.def)             Requested size: 398.33858pt x 284.53156pt.
+[10 <./paper-blocking_files/figure-latex/density-plot-1.pdf>] (./RJwrapper.bbl (./RJwrapper.brf)
 \tf@brf=\write6
 \openout6 = `RJwrapper.brf'.
 
@@ -836,7 +836,7 @@ LaTeX Font Warning: Font shape `T1/zi4/m/it' undefined
 
 LaTeX Font Info:    Font shape `T1/zi4/m/it' will be
 (Font)              scaled to size 10.20004pt on input line 851.
-) [13] [14] (./RJwrapper.aux)
+[13]) [14] (./RJwrapper.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
@@ -850,18 +850,18 @@ Package rerunfilecheck Info: File `RJwrapper.brf' has not changed.
 (rerunfilecheck)             Checksum: B174EC6F4EAE0E10886AE11C48B7F89E;1700.
  ) 
 Here is how much of TeX's memory you used:
- 27308 strings out of 469514
- 498310 string characters out of 5468563
- 920184 words of memory out of 5000000
- 55103 multiletter control sequences out of 15000+600000
- 672833 words of font info for 291 fonts, out of 8000000 for 9000
+ 27310 strings out of 469514
+ 498538 string characters out of 5468563
+ 922228 words of memory out of 5000000
+ 55102 multiletter control sequences out of 15000+600000
+ 672992 words of font info for 293 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 117i,11n,131p,1006b,911s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 117i,11n,131p,1006b,943s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4b.pfb></Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb></Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on RJwrapper.pdf (14 pages, 286128 bytes).
+Output written on RJwrapper.pdf (14 pages, 191475 bytes).
 PDF statistics:
- 413 PDF objects out of 1000 (max. 8388607)
- 372 compressed objects within 4 object streams
+ 418 PDF objects out of 1000 (max. 8388607)
+ 377 compressed objects within 4 object streams
  68 named destinations out of 1000 (max. 500000)
  56442 words of extra memory for PDF output out of 61914 (max. 10000000)
 

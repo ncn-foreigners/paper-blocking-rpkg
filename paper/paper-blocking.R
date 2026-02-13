@@ -144,15 +144,7 @@ RLdata500[df_block_melted_rec_block, on = "rec_id", block_id := i.block]
 RLdata500[, .(uniq_blocks = uniqueN(block_id)), .(ent_id)][, .N, uniq_blocks]
 
 
-## ----fig-save, results = 'hide'-----------------------------------------------
-png(file = "./figures/fig-1-density.png", 
-    width = 2400,
-    height = 1600,
-    res = 300,  
-    pointsize = 12)
-
-par(mar = c(5, 5, 2, 2))  # Adjust margins
-
+## ----density-plot, echo=FALSE, fig.cap = "Distribution of distances between true matches and non-matches within blocks", fig.height = 5, fig.width = 7, out.width="100%", fig.alt="A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the `blocking`. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies."----
 df_for_density <- copy(df_block_melted[block %in% RLdata500$block_id])
 df_for_density[, match:= block %in% RLdata500[id_count == 2]$block_id]
 
@@ -162,11 +154,6 @@ lines(density(df_for_density[match==TRUE]$dist),
       col = "red", xlim = c(0, 0.8))
 legend("topright",  legend = c("Non-matches", "Matches"), 
        col = c("blue", "red"),  lty = 1, lwd = 2)
-dev.off()
-
-
-## ----density-plot, out.width = "80%", fig.cap = "Distribution of distances between true matches and non-matches within blocks", fig.alt="A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the \\CRANpkg{blocking}. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies.", fig.pos = "!ht"----
-knitr::include_graphics("./figures/fig-1-density.png")
 
 
 ## ----table-comparison, echo = FALSE-------------------------------------------
