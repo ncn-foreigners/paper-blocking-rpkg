@@ -29,6 +29,8 @@ output:
     self_contained: yes
     toc: no
 bibliography: RJreferences.bib
+header-includes:
+  - \usepackage{needspace}
 ---
 
 ```{r setup, include=FALSE}
@@ -76,7 +78,7 @@ Furthermore, with the growing popularity of large language models (both
 closed and open-source), one may consider using embeddings
 [@mikolov2013efficient] to identify nearest neighbours and treat these
 as potential comparison pairs. For a comprehensive review of blocking
-methods, see @Steorts2014 or @Papadakis2020. Section 1.2 discusses
+methods, see @Steorts2014 or @Papadakis2020. Section [1.2](#sec-software) discusses
 existing R packages that implement blocking methods.
 
 Reducing the number of pairs has inherent costs: missed comparisons lead
@@ -144,7 +146,7 @@ linkage of units between or within sources. The basic workflow of the
     \CRANpkg{rnndescent} [@rnndescent], \CRANpkg{RcppHNSW} [@RcppHNSW],
     \CRANpkg{mlpack} (@mlpack2023, @mlpack2025), and \CRANpkg{RcppAnnoy}
     [@RcppAnnoy].
-3.  Create final blocks using \CRANpkg{igraph} (@igraph2025,@igraph2006).
+3.  Create final blocks using \CRANpkg{igraph} (@igraph2025, @igraph2006).
 
 This is the only package in the R ecosystem that readily applies modern
 ANN algorithms to reduce the number of comparisons and substantially
@@ -154,16 +156,16 @@ developed the `pair_ann()` function for seamless integration with the
 
 ## Outline of the article
 
-This paper is structured as follows. Section 2 provides a description of
+This paper is structured as follows. Section [2](#sec-blocks) provides a description of
 the main functionalities of the \CRANpkg{blocking} package and how
-results can be evaluated. Section 3 presents two case studies:
+results can be evaluated. Section [3](#sec-case) presents two case studies:
 probabilistic record linkage and deduplication. These examples
 demonstrate how our package can improve the entity resolution pipeline
 and integrate with existing R packages.
 
 # Blocking of records using `blocking()` function {#sec-blocks}
 
-## The main function
+## The main function 
 
 The main functionality is available via the `blocking()` function, which
 contains the following key arguments:
@@ -243,27 +245,39 @@ both records from the comparison pair belong to the same predicted
 *block* and to the same ground-truth *block* in the evaluation
 `data.frame`). The values in this table are defined as follows:
 
--   True positive (TP): record pairs correctly matched in the same
+-   True Positive (TP): Record pairs correctly matched in the same
     block.
--   False positive (FP): record pairs identified as matches that are not
+-   False Positive (FP): Record pairs identified as matches that are not
     true matches in the same block.
--   True negative (TN): record pairs correctly identified as non-matches
+-   True Negative (TN): Record pairs correctly identified as non-matches
     (different blocks).
--   False negative (FN): record pairs identified as non-matches that are
+-   False Negative (FN): Record pairs identified as non-matches that are
     true matches in the same block.
 
-Metrics calculated based on this confusion matrix are presented in
-Table \@ref(tab:eval-metrics).
+Metrics calculated based on this confusion matrix are defined in
+Table \@ref(tab:eval-metrics). In the context of blocking, these
+metrics are interpreted as follows:
+
+-   Accuracy: The ability to discriminate true pairs (both matches and non-matches).
+-   Precision (Positive Predictive Value, or Pairs Quality): The proportion of true matches among the
+    candidate pairs. In blocking, it is expected to be lower than in final linkage.
+-   False Positive Rate (FPR): The share of non-matches incorrectly included in the blocks.
+    It is expected to be low as pairs of non-links should be spotted as True Negatives.
+-   False Negative Rate (FNR): The share of matches missed by blocking. It is expected to be
+    low as blocking should discover all pairs one wants to compare in entity resolution.
+-   F1 Score: Combines precision and FNR. However, it might be less relevant
+    in the context of blocking, since low FNR and low precision are expected.
 
 | **Metric** | **Formula** | **Metric** | **Formula** |
 |------------------|------------------|------------------|------------------|
-| Recall | $\frac{TP}{TP + FN}$ | Accuracy | $\frac{TP + TN}{TP + TN + FP + FN}$ |
-| Precision | $\frac{TP}{TP + FP}$ | Specificity | $\frac{TN}{TN + FP}$ |
-| F1 Score | $2 \cdot \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}$ | False Positive Rate | $\frac{FP}{FP + TN}$ |
-| False Negative Rate | $\frac{FN}{FN + TP}$ |  |  |
+| Accuracy | $\frac{TP + TN}{TP + TN + FP + FN}$ | Precision | $\frac{TP}{TP + FP}$ |
+| False Positive Rate | $\frac{FP}{FP + TN}$ | False Negative Rate | $\frac{FN}{FN + TP}$ |
+| F1 Score | $2 \cdot \frac{\text{Precision} \cdot (1 - \text{FNR})}{\text{Precision} + (1 - \text{FNR})}$ |  |  |
 
 Table: (\#tab:eval-metrics) Evaluation Metrics
 
+The `blocking()` function also returns recall (sensitivity, or pairs completeness) and specificity,
+defined as $\text{Recall} = 1 - \text{FNR}$ and $\text{Specificity} = 1 - \text{FPR}$.
 
 # Case studies {#sec-case}
 
@@ -326,8 +340,6 @@ The default algorithm is the Nearest Neighbour Descent Method
 default parameter of the `blocking()` function is `seed = 2023`, which sets
 the random seed.
 
-
-<!-- # ```{r reclin_nnd, echo = TRUE, eval = FALSE} -->
 ```{r reclin_nnd, echo = TRUE, eval = FALSE}
 result_reclin <- blocking(x = foreigners_1$txt,
                           y = foreigners_2$txt)
@@ -355,6 +367,7 @@ elements, `r format(block_count[2], big.mark = ",")` blocks of
 `r format(block_count[NROW(block_count)], big.mark = ",")` blocks of
 `r block_size[NROW(block_size)]` elements.
 
+\needspace{10\baselineskip}
 ```{r reclin_nnd_summary, echo = TRUE}
 result_reclin
 ```
@@ -369,6 +382,7 @@ resulting data.table has four columns (as presented below):
 -   `block` -- the block identifier;
 -   `dist` -- distance between pairs.
 
+\needspace{9\baselineskip}
 ```{r reclin_nnd_result, echo = TRUE}
 head(result_reclin$result)
 ```
@@ -377,7 +391,8 @@ Let's examine the first block. Clearly, there are typos in the `fname`
 and `surname`. Nevertheless, all records refer to the same entity (as
 denoted by `true_id`).
 
-```{r reclin_nnd_example, echo = TRUE}
+\needspace{6\baselineskip}
+```{r reclin_nnd_example, echo = TRUE, collapse = TRUE}
 rbind(foreigners_1[3, 1:7], foreigners_2[1:2, 1:7])
 ```
 
@@ -399,7 +414,6 @@ assignments. This `data.frame` must contain three columns:
 We obtain quality metrics for the assessment of record
 linkage.
 
-<!-- # ```{r reclin_nnd_true_blocks, echo = TRUE, eval = FALSE} -->
 ```{r reclin_nnd_true_blocks, echo = TRUE, eval = FALSE}
 res_reclin <- blocking(x = foreigners_1$txt,
                        y = foreigners_2$txt,
@@ -410,6 +424,7 @@ res_reclin <- blocking(x = foreigners_1$txt,
 res_reclin <- readRDS("data/result_reclin_matches.rds")
 ```
 
+\needspace{16\baselineskip}
 ```{r reclin_nnd_true_blocks_print, echo = TRUE}
 res_reclin
 ```
@@ -419,7 +434,6 @@ we can increase the epsilon parameter of the NND method from 0.1 to 0.5.
 To do so, we configure the `control_ann` parameter in the `blocking()`
 function using the `controls_ann()` and `control_nnd()` functions.
 
-<!-- # ```{r reclin_nnd_improved, echo = TRUE, eval = FALSE} -->
 ```{r reclin_nnd_improved, echo = TRUE, eval = FALSE}
 res_reclin2 <- blocking(x = foreigners_1$txt,
                         y = foreigners_2$txt,
@@ -431,6 +445,7 @@ res_reclin2 <- blocking(x = foreigners_1$txt,
 res_reclin2 <- readRDS("data/res_reclin2.rds")
 ```
 
+\needspace{16\baselineskip}
 ```{r reclin_nnd_improved_print, echo = TRUE}
 res_reclin2
 ```
@@ -500,6 +515,7 @@ res_dedup <- blocking(x = RLdata500$txt,
 The results are as follows. This time, the HNSW algorithm provided
 blocks varying from 2 to 17 units.
 
+\needspace{10\baselineskip}
 ```{r dedup_hnsw_result, echo = TRUE}
 res_dedup
 ```
@@ -524,7 +540,7 @@ RLdata500[, .(uniq_blocks = uniqueN(block_id)), .(ent_id)][, .N, uniq_blocks]
 Additionally, Figure \@ref(fig:density-plot) visualises the results based on whether a block contains
 matches or not. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies.
 
-```{r density-plot, echo=FALSE, fig.cap = "Distribution of distances between true matches and non-matches within blocks", fig.height = 5, fig.width = 7, out.width="100%", fig.alt="A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the `blocking`. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies."}
+```{r density-plot, echo=FALSE, fig.cap = "Distribution of distances between true matches and non-matches within blocks", fig.height = 5, fig.width = 7, out.width="100%", fig.alt="A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the `blocking`. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies.", fig.pos = "!ht"}
 df_for_density <- copy(df_block_melted[block %in% RLdata500$block_id])
 df_for_density[, match:= block %in% RLdata500[id_count == 2]$block_id]
 
@@ -549,7 +565,7 @@ We compare our package with the `klsh()` function from the
 `klsh_10`) and 100 blocks (denoted as `klsh_100`), respectively. In both
 settings, we use 20 random projections and 2-character shingles. The
 results are presented in Table \@ref(tab:`r ifelse(knitr::is_html_output(), "table-html", "table-latex")`), and the code generating it
-is included in the Supplementary materials.
+(which also outputs confusion matrices) is included in the Supplementary materials.
 
 ```{r table-comparison, echo = FALSE}
 set.seed(2025)
@@ -588,36 +604,35 @@ klsh_100_metrics <- klsh::confusion.from.blocking(
   true_ids = RLdata500$ent_id)[-1]
 
 klsh_100_metrics$f1_score <- with(klsh_100_metrics, 
-                                 2*precision*recall/(precision + recall))
+                                2*precision*recall/(precision + recall))
 
 eval_metrics$klsh_100 <- unlist(klsh_100_metrics)
 ```
 
 ```{r table-html, echo = FALSE, eval = knitr::is_html_output()}
-round(do.call(rbind, eval_metrics) * 100, 2) |>
+round(do.call(rbind, eval_metrics) * 100, 2)[, c("precision", "fpr", "fnr", "accuracy", "f1_score")] |>
   kable(digits=2, format = "html", caption = "Comparison of various approximate nearest neighbour algorithms implemented in the   \\CRANpkg{blocking} and the \\CRANpkg{klsh} package for creation of blocks for deduplication (values in percentages)")
 ```
 
-```{r table-latex, echo = FALSE, eval = knitr::is_latex_output()}
-round(do.call(rbind, eval_metrics) * 100, 2) |>
+```{r table-latex, echo = FALSE, eval = knitr::is_latex_output(), fig.pos = "!ht"}
+round(do.call(rbind, eval_metrics) * 100, 2)[, c("precision", "fpr", "fnr", "accuracy", "f1_score")] |>
   kable(digits=2, format = "latex", caption = "Comparison of various approximate nearest neighbour algorithms implemented in the   \\CRANpkg{blocking} and the \\CRANpkg{klsh} package for creation of blocks for deduplication (values in percentages)")
 ```
 
 The results demonstrate a clear performance hierarchy among the ANN
 algorithms implemented in the \CRANpkg{blocking} package, with traditional
-tree-based methods (NND, HNSW, Annoy, and kNN) achieving perfect recall
-(100%) whilst maintaining excellent precision and F1 scores around
-5-10%. Notably, these methods exhibit minimal FPR (0.73-0.80%) and
-maintain high specificity (99.20-99.27%), indicating their effectiveness
-in creating tight, accurate blocks.
+tree-based methods (NND, HNSW, Annoy, and kNN) achieving perfect FNR
+(0%) whilst maintaining excellent precision and F1 scores around
+5-10%. Notably, these methods exhibit minimal FPR (0.73-0.80%),
+indicating their effectiveness in creating tight, accurate blocks.
 
 In contrast, the LSH-based methods show more variable performance: the
-`mlpack` LSH implementation achieves 98% recall but suffers from higher
-FPR (3.74%) and, importantly, FNR (2%), whilst the `klsh` package
+\CRANpkg{mlpack} LSH implementation achieves 2% FNR and suffers from higher
+FPR (3.74%), whilst the \CRANpkg{klsh} package
 results reveal a trade-off between block granularity and performance --
-`klsh_10` with only 10 blocks shows poor recall (84%), high FPR
-(10.13%), and FNR (16%), whereas `klsh_100` with 100 blocks recovers
-much of the performance (90% recall, 0.94% FPR, but high FNR of 10%).
+`klsh_10` with only 10 blocks shows high FNR (16%) and FPR
+(10.13%), whereas `klsh_100` with 100 blocks recovers
+much of the performance (10% FNR, 0.94% FPR).
 This indicates that the `klsh`, particularly these implementations of
 the LSH approach, misses a large number of true matches.
 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.2.1)  13 FEB 2026 17:29
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.2.1)  14 FEB 2026 14:53
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -624,30 +624,32 @@ LaTeX Info: Redefining \setlength on input line 86.
 LaTeX Info: Redefining \addtolength on input line 87.
 \calc@Ccount=\count353
 \calc@Cskip=\skip84
+) (/Users/adamstruzik/Library/TinyTeX/texmf-dist/tex/latex/needspace/needspace.sty
+Package: needspace 2025/03/13 v1.3e reserve vertical space
 ) (/Users/adamstruzik/Library/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count354
 ) (./RJwrapper.aux)
 \openout1 = `RJwrapper.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 54.
-LaTeX Font Info:    ... okay on input line 54.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 55.
+LaTeX Font Info:    ... okay on input line 55.
 (/Users/adamstruzik/Library/TinyTeX/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
@@ -690,15 +692,15 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Info: Redefining \microtypecontext on input line 54.
-Package microtype Info: Applying patch `item' on input line 54.
-Package microtype Info: Applying patch `toc' on input line 54.
-Package microtype Info: Applying patch `eqnum' on input line 54.
+LaTeX Info: Redefining \microtypecontext on input line 55.
+Package microtype Info: Applying patch `item' on input line 55.
+Package microtype Info: Applying patch `toc' on input line 55.
+Package microtype Info: Applying patch `eqnum' on input line 55.
 
-Package microtype Warning: Unable to apply patch `footnote' on input line 54.
+Package microtype Warning: Unable to apply patch `footnote' on input line 55.
 
-Package microtype Info: Applying patch `verbatim' on input line 54.
-LaTeX Info: Redefining \microtypesetup on input line 54.
+Package microtype Info: Applying patch `verbatim' on input line 55.
+LaTeX Info: Redefining \microtypesetup on input line 55.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using default protrusion set `alltext'.
@@ -714,8 +716,8 @@ File: mt-ppl.cfg 2005/11/16 v1.6 microtype config. file: Palatino (RS)
 ) (/Users/adamstruzik/Library/TinyTeX/texmf-dist/tex/latex/upquote/upquote.sty
 Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verbatim
 )
-Package backref Info: ** backref set up for natbib ** on input line 54.
-Package hyperref Info: Link coloring ON on input line 54.
+Package backref Info: ** backref set up for natbib ** on input line 55.
+Package hyperref Info: Link coloring ON on input line 55.
 (./RJwrapper.out) (./RJwrapper.out)
 \@outlinefile=\write5
 \openout5 = `RJwrapper.out'.
@@ -799,44 +801,44 @@ Overfull \hbox (10.05826pt too wide) in paragraph at lines 103--107
 LaTeX Font Info:    Font shape `T1/zi4/b/n' will be
 (Font)              scaled to size 12.24005pt on input line 169.
 [3] [4] [5]
-Overfull \hbox (5.79631pt too wide) in paragraph at lines 452--455
+Overfull \hbox (5.79631pt too wide) in paragraph at lines 475--478
 []\T1/zi4/m/n/10 x \T1/ppl/m/n/10 (-20) -- ref-er-ence dataset (i.e., \T1/zi4/m/n/10 foreigners_1\T1/ppl/m/n/10 (-20) ) -- this may not con-tain all units of \T1/zi4/m/n/10 foreigners_1\T1/ppl/m/n/10 (-20) ; 
  []
 
 [6]
-Overfull \hbox (21.83835pt too wide) in paragraph at lines 552--556
+Overfull \hbox (21.83835pt too wide) in paragraph at lines 578--582
 \T1/zi4/m/n/10 control_ann \T1/ppl/m/n/10 (-20) pa-ram-e-ter in the \T1/zi4/m/n/10 blocking() \T1/ppl/m/n/10 (-20) func-tion us-ing the \T1/zi4/m/n/10 controls_ann() \T1/ppl/m/n/10 (-20) and \T1/zi4/m/n/10 control_nnd()
  []
 
 [7]
-LaTeX Font Info:    Trying to load font information for TS1+zi4 on input line 624.
+LaTeX Font Info:    Trying to load font information for TS1+zi4 on input line 652.
 (/Users/adamstruzik/Library/TinyTeX/texmf-dist/tex/latex/inconsolata/ts1zi4.fd
 File: ts1zi4.fd 2018/01/14 TS1/zi4 (Inconsolata)
 )
 LaTeX Font Info:    Font shape `TS1/zi4/m/n' will be
-(Font)              scaled to size 10.20004pt on input line 624.
+(Font)              scaled to size 10.20004pt on input line 652.
 Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `zi4' (encoding: TS1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 [8{/Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/enc/dvips/inconsolata/i4-ts1.enc}] [9]
-<paper-blocking_files/figure-latex/density-plot-1.pdf, id=244, 505.89pt x 361.35pt>
+<paper-blocking_files/figure-latex/density-plot-1.pdf, id=247, 505.89pt x 361.35pt>
 File: paper-blocking_files/figure-latex/density-plot-1.pdf Graphic file (type pdf)
 <use paper-blocking_files/figure-latex/density-plot-1.pdf>
-Package pdftex.def Info: paper-blocking_files/figure-latex/density-plot-1.pdf  used on input line 742.
+Package pdftex.def Info: paper-blocking_files/figure-latex/density-plot-1.pdf  used on input line 772.
 (pdftex.def)             Requested size: 398.33858pt x 284.53156pt.
-[10 <./paper-blocking_files/figure-latex/density-plot-1.pdf>] (./RJwrapper.bbl (./RJwrapper.brf)
+[10] [11 <./paper-blocking_files/figure-latex/density-plot-1.pdf>] (./RJwrapper.bbl (./RJwrapper.brf)
 \tf@brf=\write6
 \openout6 = `RJwrapper.brf'.
 
-[11] [12])
+[12] [13])
 
 LaTeX Font Warning: Font shape `T1/zi4/m/it' undefined
-(Font)              using `T1/zi4/m/n' instead on input line 851.
+(Font)              using `T1/zi4/m/n' instead on input line 880.
 
 LaTeX Font Info:    Font shape `T1/zi4/m/it' will be
-(Font)              scaled to size 10.20004pt on input line 851.
-[13]) [14] (./RJwrapper.aux)
+(Font)              scaled to size 10.20004pt on input line 880.
+) [14] (./RJwrapper.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
@@ -847,21 +849,21 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 Package rerunfilecheck Info: File `RJwrapper.out' has not changed.
 (rerunfilecheck)             Checksum: 262DA796EFAC7D48498477DD27BA9285;2790.
 Package rerunfilecheck Info: File `RJwrapper.brf' has not changed.
-(rerunfilecheck)             Checksum: B174EC6F4EAE0E10886AE11C48B7F89E;1700.
+(rerunfilecheck)             Checksum: 34C41B8E6DB66FED40B07A41134B9828;1700.
  ) 
 Here is how much of TeX's memory you used:
- 27310 strings out of 469514
- 498538 string characters out of 5468563
- 922228 words of memory out of 5000000
- 55102 multiletter control sequences out of 15000+600000
- 672992 words of font info for 293 fonts, out of 8000000 for 9000
+ 27336 strings out of 469514
+ 499235 string characters out of 5468563
+ 921490 words of memory out of 5000000
+ 55121 multiletter control sequences out of 15000+600000
+ 673077 words of font info for 295 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 117i,11n,131p,1006b,943s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 117i,12n,131p,1006b,923s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4b.pfb></Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/type1/public/inconsolata/Inconsolata-zi4r.pfb></Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></Users/adamstruzik/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on RJwrapper.pdf (14 pages, 191475 bytes).
+Output written on RJwrapper.pdf (14 pages, 192375 bytes).
 PDF statistics:
- 418 PDF objects out of 1000 (max. 8388607)
- 377 compressed objects within 4 object streams
+ 426 PDF objects out of 1000 (max. 8388607)
+ 385 compressed objects within 4 object streams
  68 named destinations out of 1000 (max. 500000)
  56442 words of extra memory for PDF output out of 61914 (max. 10000000)
 
