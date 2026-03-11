@@ -2,23 +2,23 @@
 title: "blocking: An R Package for Blocking of Records for Record Linkage and Deduplication"
 date: "2025-08-27"
 abstract: >
-  Entity resolution (probabilistic record linkage, deduplication) is essential for bringing together data needed for estimation or other analyses based on multiple sources. It aims to link records that refer to the same entity (e.g., person, company) in the absence of unique identifiers. Without identifiers, researchers must specify which records to compare to calculate matching probability and reduce computational complexity. Traditional deterministic blocking uses common variables like first letters of names, sex, or dates of birth, but assumes error-free, complete data. To address this limitation, we developed the R package **blocking**, which uses approximate nearest neighbor search and graph algorithms to reduce the number of comparisons. This paper presents the package design, functionalities, and two case studies.
+  Entity resolution (probabilistic record linkage, deduplication) is essential for bringing together data needed for estimation or other analyses based on multiple sources. It aims to link records that refer to the same entity (e.g., person, company) in the absence of unique identifiers. Without identifiers, researchers must specify which records to compare to calculate matching probability and reduce computational complexity. Traditional deterministic blocking uses common variables like first letters of names, sex, or dates of birth, but assumes error-free, complete data. To address this limitation, we developed the R package **blocking**, which uses approximate nearest neighbour search and graph algorithms to reduce the number of comparisons. This paper presents the package design, functionalities, and two case studies.
 draft: false
 author:  
   - name: Maciej Beręsewicz
     affiliation: 
       - University of Economics and Business  
-      - Statisical Office in Poznań  
+      - Statistical Office in Poznań  
     address:
       - Department of Statistics  
       - Centre for the Methodology of Population Studies  
     url: https://maciejberesewicz.com
     orcid: 0000-0002-8281-4301
-    email: maciej.beresewicz@poznan.pl
+    email: maciej.beresewicz@ue.poznan.pl
   - name: Adam Struzik
     affiliation:
       - Adam Mickiewicz University  
-      - Statisical Office in Poznań  
+      - Statistical Office in Poznań  
     address:
       - Faculty of Mathematics and Computer Science  
       - Centre for Urban Statistics  
@@ -64,7 +64,7 @@ records in large datasets (e.g., the aforementioned example would
 require over 700 billion comparisons). Consequently, researchers aim to
 reduce the number of comparisons in various ways prior to the record
 linkage/deduplication stage. The rationale is twofold: computational
-resource constraints and clerical review workload (cf. @christen2012book)
+resource constraints and clerical review workload (cf. @christen2012book).
 
 Reducing the number of comparisons is accomplished through blocking, a
 method that limits possible comparisons by assuming that certain
@@ -79,7 +79,7 @@ Furthermore, with the growing popularity of large language models (both
 closed and open-source), one may consider using embeddings
 [@mikolov2013efficient] to identify nearest neighbours and treat these
 as potential comparison pairs. For a comprehensive review of blocking
-methods, see @Christen2012, @Steorts2014 or @Papadakis2020. Section
+methods, see @Christen2012, @Steorts2014, or @Papadakis2020. Section
 [1.2](#sec-software) discusses existing R packages that implement
 blocking methods.
 
@@ -169,7 +169,7 @@ These steps can be explained as follows:
     as dense numeric vectors. Embeddings can be obtained, for example,
     via \CRANpkg{ragnar} [@ragnar], a package that provides an interface
     to large language models for generating text embeddings (either
-    static or dynamic). An example using embeddings is provided in Supplementary Materials.
+    static or dynamic). An example using embeddings is provided in the Supplementary Materials.
 2.  Search for nearest neighbours using ANN algorithms implemented in
     \CRANpkg{rnndescent} (the only one allowing for sparse matrices, 
     cf. @rnndescent), \CRANpkg{RcppHNSW} [@RcppHNSW],
@@ -304,7 +304,7 @@ interpreted as follows:
 -   False Negative Rate (FNR): The share of matches missed by blocking.
     It is expected to be low as blocking should discover all pairs one
     wants to compare in entity resolution.
--   F1 Score: Combines precision and recall. However, it may be less relevant in the context of blocking, since both low precision and low recall are expected. For a critique of the F1 score in the context of record linkage see @hand2018, and for an alternative F* measure see @hand2021 (not yet implemented).
+-   F1 Score: Combines precision and FNR. However, it may be less relevant in the context of blocking, since low precision and low FNR are expected. For a critique of the F1 score in the context of record linkage see @hand2018, and for an alternative F* measure see @hand2021 (not yet implemented).
 
 | **Metric** | **Formula** | **Metric** | **Formula** |
 |------------------|------------------|------------------|------------------|
@@ -595,7 +595,7 @@ for the second group, the distance is similar to true non-matches
 (between 0.4 and 0.6). This distance may be used as additional
 information for deduplication (and record linkage) studies.
 
-```{r density-plot, echo=FALSE, fig.cap = "Distribution of distances between true matches and non-matches within blocks", fig.height = 5, fig.width = 7, out.width="100%", fig.alt="A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the `blocking`. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), while for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies.", fig.pos = "!ht"}
+```{r density-plot, echo=FALSE, fig.cap = "Distribution of distances between true matches and non-matches within blocks", fig.height = 5, fig.width = 7, out.width="100%", fig.alt="A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the `blocking` function. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), while for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies.", fig.pos = "!ht"}
 df_for_density <- copy(df_block_melted[block %in% RLdata500$block_id])
 df_for_density[, match:= block %in% RLdata500[id_count == 2]$block_id]
 
@@ -668,19 +668,19 @@ eval_metrics$klsh_100 <- unlist(klsh_100_metrics)
 
 ```{r table-html, echo = FALSE, eval = knitr::is_html_output()}
 round(do.call(rbind, eval_metrics) * 100, 2)[, c("precision", "fpr", "fnr", "accuracy", "f1_score")] |>
-  kable(digits=2, format = "html", caption = "Comparison of various approximate nearest neighbour algorithms implemented in the   \\CRANpkg{blocking} and the \\CRANpkg{klsh} package for creation of blocks for deduplication (values in percentages)")
+  kable(digits=2, format = "html", caption = "Comparison of various approximate nearest neighbour algorithms implemented in the \\CRANpkg{blocking} and the \\CRANpkg{klsh} packages for creation of blocks for deduplication (values in percentages)")
 ```
 
 ```{r table-latex, echo = FALSE, eval = knitr::is_latex_output(), fig.pos = "!ht"}
 round(do.call(rbind, eval_metrics) * 100, 2)[, c("precision", "fpr", "fnr", "accuracy", "f1_score")] |>
-  kable(digits=2, format = "latex", caption = "Comparison of various approximate nearest neighbour algorithms implemented in the   \\CRANpkg{blocking} and the \\CRANpkg{klsh} package for creation of blocks for deduplication (values in percentages)")
+  kable(digits=2, format = "latex", caption = "Comparison of various approximate nearest neighbour algorithms implemented in the \\CRANpkg{blocking} and the \\CRANpkg{klsh} packages for creation of blocks for deduplication (values in percentages)")
 ```
 
 The results of this small-scale comparison are broadly consistent with the existing literature on ANN-based blocking. The tree-based methods (NND, HNSW, Annoy, and kNN) achieve 0% FNR while maintaining FPR below 1%, indicating tight blocks that miss no true matches. Their precision and F1 scores (around 5--10%) are expected, as blocking is not intended to provide the final linkage.
 
 In contrast, the LSH-based methods show more variable behaviour: the \CRANpkg{mlpack} LSH implementation achieves 2% FNR with a higher FPR (3.74%), while the \CRANpkg{klsh} results illustrate a trade-off between block granularity and recall: `klsh_10` with only 10 blocks yields 16% FNR and 10.13% FPR, whereas `klsh_100` with 100 blocks improves to 10% FNR and 0.94% FPR.
 
-We note that this comparison is illustrative rather than exhaustive; the dataset is small and results may differ on larger or noisier data. Nevertheless, the pattern, that modern ANN algorithms such as NND, HNSW, and Annoy produce high-recall, low-FPR blocks with minimal configuration, is consistent with findings reported elsewhere in the blocking literature (cf. @Papadakis2020).
+We note that this comparison is illustrative rather than exhaustive; the dataset is small and results may differ on larger or noisier data. Nevertheless, the pattern that modern ANN algorithms such as NND, HNSW, and Annoy produce high-recall, low-FPR blocks with minimal configuration is consistent with findings reported elsewhere in the blocking literature (cf. @Papadakis2020).
 
 # Summary
 
@@ -698,11 +698,11 @@ the flexibility of the `representation` argument (which accepts user-supplied ma
 a natural entry point for integrating encodings such as Bloom filters. 
 Developing and evaluating dedicated PPRL workflows is a direction for future work.
 
-Finally, to extend the package's ability to block large datasets, we could allow users to use DuckDB [@raasveldt2019duckdb] via the \CRANpkg{duckdb} package [@duckdb]. DuckDB smoothly handles large datasets and allows for extensions that implement ANN algorithms (see https://duckdb.org/community_extensions/extensions}.
+Finally, to extend the package's ability to block large datasets, we could allow users to use DuckDB [@raasveldt2019duckdb] via the \CRANpkg{duckdb} package [@duckdb]. DuckDB smoothly handles large datasets and allows for extensions that implement ANN algorithms (see https://duckdb.org/community_extensions/extensions).
 
 # Acknowledgements
 
-We thank the three reviewers for their comments. We also thank participants of the uRos 2024 conference for valuable comments and discussion. Work on this package was supported by the National Science Centre, OPUS 20 grant no. 2020/39/B/HS4/00941.
+We thank the three reviewers for their comments. We also thank the participants of the uRos 2024 conference for valuable comments and discussion. Work on this package was supported by the National Science Centre, OPUS 20 grant no. 2020/39/B/HS4/00941.
 
 We have also developed a Python version of the package,
 [`BlockingPy`](https://blockingpy.readthedocs.io/en/latest/), which is

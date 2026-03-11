@@ -7,7 +7,7 @@
 \maketitle
 
 \abstract{%
-Entity resolution (probabilistic record linkage, deduplication) is essential for bringing together data needed for estimation or other analyses based on multiple sources. It aims to link records that refer to the same entity (e.g., person, company) in the absence of unique identifiers. Without identifiers, researchers must specify which records to compare to calculate matching probability and reduce computational complexity. Traditional deterministic blocking uses common variables like first letters of names, sex, or dates of birth, but assumes error-free, complete data. To address this limitation, we developed the R package \textbf{blocking}, which uses approximate nearest neighbor search and graph algorithms to reduce the number of comparisons. This paper presents the package design, functionalities, and two case studies.
+Entity resolution (probabilistic record linkage, deduplication) is essential for bringing together data needed for estimation or other analyses based on multiple sources. It aims to link records that refer to the same entity (e.g., person, company) in the absence of unique identifiers. Without identifiers, researchers must specify which records to compare to calculate matching probability and reduce computational complexity. Traditional deterministic blocking uses common variables like first letters of names, sex, or dates of birth, but assumes error-free, complete data. To address this limitation, we developed the R package \textbf{blocking}, which uses approximate nearest neighbour search and graph algorithms to reduce the number of comparisons. This paper presents the package design, functionalities, and two case studies.
 }
 
 \section{Introduction}\label{introduction}
@@ -36,7 +36,7 @@ records in large datasets (e.g., the aforementioned example would
 require over 700 billion comparisons). Consequently, researchers aim to
 reduce the number of comparisons in various ways prior to the record
 linkage/deduplication stage. The rationale is twofold: computational
-resource constraints and clerical review workload (cf.~\citet{christen2012book})
+resource constraints and clerical review workload (cf.~\citet{christen2012book}).
 
 Reducing the number of comparisons is accomplished through blocking, a
 method that limits possible comparisons by assuming that certain
@@ -51,7 +51,7 @@ Furthermore, with the growing popularity of large language models (both
 closed and open-source), one may consider using embeddings
 \citep{mikolov2013efficient} to identify nearest neighbours and treat these
 as potential comparison pairs. For a~comprehensive review of blocking
-methods, see \citet{Christen2012}, \citet{Steorts2014} or \citet{Papadakis2020}. Section
+methods, see \citet{Christen2012}, \citet{Steorts2014}, or \citet{Papadakis2020}. Section
 \hyperref[sec-software]{1.2} discusses existing R packages that implement
 blocking methods.
 
@@ -170,7 +170,7 @@ These steps can be explained as follows:
   as dense numeric vectors. Embeddings can be obtained, for example,
   via \CRANpkg{ragnar} \citep{ragnar}, a~package that provides an interface
   to large language models for generating text embeddings (either
-  static or dynamic). An example using embeddings is provided in Supplementary Materials.
+  static or dynamic). An example using embeddings is provided in the Supplementary Materials.
 \item
   Search for nearest neighbours using ANN algorithms implemented in
   \CRANpkg{rnndescent} (the only one allowing for sparse matrices,
@@ -345,7 +345,7 @@ interpreted as follows:
   It is expected to be low as blocking should discover all pairs one
   wants to compare in entity resolution.
 \item
-  F1 Score: Combines precision and recall. However, it may be less relevant in the context of blocking, since both low precision and low recall are expected. For a~critique of the F1 score in the context of record linkage see \citet{hand2018}, and for an alternative F* measure see \citet{hand2021} (not yet implemented).
+  F1 Score: Combines precision and FNR. However, it may be less relevant in the context of blocking, since low precision and low FNR are expected. For a~critique of the F1 score in the context of record linkage see \citet{hand2018}, and for an alternative F* measure see \citet{hand2021} (not yet implemented).
 \end{itemize}
 
 \begin{longtable}[]{@{}
@@ -819,7 +819,7 @@ for the second group, the distance is similar to true non-matches
 information for deduplication (and record linkage) studies.
 
 \begin{figure}[!ht]
-\includegraphics[width=1\linewidth,alt={A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the `blocking`. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), while for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies.}]{paper-blocking_files/figure-latex/density-plot-1} \caption{Distribution of distances between true matches and non-matches within blocks}\label{fig:density-plot}
+\includegraphics[width=1\linewidth,alt={A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the `blocking` function. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), while for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies.}]{paper-blocking_files/figure-latex/density-plot-1} \caption{Distribution of distances between true matches and non-matches within blocks}\label{fig:density-plot}
 \end{figure}
 
 Finally, we compare the evaluation metrics across all ANN algorithms
@@ -841,7 +841,7 @@ included in the Supplementary materials.
 
 \begin{table}
 
-\caption{\label{tab:table-latex}Comparison of various approximate nearest neighbour algorithms implemented in the   \CRANpkg{blocking} and the \CRANpkg{klsh} package for creation of blocks for deduplication (values in percentages)}
+\caption{\label{tab:table-latex}Comparison of various approximate nearest neighbour algorithms implemented in the \CRANpkg{blocking} and the \CRANpkg{klsh} packages for creation of blocks for deduplication (values in percentages)}
 \centering
 \begin{tabular}[t]{l|r|r|r|r|r}
 \hline
@@ -868,7 +868,7 @@ The results of this small-scale comparison are broadly consistent with the exist
 
 In contrast, the LSH-based methods show more variable behaviour: the \CRANpkg{mlpack} LSH implementation achieves 2\% FNR with a higher FPR (3.74\%), while the \CRANpkg{klsh} results illustrate a trade-off between block granularity and recall: \texttt{klsh\_10} with only 10 blocks yields 16\% FNR and 10.13\% FPR, whereas \texttt{klsh\_100} with 100 blocks improves to 10\% FNR and 0.94\% FPR.
 
-We note that this comparison is illustrative rather than exhaustive; the dataset is small and results may differ on larger or noisier data. Nevertheless, the pattern, that modern ANN algorithms such as NND, HNSW, and Annoy produce high-recall, low-FPR blocks with minimal configuration, is consistent with findings reported elsewhere in the blocking literature (cf.~\citet{Papadakis2020}).
+We note that this comparison is illustrative rather than exhaustive; the dataset is small and results may differ on larger or noisier data. Nevertheless, the pattern that modern ANN algorithms such as NND, HNSW, and Annoy produce high-recall, low-FPR blocks with minimal configuration is consistent with findings reported elsewhere in the blocking literature (cf.~\citet{Papadakis2020}).
 
 \section{Summary}\label{summary}
 
@@ -886,11 +886,11 @@ the flexibility of the \texttt{representation} argument (which accepts user-supp
 a~natural entry point for integrating encodings such as Bloom filters.
 Developing and evaluating dedicated PPRL workflows is a direction for future work.
 
-Finally, to extend the package's ability to block large datasets, we could allow users to use DuckDB \citep{raasveldt2019duckdb} via the \CRANpkg{duckdb} package \citep{duckdb}. DuckDB smoothly handles large datasets and allows for extensions that implement ANN algorithms (see \url{https://duckdb.org/community_extensions/extensions}\}.
+Finally, to extend the package's ability to block large datasets, we could allow users to use DuckDB \citep{raasveldt2019duckdb} via the \CRANpkg{duckdb} package \citep{duckdb}. DuckDB smoothly handles large datasets and allows for extensions that implement ANN algorithms (see \url{https://duckdb.org/community_extensions/extensions}).
 
 \section{Acknowledgements}\label{acknowledgements}
 
-We thank the three reviewers for their comments. We also thank participants of the uRos 2024 conference for valuable comments and discussion. Work on this package was supported by the National Science Centre, OPUS 20 grant no.~2020/39/B/HS4/00941.
+We thank the three reviewers for their comments. We also thank the participants of the uRos 2024 conference for valuable comments and discussion. Work on this package was supported by the National Science Centre, OPUS 20 grant no.~2020/39/B/HS4/00941.
 
 We have also developed a~Python version of the package,
 \href{https://blockingpy.readthedocs.io/en/latest/}{\texttt{BlockingPy}}, which is
@@ -902,17 +902,17 @@ details, see: \citet{Strojny2026}.
 
 \address{%
 Maciej Beręsewicz\\
-University of Economics and BusinessStatisical Office in Poznań\\%
+University of Economics and BusinessStatistical Office in Poznań\\%
 Department of Statistics\\ Centre for the Methodology of Population Studies\\
 %
 \url{https://maciejberesewicz.com}\\%
 \textit{ORCiD: \href{https://orcid.org/0000-0002-8281-4301}{0000-0002-8281-4301}}\\%
-\href{mailto:maciej.beresewicz@poznan.pl}{\nolinkurl{maciej.beresewicz@poznan.pl}}%
+\href{mailto:maciej.beresewicz@ue.poznan.pl}{\nolinkurl{maciej.beresewicz@ue.poznan.pl}}%
 }
 
 \address{%
 Adam Struzik\\
-Adam Mickiewicz UniversityStatisical Office in Poznań\\%
+Adam Mickiewicz UniversityStatistical Office in Poznań\\%
 Faculty of Mathematics and Computer Science\\ Centre for Urban Statistics\\
 %
 %
