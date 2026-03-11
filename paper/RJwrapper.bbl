@@ -29,11 +29,13 @@ P.~Christen.
 P.~Christen.
 \newblock \emph{Data Matching: Concepts and Techniques for Record Linkage, Entity Resolution, and Duplicate Detection}.
 \newblock Springer, 2012{\natexlab{b}}.
+\newblock URL \url{https://link.springer.com/book/10.1007/978-3-642-31164-2}.
 
 \bibitem[Christen and Goiser(2007)]{christen2007quality}
 P.~Christen and K.~Goiser.
 \newblock Quality and complexity measures for data linkage and deduplication.
 \newblock In F.~Guillet and H.~Hamilton, editors, \emph{Quality Measures in Data Mining}, pages 127--151. Springer, 2007.
+\newblock \doi{10.1007/978-3-540-44918-8_6}.
 
 \bibitem[Csardi and Nepusz(2006)]{igraph2006}
 G.~Csardi and T.~Nepusz.
@@ -101,11 +103,13 @@ I.~P. Fellegi and A.~B. Sunter.
 D.~J. Hand and P.~Christen.
 \newblock A note on using the {F}-measure for evaluating record linkage algorithms.
 \newblock \emph{Statistics and Computing}, 28\penalty0 (3):\penalty0 539--547, 2018.
+\newblock \doi{10.1007/s11222-017-9746-6}.
 
 \bibitem[Hand et~al.(2021)Hand, Christen, and Kirielle]{hand2021}
 D.~J. Hand, P.~Christen, and N.~Kirielle.
 \newblock {F*}: an interpretable transformation of the {F}-measure.
 \newblock \emph{Machine Learning}, 110\penalty0 (3):\penalty0 451--456, 2021.
+\newblock \doi{10.1007/s10994-021-05964-1}.
 
 \bibitem[Howard~II(2020)]{Howard2020}
 J.~P. Howard~II.
@@ -124,6 +128,7 @@ J.~P. Howard~II.
 P.~Indyk and R.~Motwani.
 \newblock Approximate nearest neighbors: towards removing the curse of dimensionality.
 \newblock In \emph{Proceedings of the 30th Annual ACM Symposium on Theory of Computing}, pages 604--613, 1998.
+\newblock \doi{10.1145/276698.276876}.
 
 \bibitem[Johndrow et~al.(2018)Johndrow, Lum, and Dunson]{johndrow2018theoretical}
 J.~Johndrow, K.~Lum, and D.~Dunson.
@@ -141,6 +146,7 @@ T.~Kalinowski and D.~Falbel.
 D.~E. Knuth.
 \newblock \emph{The Art of Computer Programming, Vol. 3: Sorting and Searching}.
 \newblock Addison-Wesley, 1973.
+\newblock URL \url{https://dl.acm.org/doi/10.5555/280635}.
 
 \bibitem[Malkov and Yashunin(2018)]{malkov2018efficient}
 Y.~A. Malkov and D.~A. Yashunin.
@@ -272,5 +278,6 @@ M.~{van der Loo}.
 M.~Wang, X.~Xu, Q.~Yue, and Y.~Wang.
 \newblock A comprehensive survey and experimental comparison of graph-based approximate nearest neighbor search.
 \newblock \emph{Proceedings of the VLDB Endowment}, 14\penalty0 (11):\penalty0 1964--1978, 2021.
+\newblock \doi{10.14778/3476249.3476255}.
 
 \end{thebibliography}
