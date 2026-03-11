@@ -702,9 +702,7 @@ Finally, to extend the package's ability to block large datasets, we could allow
 
 # Acknowledgements
 
-Work on this package is supported by the National Science Centre, OPUS
-20 grant no. 2020/39/B/HS4/00941. We also thank participants of the uRos
-2024 conference for valuable comments and discussion.
+We thank the three reviewers for their comments. We also thank participants of the uRos 2024 conference for valuable comments and discussion. Work on this package was supported by the National Science Centre, OPUS 20 grant no. 2020/39/B/HS4/00941.
 
 We have also developed a Python version of the package,
 [`BlockingPy`](https://blockingpy.readthedocs.io/en/latest/), which is
