@@ -6,6 +6,10 @@ knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 library("kableExtra")
 
 
+## ----diagram, echo=FALSE, fig.cap="Workflow of the `blocking()` function", out.width="100%"----
+knitr::include_graphics("figures/diagram.png")
+
+
 ## ----packages, echo=TRUE, message=FALSE, warning=FALSE------------------------
 library("blocking")
 library("data.table")
@@ -144,7 +148,7 @@ RLdata500[df_block_melted_rec_block, on = "rec_id", block_id := i.block]
 RLdata500[, .(uniq_blocks = uniqueN(block_id)), .(ent_id)][, .N, uniq_blocks]
 
 
-## ----density-plot, echo=FALSE, fig.cap = "Distribution of distances between true matches and non-matches within blocks", fig.height = 5, fig.width = 7, out.width="100%", fig.alt="A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the `blocking`. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), whilst for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies.", fig.pos = "!ht"----
+## ----density-plot, echo=FALSE, fig.cap = "Distribution of distances between true matches and non-matches within blocks", fig.height = 5, fig.width = 7, out.width="100%", fig.alt="A density plot of distances between units that are true matches (red) and non-matches (blue) within blocks created by the `blocking`. The distribution of distance for matches is bimodal. There is a group of units that are true matches where the distance between them is small (less than 0.2), while for the second group, the distance is similar to true non-matches (between 0.4 and 0.6). This distance may be used as additional information for deduplication (and record linkage) studies.", fig.pos = "!ht"----
 df_for_density <- copy(df_block_melted[block %in% RLdata500$block_id])
 df_for_density[, match:= block %in% RLdata500[id_count == 2]$block_id]
 

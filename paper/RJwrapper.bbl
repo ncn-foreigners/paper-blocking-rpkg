@@ -1,4 +1,4 @@
-\begin{thebibliography}{32}
+\begin{thebibliography}{44}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
 \expandafter\ifx\csname urlstyle\endcsname\relax
@@ -18,6 +18,22 @@ O.~Binette and R.~C. Steorts.
 \newblock \emph{Science Advances}, 8\penalty0 (12):\penalty0 eabi8021, 2022.
 \newblock \doi{https://doi.org/10.1126/sciadv.abi8021}.
 \newblock URL \url{https://www.science.org/doi/abs/10.1126/sciadv.abi8021}.
+
+\bibitem[Christen(2012{\natexlab{a}})]{Christen2012}
+P.~Christen.
+\newblock A survey of indexing techniques for scalable record linkage and deduplication.
+\newblock \emph{IEEE Transactions on Knowledge and Data Engineering}, 24\penalty0 (9):\penalty0 1537--1555, 2012{\natexlab{a}}.
+\newblock \doi{10.1109/TKDE.2011.127}.
+
+\bibitem[Christen(2012{\natexlab{b}})]{christen2012book}
+P.~Christen.
+\newblock \emph{Data Matching: Concepts and Techniques for Record Linkage, Entity Resolution, and Duplicate Detection}.
+\newblock Springer, 2012{\natexlab{b}}.
+
+\bibitem[Christen and Goiser(2007)]{christen2007quality}
+P.~Christen and K.~Goiser.
+\newblock Quality and complexity measures for data linkage and deduplication.
+\newblock In F.~Guillet and H.~Hamilton, editors, \emph{Quality Measures in Data Mining}, pages 127--151. Springer, 2007.
 
 \bibitem[Csardi and Nepusz(2006)]{igraph2006}
 G.~Csardi and T.~Nepusz.
@@ -81,6 +97,16 @@ I.~P. Fellegi and A.~B. Sunter.
 \newblock \emph{Journal of the American statistical association}, 64\penalty0 (328):\penalty0 1183--1210, 1969.
 \newblock \doi{https://doi.org/10.1080/01621459.1969.10501049}.
 
+\bibitem[Hand and Christen(2018)]{hand2018}
+D.~J. Hand and P.~Christen.
+\newblock A note on using the {F}-measure for evaluating record linkage algorithms.
+\newblock \emph{Statistics and Computing}, 28\penalty0 (3):\penalty0 539--547, 2018.
+
+\bibitem[Hand et~al.(2021)Hand, Christen, and Kirielle]{hand2021}
+D.~J. Hand, P.~Christen, and N.~Kirielle.
+\newblock {F*}: an interpretable transformation of the {F}-measure.
+\newblock \emph{Machine Learning}, 110\penalty0 (3):\penalty0 451--456, 2021.
+
 \bibitem[Howard~II(2020)]{Howard2020}
 J.~P. Howard~II.
 \newblock Phonetic spelling algorithm implementations for r.
@@ -94,6 +120,11 @@ J.~P. Howard~II.
 \newblock URL \url{https://jameshoward.us/phonics-in-r/}.
 \newblock R package version 1.3.10.
 
+\bibitem[Indyk and Motwani(1998)]{indyk1998}
+P.~Indyk and R.~Motwani.
+\newblock Approximate nearest neighbors: towards removing the curse of dimensionality.
+\newblock In \emph{Proceedings of the 30th Annual ACM Symposium on Theory of Computing}, pages 604--613, 1998.
+
 \bibitem[Johndrow et~al.(2018)Johndrow, Lum, and Dunson]{johndrow2018theoretical}
 J.~Johndrow, K.~Lum, and D.~Dunson.
 \newblock Theoretical limits of microclustering for record linkage.
@@ -105,6 +136,11 @@ T.~Kalinowski and D.~Falbel.
 \newblock \emph{{ragnar}: Retrieval-Augmented Generation (RAG) Workflows}, 2025.
 \newblock URL \url{https://CRAN.R-project.org/package=ragnar}.
 \newblock R package version 0.2.0.
+
+\bibitem[Knuth(1973)]{knuth1973}
+D.~E. Knuth.
+\newblock \emph{The Art of Computer Programming, Vol. 3: Sorting and Searching}.
+\newblock Addison-Wesley, 1973.
 
 \bibitem[Malkov and Yashunin(2018)]{malkov2018efficient}
 Y.~A. Malkov and D.~A. Yashunin.
@@ -137,6 +173,18 @@ L.~A. Mullen, K.~Benoit, O.~Keyes, D.~Selivanov, and J.~Arnold.
 \newblock \doi{https://doi.org/10.21105/joss.00655}.
 \newblock URL \url{https://doi.org/10.21105/joss.00655}.
 
+\bibitem[Mühleisen and Raasveldt(2026)]{duckdb}
+H.~Mühleisen and M.~Raasveldt.
+\newblock \emph{duckdb: DBI Package for the DuckDB Database Management System}, 2026.
+\newblock URL \url{https://CRAN.R-project.org/package=duckdb}.
+\newblock R package version 1.4.4.
+
+\bibitem[Papadakis et~al.(2016)Papadakis, Papastefanatos, Palpanas, and Koubarakis]{papadakis2016schema}
+G.~Papadakis, G.~Papastefanatos, T.~Palpanas, and M.~Koubarakis.
+\newblock Schema-agnostic vs schema-based configurations for blocking methods on homogeneous data.
+\newblock \emph{Proceedings of the VLDB Endowment}, 9\penalty0 (4):\penalty0 312--323, 2016.
+\newblock \doi{10.14778/2856318.2856326}.
+
 \bibitem[Papadakis et~al.(2020)Papadakis, Skoutas, Thanos, and Palpanas]{Papadakis2020}
 G.~Papadakis, D.~Skoutas, E.~Thanos, and T.~Palpanas.
 \newblock Blocking and filtering techniques for entity resolution: A survey.
@@ -144,6 +192,12 @@ G.~Papadakis, D.~Skoutas, E.~Thanos, and T.~Palpanas.
 \newblock ISSN 0360-0300.
 \newblock \doi{https://doi.org/10.1145/3377455}.
 \newblock URL \url{https://doi.org/10.1145/3377455}.
+
+\bibitem[Raasveldt and M\"{u}hleisen(2019)]{raasveldt2019duckdb}
+M.~Raasveldt and H.~M\"{u}hleisen.
+\newblock {DuckDB}: An embeddable analytical database.
+\newblock In \emph{Proceedings of the 2019 International Conference on Management of Data}, SIGMOD '19, New York, NY, USA, 2019. ACM.
+\newblock \doi{10.1145/3299869.3320212}.
 
 \bibitem[Sariyar and Borg(2010)]{RecordLinkage-rjournal}
 M.~Sariyar and A.~Borg.
@@ -157,6 +211,12 @@ M.~Sariyar and A.~Borg.
 \newblock \emph{RecordLinkage: Record Linkage Functions for Linking and Deduplicating Data Sets}, 2025.
 \newblock URL \url{https://CRAN.R-project.org/package=RecordLinkage}.
 \newblock R package version 0.4-12.5.
+
+\bibitem[Schnell and Rukasz(2025)]{PPRL}
+R.~Schnell and D.~Rukasz.
+\newblock \emph{PPRL: Privacy Preserving Record Linkage}, 2025.
+\newblock URL \url{https://CRAN.R-project.org/package=PPRL}.
+\newblock R package version 0.3.9.
 
 \bibitem[Selivanov et~al.(2023)Selivanov, Bickel, and Wang]{text2vec}
 D.~Selivanov, M.~Bickel, and Q.~Wang.
@@ -183,6 +243,13 @@ R.~C. Steorts, S.~L. Ventura, M.~Sadinle, and S.~E. Fienberg.
 \newblock ISBN 978-3-319-11257-2.
 \newblock \doi{https://doi.org/10.1007/978-3-319-11257-2_20}.
 
+\bibitem[Strojny and Beręsewicz(2026)]{Strojny2026}
+T.~Strojny and M.~Beręsewicz.
+\newblock Blockingpy: approximate nearest neighbours for blocking of records for entity resolution.
+\newblock \emph{SoftwareX}, 34:\penalty0 102583, 2026.
+\newblock \doi{10.1016/j.softx.2026.102583}.
+\newblock URL \url{https://doi.org/10.1016/j.softx.2026.102583}.
+
 \bibitem[{van der Laan}(2022)]{reclin2-rjournal}
 J.~{van der Laan}.
 \newblock reclin2: a toolkit for record linkage and deduplication.
@@ -201,10 +268,9 @@ M.~{van der Loo}.
 \newblock \emph{The {R} {J}ournal}, 6:\penalty0 111--122, 2014.
 \newblock URL \url{https://CRAN.R-project.org/package=stringdist}.
 
-\bibitem[Wright(1960)]{Wright1960}
-M.~A. Wright.
-\newblock Mechanizing a large index.
-\newblock \emph{The Computer Journal}, 3\penalty0 (2):\penalty0 76, 1960.
-\newblock \doi{https://doi.org/10.1093/comjnl/3.2.76}.
+\bibitem[Wang et~al.(2021)Wang, Xu, Yue, and Wang]{wang2021comprehensive}
+M.~Wang, X.~Xu, Q.~Yue, and Y.~Wang.
+\newblock A comprehensive survey and experimental comparison of graph-based approximate nearest neighbor search.
+\newblock \emph{Proceedings of the VLDB Endowment}, 14\penalty0 (11):\penalty0 1964--1978, 2021.
 
 \end{thebibliography}
